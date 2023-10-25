@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "freedb_xioami",
-    "password": "%HZ3U8g!U&%jbPA",
+    "username": "freedb_category",
+    "password": "7gV&gdk*5B3UESh",
     "database": "freedb_xiaome_be",
     "host": "sql.freedb.tech",
     "dialect": "mysql"

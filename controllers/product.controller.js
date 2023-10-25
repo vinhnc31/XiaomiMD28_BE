@@ -1,11 +1,18 @@
 const cloudinary = require("cloudinary").v2;
 const { Product } = require("../models");
 exports.getProduct = async (req, res) => {
-  const listProduct = Product.findAll();
-  if (listProduct) {
-    return res.status(200).json({ status: 200, data: listProduct });
-  } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+  try {
+    const listProduct = await Product.findAll();
+    if (listProduct) {
+      return res.status(200).json({ status: 200, data: listProduct });
+    } else {
+      res.status(400).json({ status: 400, message: "false connexting db" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 
@@ -17,8 +24,8 @@ exports.addCategory = async (req, res) => {
       price,
       description,
       quantity,
-      categoryID,
-      promotionID,
+      CategoryId,
+      PromotionId,
     } = req.body;
     console.log(req.body);
     const filedata = req.file;
@@ -29,8 +36,8 @@ exports.addCategory = async (req, res) => {
       !price ||
       !description ||
       !quantity ||
-      !categoryID ||
-      !promotionID
+      !CategoryId ||
+      !PromotionId
     ) {
       if (filedata) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
@@ -40,14 +47,12 @@ exports.addCategory = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    // Check if categoryID and promotionID are defined
-    if (categoryID === undefined || promotionID === undefined) {
-      return res
-        .status(400)
-        .json({
-          status: 400,
-          message: "categoryID and promotionID are required fields",
-        });
+    // Check if CategoryId and PromotionId are defined
+    if (!CategoryId || !PromotionId) {
+      return res.status(400).json({
+        status: 400,
+        message: "CategoryId and PromotionId are required fields",
+      });
     }
 
     let imageUrl = "";
@@ -65,18 +70,18 @@ exports.addCategory = async (req, res) => {
       price,
       description,
       quantity,
-      categoryID,
-      promotionID,
+      CategoryId,
+      PromotionId,
     };
 
-    const addProduct = Product.create(product);
-    if (addProduct) {
-      return res.status(201).json({ status: 201, data: addProduct });
-    } else {
+    const addProduct = await Product.create(product);
+    console.log(addProduct)
+    if (!addProduct) {
       return res
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
+    return res.status(201).json({ status: 201, data: addProduct });
   } catch (error) {
     console.log(error);
     return res
