@@ -29,11 +29,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Promotion.associate = (models) => {
-    Promotion.hasMany(models.Product, {
-      onDelete: "cascade"
-    });
-  };
-
   return Promotion;
 };

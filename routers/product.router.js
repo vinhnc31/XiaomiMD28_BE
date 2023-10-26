@@ -20,12 +20,15 @@
  *           type: string
  *         quantity:
  *           type: integer
+ *         CategoryId:
+ *           type: integer
  *       required:
  *         - name
  *         - price
  *         - description
  *         - quantity
  *         - image
+ *         - CategoryId
  *   responses:
  *     ProductListResponse:
  *       description: List of products

@@ -16,6 +16,7 @@
  *           type: string
  *       required:
  *         - name
+ *         - image
  *   parameters:
  *     CategoryId:
  *       in: path
@@ -65,10 +66,18 @@
  *       - Category
  *     requestBody:
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Category'
- *       required: true
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *               name:
+ *                 type: string
+ *             required:
+ *               - image
+ *               - name
  *     responses:
  *       201:
  *         description: Category created successfully

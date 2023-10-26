@@ -1,5 +1,3 @@
-
-
 const cloudinary = require("cloudinary").v2;
 const { Category } = require("../models");
 exports.getCategory = async (req, res) => {
