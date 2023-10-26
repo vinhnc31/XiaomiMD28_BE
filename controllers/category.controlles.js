@@ -10,6 +10,7 @@ exports.getCategory = async (req, res) => {
 };
 //get category theo id
 exports.getCategoryId = async (req, res) => {
+  console.log("hgvuahgdjbfmncahksdj")
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({status: 404,message : "Nod found"})

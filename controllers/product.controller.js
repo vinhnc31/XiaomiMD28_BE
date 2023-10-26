@@ -16,6 +16,30 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+exports.getProductID = async (req, res) => {
+  try {
+    const categoryID = +req.params.CategoryId;
+    console.log(categoryID)
+    if (!categoryID) { 
+      return res
+        .status(404)
+        .json({ status: 404, message: "Category not found" });
+    }
+    const product = await Product.findAll({ where: { CategoryId: categoryID } ,raw:true});
+    console.log(product)
+    if (!product) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Category not found" });
+    }
+    return res.status(200).json({ status: 200, data: product });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
 exports.addCategory = async (req, res) => {
   try {
     const {
@@ -75,7 +99,7 @@ exports.addCategory = async (req, res) => {
     };
 
     const addProduct = await Product.create(product);
-    console.log(addProduct)
+    console.log(addProduct);
     if (!addProduct) {
       return res
         .status(500)
