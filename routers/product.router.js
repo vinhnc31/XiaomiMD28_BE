@@ -71,7 +71,7 @@
  *                 type: string
  *               quantity:
  *                 type: integer
- *               categoryId:
+ *               CategoryId:
  *                 type: integer
  *             required:
  *               - image
@@ -79,7 +79,7 @@
  *               - price
  *               - description
  *               - quantity
- *               - categoryId
+ *               - CategoryId
  *     responses:
  *       '200':
  *         description: Product added successfully
@@ -104,6 +104,7 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/responses/ProductListResponse'
+ * /api/product/{id}:
  *   delete:
  *     summary: Delete a product by ID
  *     tags:

@@ -9,7 +9,7 @@
  *       type: object
  *       properties:
  *         id:
- *           type: string
+ *           type: integer
  *         name:
  *           type: string
  *         image:

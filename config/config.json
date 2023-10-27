@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "sql12656778",
-    "password": "PBsSH7Vmbq",
-    "database": "sql12656778",
-    "host": "sql12.freemysqlhosting.net",
+    "username": "freedb_xioami_be_md28",
+    "password": "9gx&chY?3Kh97kM",
+    "database": "freedb_xiaome_be_md28",
+    "host": "sql.freedb.tech",
     "dialect": "mysql"
   },
   "test": {

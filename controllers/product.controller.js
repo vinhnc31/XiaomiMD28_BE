@@ -49,7 +49,6 @@ exports.addCategory = async (req, res) => {
       description,
       quantity,
       CategoryId,
-      PromotionId,
     } = req.body;
     console.log(req.body);
     const filedata = req.file;
@@ -60,8 +59,7 @@ exports.addCategory = async (req, res) => {
       !price ||
       !description ||
       !quantity ||
-      !CategoryId ||
-      !PromotionId
+      !CategoryId
     ) {
       if (filedata) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
@@ -72,7 +70,7 @@ exports.addCategory = async (req, res) => {
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
     // Check if CategoryId and PromotionId are defined
-    if (!CategoryId || !PromotionId) {
+    if (!CategoryId) {
       return res.status(400).json({
         status: 400,
         message: "CategoryId and PromotionId are required fields",
@@ -95,7 +93,6 @@ exports.addCategory = async (req, res) => {
       description,
       quantity,
       CategoryId,
-      PromotionId,
     };
 
     const addProduct = await Product.create(product);
