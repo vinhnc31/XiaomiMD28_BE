@@ -8,6 +8,7 @@ const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
 const promotion = require("./routers/promotion.router");
+const comment = require("./routers/comment.router")
 const db = require("./models");
 const PORT = process.env.POST || 3000;
 
@@ -38,6 +39,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
+app.use("/api",comment)
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

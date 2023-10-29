@@ -1,7 +1,22 @@
 const cloudinary = require("cloudinary").v2;
-const { Category } = require("../models");
+const { Category,Product } = require("../models");
+const sequelize = require("sequelize")
 exports.getCategory = async (req, res) => {
-  const listCategory = await Category.findAll();
+  const listCategory = await Category.findAll({
+    include: [
+      {
+        model: Product,
+        attributes: ['name'],
+      },
+    ],
+    attributes: [
+      "Category.id",
+      "name",
+      "image",
+      [sequelize.fn("COUNT", sequelize.col("Products.id")), "productCount"],
+    ],
+    group: ['Category.id'],
+  });
   if (listCategory) {
     res.status(200).json({ status: 200, data: listCategory });
   } else {

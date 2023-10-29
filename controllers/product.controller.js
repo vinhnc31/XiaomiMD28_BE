@@ -73,7 +73,7 @@ exports.addCategory = async (req, res) => {
     if (!CategoryId) {
       return res.status(400).json({
         status: 400,
-        message: "CategoryId and PromotionId are required fields",
+        message: "CategoryId are required fields",
       });
     }
 
@@ -124,3 +124,4 @@ exports.deleteProduct = async (req, res) => {
     res.status(400).json({ status: 400, message: "false connexting db" });
   }
 };
+
