@@ -46,6 +46,10 @@ app.use("/api",comment)
 app.use("/api", account);
 app.use("/api", accounts_google);
 
+app.get("/", function(req, res){
+  res.render('home');
+});
+
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);
