@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const authController = require("../controllers/accounts_google.controller");
 router.get(
-  "/google",
+  "/auth/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
     session: false,
@@ -11,7 +11,7 @@ router.get(
 );
 
 router.get(
-  "/google/callback",
+  "/auth/google/callback",
   (req, res, next) => {
     passport.authenticate("google", (err, profile) => {
       req.user = profile;
@@ -20,9 +20,11 @@ router.get(
     })(req, res, next);
   },
   (req, res) => {
-    res.redirect(`http://localhost:3000/login-success/${req.user?.id}`);
+    res.redirect(
+      `http://localhost:3000/api/auth/login-success/${req.user?.id}`
+    );
   }
 );
-router.post("/login-success", authController.loginSuccess);
+router.post("/auth/login-success", authController.loginSuccess);
 
 module.exports = router;

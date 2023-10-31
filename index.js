@@ -41,8 +41,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
-app.use("/account", account);
-app.use("/api/auth", accounts_google);
+app.use("/api", account);
+app.use("/api", accounts_google);
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

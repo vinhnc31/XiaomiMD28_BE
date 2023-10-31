@@ -3,11 +3,15 @@ const router = express.Router();
 const account = require("../controllers/accounts.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
 
-router.post("/register", account.register);
-router.post("/login", account.login);
-router.get("/verify/:idUser/:token", account.verifyEmail);
-router.get("/logout", authMidleWare.apiAuth, account.logout);
-router.post("/changePassword", authMidleWare.apiAuth, account.changPassword);
+router.post("/account/register", account.register);
+router.post("/account/login", account.login);
+router.get("/account/verify/:idUser/:token", account.verifyEmail);
+router.get("/account/logout", authMidleWare.apiAuth, account.logout);
+router.post(
+  "/account/changePassword",
+  authMidleWare.apiAuth,
+  account.changPassword
+);
 //router.get("/add", user.add);
 
 module.exports = router;

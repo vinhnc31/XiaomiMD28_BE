@@ -52,7 +52,7 @@ exports.register = async (req, res, next) => {
           token: require("crypto").randomBytes(32).toString("hex"),
         });
 
-        const emailMessage = `http://localhost:3000/account/verify/${checkEmail.idUser}/${newVerificationToken.token}
+        const emailMessage = `http://localhost:3000/api/account/verify/${checkEmail.idUser}/${newVerificationToken.token}
         `;
         console.log("email", checkEmail.email);
         await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
@@ -87,7 +87,7 @@ exports.register = async (req, res, next) => {
     });
     console.log("new token", new_token);
     // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/account/verify/${new_user.idUser}/${new_token.token}`;
+    const message = `http://localhost:3000/api/account/verify/${new_user.idUser}/${new_token.token}`;
     await sendEmail(new_account.email, "Verify Email", message);
 
     return res.status(201).json({
