@@ -85,5 +85,5 @@ exports.deleteAddress = async (req, res) => {
       .status(500)
       .json({ status: 500, message: "Error connecting to database" });
   }
-  return res.status(200).json({ status: 200, message: "Delete successfuly" });
+  return res.status(204).json({ status: 204, message: "Delete successfuly" });
 };

@@ -6,7 +6,7 @@ const sendEmail = require("../untils/email");
 const SIGN_PRIVATE = "xiaomimd28";
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-exports.getUserId = async (req,res) => {
+exports.getUserId = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, SIGN_PRIVATE);
@@ -35,8 +35,8 @@ exports.getUserId = async (req,res) => {
       message: "Invalid token",
     });
   }
-}
-exports.register = async (req, res, next) => {
+};
+exports.register = async (req, res) => {
   try {
     console.log(req.body);
     if (!req.body.email || !req.body.password || !req.body.name) {
@@ -81,7 +81,7 @@ exports.register = async (req, res, next) => {
         });
 
         const emailMessage = `http://localhost:3000/account/verify/${checkEmail.id}/${newVerificationToken.token}
-        `;
+`;
         console.log("email", checkEmail.email);
         await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
 
@@ -170,7 +170,7 @@ exports.login = async (req, res, next) => {
     if (!req.body.email || !req.body.password) {
       return res
         .status(401)
-        .json({ status: 401, message: "Email or password is not empty" });
+        .json({ status: 401, message: "Email or password is empty" });
     }
 
     const result = await Account.findOne({
@@ -178,9 +178,11 @@ exports.login = async (req, res, next) => {
         email: req.body.email,
       },
     });
-    console.log("result", result);
+
     if (!result) {
-      return res.status(401).json({ status: 401, message: result.message });
+      return res
+        .status(401)
+        .json({ status: 401, message: "Invalid email or password" });
     }
 
     const isPasswordMatch = await bcrypt.compare(
@@ -189,25 +191,21 @@ exports.login = async (req, res, next) => {
     );
 
     if (!isPasswordMatch) {
-      return res.status(401).json({ message: "Password is not incorrect" });
+      return res
+        .status(401)
+        .json({ status: 401, message: "Invalid email or password" });
     }
 
-    // Đăng nhập thành công
-    // Tạo và trả về token
-
-    const account = result;
-
     // Kiểm tra xem email đã được xác minh chưa
-    if (!account.verified) {
+    if (!result.verified) {
       return res
         .status(401)
         .json({ status: 401, message: "Email is not verified" });
     }
 
     // Tạo và lưu token cho người dùng
-    console.log("email", account.email);
     const token = jwt.sign(
-      { id: account.id, email: account.email },
+      { id: result.id, email: result.email },
       SIGN_PRIVATE,
       { expiresIn: "1y" }
     );
@@ -216,12 +214,12 @@ exports.login = async (req, res, next) => {
     return res.status(200).json({
       status: 200,
       data: {
-        id: account.id,
-        email: account.email,
+        id: result.id,
+        email: result.email,
         token: token,
-        verified: account.verified,
+        verified: result.verified,
       },
-      message: "Login successfully!",
+      message: "Login successful!",
     });
   } catch (error) {
     console.error(error);

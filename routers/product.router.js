@@ -81,9 +81,9 @@
  *               - quantity
  *               - CategoryId
  *     responses:
- *       '200':
+ *       200:
  *         description: Product added successfully
- *       '400':
+ *       400:
  *         description: Invalid request data
  * /api/product/{CategoryId}:
  *   get:
@@ -98,12 +98,14 @@
  *         schema:
  *           type: integer
  *     responses:
- *       '200':
+ *       200:
  *         description: Successful operation
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/responses/ProductListResponse'
+ *       500:
+ *          description:Error connecting to database
  * /api/product/{id}:
  *   delete:
  *     summary: Delete a product by ID
@@ -117,10 +119,12 @@
  *         schema:
  *           type: integer
  *     responses:
- *       '204':
+ *       204:
  *         description: Product deleted successfully
- *       '404':
+ *       404:
  *         description: Product not found
+ *       500:
+ *          description:Error connecting to database
  */
 const express = require("express");
 const router = express.Router();

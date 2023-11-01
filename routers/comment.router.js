@@ -8,14 +8,14 @@
  *     Comment:
  *       type: object
  *       properties:
- *          id:
- *            type: integer
- *          commentBody:
- *            type: string
- *          userId:
- *            type: integer
- *          productId:
- *            type: integer
+ *         id:
+ *           type: integer
+ *         commentBody:
+ *           type: string
+ *         userId:
+ *           type: integer
+ *         productId:
+ *           type: integer
  *       required:
  *         - commentBody
  *         - userId
@@ -35,21 +35,11 @@
  *     tags:
  *       - Comment
  *     requestBody:
+ *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               productId:
- *                 type: integer
- *               userId:
- *                 type: integer
- *               commentBody:
- *                 type: string
- *             required:
- *               - productId
- *               - commentBody
- *               - userId
+ *             $ref: '#/components/schemas/Comment'
  *     responses:
  *       201:
  *         description: Comment created successfully
@@ -61,13 +51,13 @@
  *         description: Invalid request data
  * /api/comment/{ProductId}:
  *   get:
- *     summary: Get products by category ID
+ *     summary: Get comments by product ID
  *     tags:
  *       - Comment
  *     parameters:
  *       - in: path
- *         name: ProcutctId
- *         description: ID of the category
+ *         name: ProductId
+ *         description: ID of the product
  *         required: true
  *         schema:
  *           type: integer
@@ -78,6 +68,55 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/responses/ProductListResponse'
+ * /api/comment/{id}:
+ *   put:
+ *     summary: Update a comment by ID
+ *     tags:
+ *       - Comment
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID of the comment to update
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: formData
+ *         name: commentBody
+ *         description: The updated comment body
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comment updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Comment'
+ *       400:
+ *         description: Invalid request data
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Error connecting to the database
+ *   delete:
+ *     summary: Delete a comment by ID
+ *     tags:
+ *       - Comment
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID of the comment to delete
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Comment deleted successfully
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Error connecting to the database
  */
 
 const express = require("express");
