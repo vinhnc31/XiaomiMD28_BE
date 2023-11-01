@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 
+app.use(express.static('/public/dist/img'));
+
+
 const options = {
   definition: {
     openapi: "3.0.0",
