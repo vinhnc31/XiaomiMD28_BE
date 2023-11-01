@@ -6,8 +6,36 @@ const sendEmail = require("../untils/email");
 const SIGN_PRIVATE = "xiaomimd28";
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const { where } = require("sequelize");
-
+exports.getUserId = async (req,res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, SIGN_PRIVATE);
+    console.log(decoded);
+    const user = await User.findOne({
+      where: {
+        id: decoded.id,
+      },
+    });
+    console.log(user);
+    if (user) {
+      return res.status(200).json({
+        status: 200,
+        message: "User found",
+        user: user,
+      });
+    } else {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    return res.status(401).json({
+      status: 401,
+      message: "Invalid token",
+    });
+  }
+}
 exports.register = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -37,13 +65,13 @@ exports.register = async (req, res, next) => {
           { name: user.name },
           {
             where: {
-              idUser: checkEmail.idUser,
+              id: checkEmail.id,
             },
           }
         );
         await Account.update(checkEmail, {
           where: {
-            idUser: checkEmail.idUser,
+            id: checkEmail.id,
           },
         });
 
@@ -52,7 +80,7 @@ exports.register = async (req, res, next) => {
           token: require("crypto").randomBytes(32).toString("hex"),
         });
 
-        const emailMessage = `http://localhost:3000/account/verify/${checkEmail.idUser}/${newVerificationToken.token}
+        const emailMessage = `http://localhost:3000/account/verify/${checkEmail.id}/${newVerificationToken.token}
         `;
         console.log("email", checkEmail.email);
         await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
@@ -66,7 +94,7 @@ exports.register = async (req, res, next) => {
     }
 
     const id = crypto.randomBytes(5).toString("hex");
-    user.idUser = id;
+    user.id = id;
     // Tạo salt và mã hóa mật khẩu
     const salt = await bcrypt.genSalt(15);
     user.password = await bcrypt.hash(req.body.password, salt);
@@ -75,7 +103,6 @@ exports.register = async (req, res, next) => {
     let new_user = await User.create(user);
     console.log("new user", new_user);
     let new_account = await Account.create({
-      idUser: id,
       email: req.body.email,
       password: req.body.password,
     });
@@ -87,7 +114,7 @@ exports.register = async (req, res, next) => {
     });
     console.log("new token", new_token);
     // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/account/verify/${new_user.idUser}/${new_token.token}`;
+    const message = `http://localhost:3000/account/verify/${new_user.id}/${new_token.token}`;
     await sendEmail(new_account.email, "Verify Email", message);
 
     return res.status(201).json({
@@ -98,15 +125,17 @@ exports.register = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: err.message });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 exports.verifyEmail = async (req, res) => {
   try {
-    const user = await Account.findOne({ idUser: req.params.idUser });
+    const user = await Account.findOne({ id: req.params.id });
 
     if (!user) return res.status(400).json({ message: "Invalid link" });
-    const account = await Account.findOne({ idUser: req.params.idUser });
+    const account = await Account.findOne({ id: req.params.id });
 
     const token = await Token.findOne({
       where: {
@@ -121,7 +150,7 @@ exports.verifyEmail = async (req, res) => {
       { verified: true },
       {
         where: {
-          idUser: user.idUser,
+          id: user.id,
         },
       }
     );
@@ -178,7 +207,7 @@ exports.login = async (req, res, next) => {
     // Tạo và lưu token cho người dùng
     console.log("email", account.email);
     const token = jwt.sign(
-      { idUser: account.idUser, email: account.email },
+      { id: account.id, email: account.email },
       SIGN_PRIVATE,
       { expiresIn: "1y" }
     );
@@ -187,7 +216,7 @@ exports.login = async (req, res, next) => {
     return res.status(200).json({
       status: 200,
       data: {
-        idUser: account.idUser,
+        id: account.id,
         email: account.email,
         token: token,
         verified: account.verified,
@@ -217,7 +246,7 @@ exports.changPassword = async (req, res, next) => {
       { password: changedPassword },
       {
         where: {
-          idUser: req.user.idUser,
+          id: req.user.id,
         },
       }
     );

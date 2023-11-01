@@ -12,6 +12,7 @@ exports.getProductId = async (req, res) => {
     const list = await Comment.findAll({ raw: true });
     console.log(list);
     const listcomment = await Comment.findAll({
+      include: Invoice,
       where: { ProductId: ProductId },
       raw: true,
     });

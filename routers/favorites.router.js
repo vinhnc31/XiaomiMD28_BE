@@ -18,3 +18,13 @@
  *         - ProductId
  *         - UserId
  */
+
+const express = require('express');
+const router = express.Router();
+const favoritesController = require("../controllers/favorites.controller")
+
+router.get("/favorites/:AccountId",favoritesController.getAccount );
+router.post("/favorites",favoritesController.createFavorites);
+router.delete("/favorites/:id",favoritesController.deleteFavorites);
+
+module.exports = router;
