@@ -9,14 +9,13 @@
   .treeview-menu a,
   .fa {
     color: white;
-    font-size: 10px;
-    font-family: 'Libre Baskerville', serif;
+    font-size: 16px;
   }
 
   /* Định dạng tên người dùng */
   .user-name {
     text-align: center;
-    font-size: 12px;
+    font-size: 18px;
   }
 
   /* Tạo màu nền màu vàng cho Xiaomi VN và bo tròn */
@@ -40,6 +39,11 @@
     justify-content: center;
     flex-direction: column;
   }
+  .welcome-line {
+    border-bottom: 1px solid white;
+    width: 80%;
+    margin: 10px auto;
+  }
 </style>
 <aside class="main-sidebar">
   <section class="sidebar">
@@ -49,9 +53,9 @@
           <img src="../public/dist/img/avatar.png" class="img-circle user-image" alt="User Image">
           <div class="fa user-name">Nguyễn Công Vinh</div>
         </div>
-        <p style="text-align: center; font-size: 8px;">Chào mừng bạn</p>
+        <p style="text-align: center; font-size: 14px;">Chào mừng bạn</p>
       </li>
-
+      <div class="welcome-line"></div> 
       <!-- Xiaomi VN có màu nền vàng và bo tròn -->
       <li class="treeview xiaomi-vn">
         <a href="#">
@@ -91,6 +95,16 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-table"></i> <span>Quản lý nội bộ</span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-edit"></i> <span>Bảng kê lương</span>
+        </a>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-table"></i> <span>Báo cáo doanh thu</span>
         </a>
       </li>
     </ul>

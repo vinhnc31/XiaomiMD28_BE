@@ -1,33 +1,47 @@
-
 <%- include('head') %>
 <%- include('aside') %>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Blank page
-      </h1>
-      
-    </section>
 
-    <!-- Main content -->
-    <section class="content">
-
-      <!-- Default box -->
-      <div class="box">
-        
-        <div class="box-body">
-          
-        </div>
-        <!-- /.box-body -->
-        
-      </div>
-      <!-- /.box -->
-
-    </section>
-    <!-- /.content -->
+<div class="content-wrapper" style="height: 100vh;">
+  <div class="collapse navbar-collapse" id="myNavbar" style="margin: 10px;">
+    <h2 class="navbar-text" >Bảng điều kiển</h2>
   </div>
-  <!-- /.content-wrapper -->
-  <%- include('footer') %>
- 
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-md-6" style="background-color: #FF5733; height: 50vh;">
+        <div class="box">
+          <div class="box-body">
+            <!-- Nội dung phần 1 -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" style="background-color: #33FF57; height: 50vh;">
+        <div class="box">
+          <div class="box-body">
+            <!-- Nội dung phần 2 -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" style="background-color: #5733FF; height: 50vh;">
+        <div class="box">
+          <div class="box-body">
+            <!-- Nội dung phần 3 -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" style="background-color: #33AFFF; height: 50vh;">
+        <div class "box">
+          <div class="box-body">
+            <!-- Nội dung phần 4 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+<%- include('footer') %>
