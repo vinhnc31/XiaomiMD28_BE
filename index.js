@@ -11,6 +11,8 @@ const product = require("./routers/product.router");
 const promotion = require("./routers/promotion.router");
 const comment = require("./routers/comment.router")
 const account = require("./routers/accounts.router");
+const address = require("./routers/address.router");
+const favorites = require("./routers/favorites.router");
 const accounts_google = require("./routers/accounts_google.router");
 const db = require("./models");
 const PORT = process.env.POST || 3000;
@@ -45,7 +47,8 @@ app.use("/api", promotion);
 app.use("/api",comment)
 app.use("/api", account);
 app.use("/api", accounts_google);
-
+app.use("/api", address);
+app.use("/api", favorites);
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);
