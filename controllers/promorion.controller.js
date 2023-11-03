@@ -118,7 +118,7 @@ exports.deletePromotion = async (req, res) => {
   }
   const deletePromotion = await promotion.destroy();
   if (deletePromotion) {
-    return res.status(201).json({ status: 201, message: "Delete successfuly" });
+    return res.status(204).json({ status: 204, message: "Delete successfuly" });
   } else {
     return res
       .status(500)

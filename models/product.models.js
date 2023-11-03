@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    image: {
-      type: DataTypes.STRING,
+    images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
   });
@@ -25,17 +25,25 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = (models) => {
     // Thiết lập quan hệ một-nhiều với mô hình "Comment"
     Product.hasMany(models.Comment, {
-      onDelete: "CASCADE", // Cascade xóa các Comment liên quan khi một Product bị xóa
-      foreignKey: "productId", // Tên trường khóa ngoại trong bảng "Comment"
-      as: "comments", // Tên thay thế cho quan hệ
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "comments",
     });
 
     // Thiết lập quan hệ một-nhiều với mô hình "Favorites"
     Product.hasMany(models.Favorites, {
-      onDelete: "CASCADE", // Cascade xóa các Favorites liên quan khi một Product bị xóa
-      foreignKey: "productId", // Tên trường khóa ngoại trong bảng "Favorites"
-      as: "favorites", // Tên thay thế cho quan hệ
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "favorites",
+    });
+
+    // Thiết lập quan hệ một-nhiều với mô hình "Product_Color"
+    Product.hasMany(models.Product_Color, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "colorProducts",
     });
   };
+
   return Product;
 };

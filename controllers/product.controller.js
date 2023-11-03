@@ -19,14 +19,17 @@ exports.getProduct = async (req, res) => {
 exports.getProductID = async (req, res) => {
   try {
     const categoryID = +req.params.CategoryId;
-    console.log(categoryID)
-    if (!categoryID) { 
+    console.log(categoryID);
+    if (!categoryID) {
       return res
         .status(404)
         .json({ status: 404, message: "Category not found" });
     }
-    const product = await Product.findAll({ where: { CategoryId: categoryID } ,raw:true});
-    console.log(product)
+    const product = await Product.findAll({
+      where: { CategoryId: categoryID },
+      raw: true,
+    });
+    console.log(product);
     if (!product) {
       return res
         .status(404)
@@ -42,14 +45,7 @@ exports.getProductID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const {
-      name,
-      image,
-      price,
-      description,
-      quantity,
-      CategoryId,
-    } = req.body;
+    const { name, image, price, description, quantity, CategoryId } = req.body;
     console.log(req.body);
     const filedata = req.file;
 
@@ -57,7 +53,6 @@ exports.addCategory = async (req, res) => {
       !name ||
       (!image && !filedata) ||
       !price ||
-      !description ||
       !quantity ||
       !CategoryId
     ) {
@@ -112,16 +107,25 @@ exports.addCategory = async (req, res) => {
 };
 
 exports.deleteProduct = async (req, res) => {
-  const productID = req.params.id;
-  const product = Product.findByPk(productID);
-  if (!product) {
-    res.status(404).json({ status: 404, message: "Product not found" });
-  }
-  const deleteCategory = await Product.destroy();
-  if (deleteCategory) {
-    res.status(200).json({ status: 200, message: "delete successfuly" });
-  } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+  try {
+    const productID = req.params.id;
+    const product = await Product.findByPk(productID);
+    
+    if (!product) {
+      return res.status(404).json({ status: 404, message: "Product not found" });
+    }
+    
+    const deleteProduct = await product.destroy();
+
+    if (deleteProduct) {
+      res.status(204).json({ status: 204, message: "delete successfuly" });
+    } else {
+      res.status(400).json({ status: 400, message: "false connexting db" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
-

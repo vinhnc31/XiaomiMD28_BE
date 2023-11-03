@@ -134,7 +134,7 @@ exports.deleteCategory = async (req, res) => {
   }
   const deleteCategory = await category.destroy();
   if (deleteCategory) {
-    return res.status(201).json({ status: 201, message: "Delete successfuly" });
+    return res.status(204).json({ status: 204, message: "Delete successfuly" });
   } else {
     return res
       .status(500)
