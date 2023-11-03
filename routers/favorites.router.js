@@ -77,11 +77,12 @@
  *               $ref: '#/components/schemas/Favorites'
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const favoritesController = require("../controllers/favorites.controller");
 
 router.get("/favorites/:AccountId", favoritesController.getAccount);
+router.get("/favorites", favoritesController.getFavorites);
 router.post("/favorites", favoritesController.createFavorites);
 router.delete("/favorites/:id", favoritesController.deleteFavorites);
 

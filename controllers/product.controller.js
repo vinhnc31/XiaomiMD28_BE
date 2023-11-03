@@ -45,17 +45,11 @@ exports.getProductID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const { name, image, price, description, quantity, CategoryId } = req.body;
+    const { name, images, price, description, quantity, CategoryId } = req.body;
     console.log(req.body);
     const filedata = req.file;
 
-    if (
-      !name ||
-      (!image && !filedata) ||
-      !price ||
-      !quantity ||
-      !CategoryId
-    ) {
+    if (!name || (!images && !filedata) || !price || !quantity || !CategoryId) {
       if (filedata) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
         cloudinary.uploader.destroy(filedata.filename);
@@ -77,13 +71,13 @@ exports.addCategory = async (req, res) => {
       // Tiến hành tải lên hình ảnh lên Cloudinary
       const result = await cloudinary.uploader.upload(filedata.path);
       imageUrl = result.secure_url;
-    } else if (image) {
-      imageUrl = image;
+    } else if (images) {
+      imageUrl = images;
     }
 
     const product = {
       name,
-      image: imageUrl,
+      images: imageUrl,
       price,
       description,
       quantity,
@@ -110,18 +104,21 @@ exports.deleteProduct = async (req, res) => {
   try {
     const productID = req.params.id;
     const product = await Product.findByPk(productID);
-    
+
     if (!product) {
-      return res.status(404).json({ status: 404, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ status: 404, message: "Product not found" });
     }
-    
+
     const deleteProduct = await product.destroy();
 
-    if (deleteProduct) {
-      res.status(204).json({ status: 204, message: "delete successfuly" });
-    } else {
-      res.status(400).json({ status: 400, message: "false connexting db" });
+    if (!deleteProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
     }
+    return res.status(204).json({ status: 204, message: "delete successfuly" });
   } catch (error) {
     console.log(error);
     return res
@@ -129,3 +126,5 @@ exports.deleteProduct = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
+
