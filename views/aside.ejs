@@ -1,112 +1,35 @@
-<style>
-  .user-image {
-    border-radius: 50%;
-  }
-
-  /* Định dạng màu chữ màu trắng */
-  .user-header p,
-  .sidebar-menu a,
-  .treeview-menu a,
-  .fa {
-    color: white;
-    font-size: 16px;
-  }
-
-  /* Định dạng tên người dùng */
-  .user-name {
-    text-align: center;
-    font-size: 18px;
-  }
-
-  /* Tạo màu nền màu vàng cho Xiaomi VN và bo tròn */
-  .sidebar-menu .xiaomi-vn {
-    background-color: #FFD700;
-    margin: 10px;
-    border-radius: 20px;
-  }
-
-  /* Tạo màu nền màu #1EAFED cho mục được chọn và bo tròn */
-  .sidebar-menu li.active {
-    background-color: #1EAFED;
-    margin: 10px;
-    border-radius: 10px;
-  }
-
-  /* Căn chỉnh ảnh và tên người dùng theo chiều ngang */
-  .user-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .welcome-line {
-    border-bottom: 1px solid white;
-    width: 80%;
-    margin: 10px auto;
-  }
-</style>
-<aside class="main-sidebar">
-  <section class="sidebar">
-    <ul class="sidebar-menu">
-      <li class="user-header">
-        <div class="user-header">
-          <img src="../public/dist/img/avatar.png" class="img-circle user-image" alt="User Image">
-          <div class="fa user-name">Nguyễn Công Vinh</div>
-        </div>
-        <p style="text-align: center; font-size: 14px;">Chào mừng bạn</p>
-      </li>
-      <div class="welcome-line"></div> 
-      <!-- Xiaomi VN có màu nền vàng và bo tròn -->
-      <li class="treeview xiaomi-vn">
-        <a href="#">
-          <i class="fa fa-shopping-cart"></i> <span>Xiaomi VN</span> <i class=""></i>
-        </a>
-      </li>
-
-      <!-- Thay đổi màu nền cho các mục trong sidebar-menu và bo tròn -->
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-files-o"></i>
-          <span>Bảng điều khiển</span>
-        </a>
-      </li>
-      <li>
-        <a href="../widgets.html">
-          <i class="fa fa-th"></i> <span>Quản lý nhân viên</span>
-        </a>
-      </li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-pie-chart"></i>
-          <span>Quản lý khách hàng</span>
-        </a>
-      </li>
-      <li class "treeview">
-        <a href="#">
-          <i class="fa fa-laptop"></i>
-          <span>Quản lý sản phẩm</span>
-        </a>
-      </li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-edit"></i> <span>Quản lý đơn hàng</span>
-        </a>
-      </li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-table"></i> <span>Quản lý nội bộ</span>
-        </a>
-      </li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-edit"></i> <span>Bảng kê lương</span>
-        </a>
-      </li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-table"></i> <span>Báo cáo doanh thu</span>
-        </a>
-      </li>
-    </ul>
-  </section>
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/team.jpg" width="50px"
+      alt="User Image">
+    <div>
+      <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
+      <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i class='app-menu__icon bx bx-cart-alt'></i>
+        <span class="app-menu__label">Xioami VN</span></a></li>
+    <li><a class="app-menu__item active" href="index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+          class="app-menu__label">Bảng điều khiển</span></a></li>
+    <li><a class="app-menu__item " href="table-data-table.html"><i class='app-menu__icon bx bx-id-card'></i> <span
+          class="app-menu__label">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
+          class="app-menu__label">Quản lý khách hàng</span></a></li>
+    <li><a class="app-menu__item" href="table-data-product.html"><i
+          class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+    </li>
+    <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+          class="app-menu__label">Quản lý đơn hàng</span></a></li>
+    <li><a class="app-menu__item" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
+          class="app-menu__label">Quản lý nội bộ
+        </span></a></li>
+    <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
+          class="app-menu__label">Bảng kê lương</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+          class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+    </li>
+    
+  </ul>
 </aside>
