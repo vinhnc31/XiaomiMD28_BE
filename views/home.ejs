@@ -173,8 +173,7 @@
               <div class="tile">
                 <h3 class="tile-title">Thống kê đơn theo hàng tháng</h3>
                 <div class="embed-responsive embed-responsive-16by9">
-                  <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
-                </div>
+                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>                </div>
               </div>
             </div>
           </div>
@@ -198,7 +197,8 @@
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <!--===============================================================================================-->
+
+
     <script type="text/javascript">
 
 new Chart("myChart", {
@@ -206,23 +206,66 @@ new Chart("myChart", {
   data: {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
     datasets: [{ 
+      label: "Doanh thu dự kiến",
       data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
       borderColor: "red",
       fill: false
     }, { 
+      label: "Doanh thu",
       data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
       borderColor: "green",
       fill: false
     }, { 
+      label: "Doanh thu thực tế",
       data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
       borderColor: "blue",
       fill: false
     }]
   },
   options: {
-    legend: {display: false}
+    legend: {display: true}
   }
 });
+
+
+
+var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
+var yValues = [55, 49, 44, 24, 15,50];
+var zValues = [30, 40, 60, 35, 70,39];
+var aValues = [15, 20, 25, 30, 80,19];
+
+
+new Chart("myChartb", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [
+      {
+        label: "Chờ xác nhận",
+        backgroundColor: "purple",
+        data: yValues,
+      },
+      {
+        label: "Đang vận chuyển",
+        backgroundColor: "yellow",
+        data: zValues,
+      },
+      {
+        label: "Đã nhận",
+        backgroundColor: "green",
+        data: aValues,
+      },{
+        label: "Huỷ",
+        backgroundColor: "red",
+        data: aValues,
+      },
+    ],
+  },
+  options: {
+     legend: {display: true}
+  },
+});
+
     </script>
     <script type="text/javascript">
       //Thời Gian
