@@ -131,8 +131,10 @@ const router = express.Router();
 const productController = require("../controllers/product.controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
 
+
 router.get("/product", productController.getProduct);
-router.get("/product/:CategoryId", productController.getProductID);
+router.get("/product/:id", productController.getProductId);
+router.get("/product/:CategoryId", productController.getCategoryID);
 router.post(
   "/product",
   cloudinary.single("image"),

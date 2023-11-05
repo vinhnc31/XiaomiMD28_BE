@@ -17,8 +17,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     images: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.TEXT, // Sửa kiểu dữ liệu thành TEXT
       allowNull: false,
+      get() {
+        // Parse mảng từ chuỗi JSON
+        const images = this.getDataValue("images");
+        return images ? JSON.parse(images) : [];
+      },
+      set(value) {
+        // Chuyển mảng thành chuỗi JSON
+        this.setDataValue("images", JSON.stringify(value));
+      },
     },
   });
 
@@ -42,6 +51,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
       foreignKey: "productId",
       as: "colorProducts",
+    });
+    
+    // Thiết lập quan hệ một-nhiều với mô hình "Cart"
+    Product.hasMany(models.Cart, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "carts",
     });
   };
 
