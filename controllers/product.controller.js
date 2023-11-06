@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-const { Product, Product_Color, Color } = require("../models");
+const { Product, Product_Color, Color, Category } = require("../models");
 exports.getProduct = async (req, res) => {
   try {
     const listProduct = await Product.findAll();
@@ -29,8 +29,8 @@ exports.getProductId = async (req, res) => {
       include: [
         {
           model: Product_Color,
-          as:"colorProducts",
-          include:[Color]
+          as: "colorProducts",
+          include: [Color],
         },
       ],
     });
@@ -80,7 +80,7 @@ exports.addCategory = async (req, res) => {
     console.log(req.body);
     const filedata = req.file;
 
-    if (!name || (!images && !filedata) || !price || !quantity || !CategoryId) {
+    if (!name || (!images && !filedata) || !price || !quantity) {
       if (filedata) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
         cloudinary.uploader.destroy(filedata.filename);
@@ -89,11 +89,15 @@ exports.addCategory = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    // Check if CategoryId and PromotionId are defined
-    if (!CategoryId) {
+
+    const category = await Category.findByPk(CategoryId); // Đợi cho truy vấn hoàn thành
+
+    console.log("aaaaaaa");
+    // Kiểm tra nếu CategoryId đã được xác định
+    if (!category) {
       return res.status(400).json({
         status: 400,
-        message: "CategoryId are required fields",
+        message: "CategoryId is a required field",
       });
     }
 
@@ -122,6 +126,7 @@ exports.addCategory = async (req, res) => {
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
+
     return res.status(201).json({ status: 201, data: addProduct });
   } catch (error) {
     console.log(error);

@@ -16,6 +16,7 @@ const favorites = require("./routers/favorites.router");
 const accounts_google = require("./routers/accounts_google.router");
 const color = require("./routers/color.router");
 const product_color = require("./routers/product_color.router");
+const cart = require("./routers/cart.router")
 const db = require("./models");
 const PORT = process.env.POST || 3000;
 
@@ -53,6 +54,7 @@ app.use("/api", address);
 app.use("/api", favorites);
 app.use("/api", color);
 app.use("/api", product_color);
+app.use("/api", cart);
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

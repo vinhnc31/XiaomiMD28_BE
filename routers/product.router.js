@@ -85,7 +85,7 @@
  *         description: Product added successfully
  *       400:
  *         description: Invalid request data
- * /api/product/{CategoryId}:
+ * /api/product/category/{CategoryId}:
  *   get:
  *     summary: Get products by category ID
  *     tags:
@@ -134,7 +134,7 @@ const cloudinary = require("../middleWare/cloudinary.middlewere");
 
 router.get("/product", productController.getProduct);
 router.get("/product/:id", productController.getProductId);
-router.get("/product/:CategoryId", productController.getCategoryID);
+router.get("/product/category/:CategoryId", productController.getCategoryID);
 router.post(
   "/product",
   cloudinary.single("image"),
