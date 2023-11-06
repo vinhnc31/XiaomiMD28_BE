@@ -26,6 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 
+app.use(express.static('views'));
+
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -55,6 +58,10 @@ app.use("/api", favorites);
 app.use("/api", color);
 app.use("/api", product_color);
 app.use("/api", cart);
+
+app.get("/", function(req, res){
+  res.render('home');
+});
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
