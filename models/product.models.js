@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    image: {
+    images: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "productId", // Tên trường khóa ngoại trong bảng "Favorites"
       as: "favorites", // Tên thay thế cho quan hệ
     });
+    Product.belongsTo(models.Category, { foreignKey: "CategoryId" });
   };
   return Product;
 };

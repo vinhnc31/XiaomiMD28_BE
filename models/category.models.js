@@ -2,17 +2,17 @@ module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define("Category", {
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false
-    }
+      allowNull: true,
+    },
   });
 
   Category.associate = (models) => {
     Category.hasMany(models.Product, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     });
   };
 

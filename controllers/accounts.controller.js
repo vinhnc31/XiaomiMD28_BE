@@ -6,7 +6,7 @@ const sendEmail = require("../untils/email");
 const SIGN_PRIVATE = "xiaomimd28";
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-exports.getUserId = async (req,res) => {
+exports.getUserId = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, SIGN_PRIVATE);
@@ -35,7 +35,7 @@ exports.getUserId = async (req,res) => {
       message: "Invalid token",
     });
   }
-}
+};
 exports.register = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -80,7 +80,7 @@ exports.register = async (req, res, next) => {
           token: require("crypto").randomBytes(32).toString("hex"),
         });
 
-        const emailMessage = `http://localhost:3000/account/verify/${checkEmail.id}/${newVerificationToken.token}
+        const emailMessage = `http://localhost:3000/api/account/verify/${checkEmail.id}/${newVerificationToken.token}
         `;
         console.log("email", checkEmail.email);
         await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
@@ -93,8 +93,6 @@ exports.register = async (req, res, next) => {
       }
     }
 
-    const id = crypto.randomBytes(5).toString("hex");
-    user.id = id;
     // Tạo salt và mã hóa mật khẩu
     const salt = await bcrypt.genSalt(15);
     user.password = await bcrypt.hash(req.body.password, salt);
@@ -114,7 +112,7 @@ exports.register = async (req, res, next) => {
     });
     console.log("new token", new_token);
     // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/account/verify/${new_user.id}/${new_token.token}`;
+    const message = `http://localhost:3000/api/account/verify/${new_user.id}/${new_token.token}`;
     await sendEmail(new_account.email, "Verify Email", message);
 
     return res.status(201).json({
@@ -132,10 +130,10 @@ exports.register = async (req, res, next) => {
 };
 exports.verifyEmail = async (req, res) => {
   try {
-    const user = await Account.findOne({ id: req.params.id });
+    const user = await User.findOne({ where: { id: req.params.id } });
 
     if (!user) return res.status(400).json({ message: "Invalid link" });
-    const account = await Account.findOne({ id: req.params.id });
+    const account = await Account.findOne({ where: { id: req.params.id } });
 
     const token = await Token.findOne({
       where: {

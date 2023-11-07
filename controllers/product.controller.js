@@ -19,14 +19,17 @@ exports.getProduct = async (req, res) => {
 exports.getProductID = async (req, res) => {
   try {
     const categoryID = +req.params.CategoryId;
-    console.log(categoryID)
-    if (!categoryID) { 
+    console.log(categoryID);
+    if (!categoryID) {
       return res
         .status(404)
         .json({ status: 404, message: "Category not found" });
     }
-    const product = await Product.findAll({ where: { CategoryId: categoryID } ,raw:true});
-    console.log(product)
+    const product = await Product.findAll({
+      where: { CategoryId: categoryID },
+      raw: true,
+    });
+    console.log(product);
     if (!product) {
       return res
         .status(404)
@@ -42,14 +45,7 @@ exports.getProductID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const {
-      name,
-      image,
-      price,
-      description,
-      quantity,
-      CategoryId,
-    } = req.body;
+    const { name, image, price, description, quantity, CategoryId } = req.body;
     console.log(req.body);
     const filedata = req.file;
 
@@ -124,4 +120,3 @@ exports.deleteProduct = async (req, res) => {
     res.status(400).json({ status: 400, message: "false connexting db" });
   }
 };
-
