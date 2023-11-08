@@ -4,15 +4,15 @@
  *   name: Account
  *   description: The account managing API
  * components:
- *   schemas: 
+ *   schemas:
  *     Account:
  *       type: object
  *       properties:
- *         id: 
+ *         id:
  *           type: integer
  *         name:
  *           type: string
- *         email: 
+ *         email:
  *           type: string
  *         phone:
  *           type: string
@@ -22,7 +22,7 @@
  *           type: string
  *         image:
  *           type: string
- *         password: 
+ *         password:
  *           type: string
  *       required:
  *         - name
@@ -32,7 +32,7 @@
  * /api/register:
  *   post:
  *     summary: Create a new account
- *     tags: 
+ *     tags:
  *       - Account
  *     requestBody:
  *       content:
@@ -91,7 +91,7 @@ const authMidleWare = require("../middleWare/auth.middlewere");
 
 router.post("/register", account.register);
 router.post("/login", account.login);
-router.get("/verify/:idUser/:token", account.verifyEmail);
+router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
 router.post("/changePassword", authMidleWare.apiAuth, account.changPassword);
 

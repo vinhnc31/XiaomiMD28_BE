@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(10000),
       allowNull: false,
     },
     quantity: {
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "productId",
       as: "colorProducts",
     });
-    
+
     // Thiết lập quan hệ một-nhiều với mô hình "Cart"
     Product.hasMany(models.Cart, {
       onDelete: "CASCADE",

@@ -28,6 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
+  // Promotion.associate = (models) => {
+  //   Promotion.hasMany(models.Orders, {
+  //     onDelete: "CASCADE",
+  //     foreignKey: "PromotionId",
+  //     as: "promotions",
+  //   });
+  // };
   return Promotion;
 };

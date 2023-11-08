@@ -3,13 +3,15 @@ exports.getCartByAccount = async (req, res) => {
   const AccountId = req.params.AccountId;
   try {
     const account = Account.findByPk(AccountId);
+    console.log("Account.........." + account);
     if (!account) {
       return res
         .status(404)
         .json({ status: 404, message: "Account not found" });
     }
-
+    console.log("chạy");
     const listCart = await Cart.findAll({ where: { AccountId: AccountId } });
+    console.log("ok");
     if (!listCart) {
       return res
         .status(500)
@@ -23,8 +25,9 @@ exports.getCartByAccount = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.createCart = async (req, res) => {
-  const { productId, AccountId, ProductColorId } = req.body;
+  const { productId, AccountId, ProductColorId, quantity } = req.body;
   console.log(req.body);
   try {
     if (ProductColorId) {
@@ -49,22 +52,24 @@ exports.createCart = async (req, res) => {
       });
     }
 
-    const totalPrice = product.price * 7;
-    console.log(totalPrice);
     const cart = {
       productId,
       AccountId,
       ProductColorId,
-      quantity: 1,
-      total_price: totalPrice,
+      quantity,
+      total_Price: product.price * quantity,
     };
+    console.log(cart.total_Price);
     const createCart = await Cart.create(cart);
     if (!createCart) {
       return res
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
-    return res.status(201).json({ status: 201, data: createCart });
+    return res.status(201).json({
+      status: 201,
+      data: createCart,
+    });
   } catch (error) {
     console.log(error);
     return res
