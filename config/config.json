@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "freedb_xioami_be_md28",
-    "password": "vWEA*ZA!f5bB85S",
-    "database": "freedb_xiaome_be_md28",
+    "username": "freedb_izztruong",
+    "password": "Z95Z*D@!MrBFyjs",
+    "database": "freedb_truongthai",
     "host": "sql.freedb.tech",
     "dialect": "mysql"
   },

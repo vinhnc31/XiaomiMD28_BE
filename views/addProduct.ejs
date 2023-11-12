@@ -41,8 +41,8 @@
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item">Danh sách sản phẩm</li>
-                <li class="breadcrumb-item"><a href="#">
+                <li class="breadcrumb-item"><a href="/products">Danh sách sản phẩm</a></li>
+                <li class="breadcrumb-item"><a href="/products/add">
                         Thêm sản phẩm
                     </a></li>
             </ul>
@@ -127,9 +127,27 @@
 
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="control-label">Mô tả sản phẩm</label>
+
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <h3 class="box-title">Mô tả sản phẩm
+
+                                            </h3>
+
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body pad">
+                                            <form>
+                                                <textarea rows="10" cols="80" name="description" id="description"
+                                                    value="<%=product.description%>">
+
+                                                        </textarea>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- <label class="control-label">Mô tả sản phẩm</label>
                                     <textarea class="form-control" name="description" id="description"
-                                        value="<%=product.description%>" required></textarea>
+                                        value="<%=product.description%>" required></textarea> -->
 
                                 </div>
                             </div>
@@ -181,5 +199,8 @@
             </div>
         </div>
     </div>
+    <script>
+        CKEDITOR.replace('description');
+    </script>
 
     <%- include('footer') %>

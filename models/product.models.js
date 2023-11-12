@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(10000),
       allowNull: false,
     },
     quantity: {
@@ -17,24 +17,26 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     images: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT, // Sửa kiểu dữ liệu thành TEXT
       allowNull: false,
+      get() {
+        // Parse mảng từ chuỗi JSON
+        const images = this.getDataValue("images");
+        return images ? JSON.parse(images) : [];
+      },
+      set(value) {
+        // Chuyển mảng thành chuỗi JSON
+        this.setDataValue("images", JSON.stringify(value));
+      },
     },
   });
 
   Product.associate = (models) => {
-    // Thiết lập quan hệ một-nhiều với mô hình "Comment"
-    Product.hasMany(models.Comment, {
-      onDelete: "CASCADE", // Cascade xóa các Comment liên quan khi một Product bị xóa
-      foreignKey: "productId", // Tên trường khóa ngoại trong bảng "Comment"
-      as: "comments", // Tên thay thế cho quan hệ
-    });
-
-    // Thiết lập quan hệ một-nhiều với mô hình "Favorites"
-    Product.hasMany(models.Favorites, {
-      onDelete: "CASCADE", // Cascade xóa các Favorites liên quan khi một Product bị xóa
-      foreignKey: "productId", // Tên trường khóa ngoại trong bảng "Favorites"
-      as: "favorites", // Tên thay thế cho quan hệ
+    // Thiết lập quan hệ một-nhiều với mô hình "Product_Color"
+    Product.hasMany(models.Product_Color, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "colorProducts",
     });
     Product.belongsTo(models.Category, { foreignKey: "CategoryId" });
   };
