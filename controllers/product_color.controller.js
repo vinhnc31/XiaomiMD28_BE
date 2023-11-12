@@ -3,6 +3,7 @@ const { Product_Color } = require("../models");
 exports.createProductColor = async (req, res) => {
   const { productId, colorId, image } = req.body;
   const fileData = req.file;
+
   try {
     if (!productId || !colorId) {
       return res.status(404).json({
