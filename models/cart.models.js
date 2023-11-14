@@ -4,10 +4,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    total_Price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
   });
 
   Cart.associate = (models) => {
@@ -26,17 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     Cart.belongsTo(models.Product_Color, {
       foreignKey: {
         name: "ProductColorId",
-        allowNull: false,
+        allowNull: true,
       },
     });
-    // Cart.hasMany(models.Order, {
-    //   onDelete: "CASCADE",
-    //   foreignKey: {
-    //     name: "CartId",
-    //     allowNull: false,
-    //   },
-    //   as: "carts",
-    // });
   };
 
   return Cart;

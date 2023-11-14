@@ -1,6 +1,6 @@
 const { Cart, Product, Account, Product_Color } = require("../models");
 exports.getCartByAccount = async (req, res) => {
-  const AccountId = req.params.AccountId;
+  const AccountId = +req.params.AccountId;
   try {
     const account = Account.findByPk(AccountId);
     console.log("Account.........." + account);
@@ -12,10 +12,16 @@ exports.getCartByAccount = async (req, res) => {
     console.log("chạy");
     const listCart = await Cart.findAll({ where: { AccountId: AccountId } });
     console.log("ok");
+    let total_Price = 0;
+
+    for (const cartItem of listCart) {
+      const product = await Product.findByPk(cartItem.productId);
+      total_Price += product.price * cartItem.quantity;
+    }
     if (!listCart) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
     return res.status(200).json({ status: 200, data: listCart });
   } catch (error) {
@@ -30,8 +36,10 @@ exports.createCart = async (req, res) => {
   const { productId, AccountId, ProductColorId, quantity } = req.body;
   console.log(req.body);
   try {
+    let ProductColor = null;
+
     if (ProductColorId) {
-      const ProductColor = await Product_Color.findByPk(ProductColorId);
+      ProductColor = await Product_Color.findByPk(ProductColorId);
       if (!ProductColor) {
         return res.status(404).json({
           status: 404,
@@ -44,7 +52,6 @@ exports.createCart = async (req, res) => {
     const account = await Account.findByPk(AccountId);
     console.log("Product.........." + product);
     console.log("Account.........." + account);
-    console.log("total......" + product.price);
     if (!product || !account) {
       return res.status(404).json({
         status: 404,
@@ -55,11 +62,11 @@ exports.createCart = async (req, res) => {
     const cart = {
       productId,
       AccountId,
-      ProductColorId,
       quantity,
-      total_Price: product.price * quantity,
     };
-    console.log(cart.total_Price);
+    if (ProductColorId) {
+      cartData.ProductColorId = ProductColorId;
+    }
     const createCart = await Cart.create(cart);
     if (!createCart) {
       return res

@@ -23,7 +23,7 @@ const apiAuth = async (req, res, next) => {
     // Tìm người dùng dựa trên dữ liệu từ token
     const user = await User.findOne({
       where: {
-        idUser: data?.idUser,
+        id: data?.id,
       },
     });
 

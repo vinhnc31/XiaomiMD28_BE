@@ -122,10 +122,22 @@
 const express = require("express");
 const router = express.Router();
 const commentController = require("../controllers/comment.controllers");
-
-router.get("/comment/:ProductId", commentController.getProductId);
-router.post("/comment", commentController.createComment);
-router.put("/comment/:id", commentController.updateComment);
-router.delete("/comment/:id", commentController.deleteComment);
+const authMidleWare = require("../middleWare/auth.middlewere");
+router.get(
+  "/comment/:ProductId",
+  authMidleWare.apiAuth,
+  commentController.getProductId
+);
+router.post("/comment", authMidleWare.apiAuth, commentController.createComment);
+router.put(
+  "/comment/:id",
+  authMidleWare.apiAuth,
+  commentController.updateComment
+);
+router.delete(
+  "/comment/:id",
+  authMidleWare.apiAuth,
+  commentController.deleteComment
+);
 
 module.exports = router;
