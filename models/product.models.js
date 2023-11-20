@@ -12,22 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(10000),
       allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     images: {
-      type: DataTypes.TEXT, // Sửa kiểu dữ liệu thành TEXT
+      type: DataTypes.STRING, // Sửa kiểu dữ liệu thành TEXT
       allowNull: false,
-      get() {
-        // Parse mảng từ chuỗi JSON
-        const images = this.getDataValue("images");
-        return images ? JSON.parse(images) : [];
-      },
-      set(value) {
-        // Chuyển mảng thành chuỗi JSON
-        this.setDataValue("images", JSON.stringify(value));
-      },
     },
   });
 
@@ -47,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     // Thiết lập quan hệ một-nhiều với mô hình "Product_Color"
-    Product.hasMany(models.Product_Color, {
+    Product.hasMany(models.productcolor, {
       onDelete: "CASCADE",
       foreignKey: "productId",
       as: "colorProducts",

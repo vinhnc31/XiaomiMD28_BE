@@ -1,4 +1,10 @@
-const { Cart, Product, Account, Product_Color } = require("../models");
+const {
+  Cart,
+  Product,
+  Account,
+  productcolor,
+  ProductColorConfig,
+} = require("../models");
 exports.getCartByAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
   try {
@@ -33,24 +39,43 @@ exports.getCartByAccount = async (req, res) => {
 };
 
 exports.createCart = async (req, res) => {
-  const { productId, AccountId, ProductColorId, quantity } = req.body;
+  const {
+    productId,
+    AccountId,
+    ProductColorId,
+    quantity,
+    ProductColorConfigId,
+  } = req.body;
   console.log(req.body);
   try {
-    let ProductColor = null;
-
+    let productColor = null;
     if (ProductColorId) {
-      ProductColor = await Product_Color.findByPk(ProductColorId);
-      if (!ProductColor) {
+      productColor = await productcolor.findByPk(ProductColorId);
+      if (!productColor) {
         return res.status(404).json({
           status: 404,
-          message: "ProductColor not found",
+          message: "productColor not found",
+        });
+      }
+    }
+    let productColorConfig = null;
+    if (ProductColorId) {
+      productColorConfig = await ProductColorConfig.findByPk(
+        ProductColorConfigId
+      );
+      if (!productColor) {
+        return res.status(404).json({
+          status: 404,
+          message: "productColor not found",
         });
       }
     }
 
+    console.log("vào");
     const product = await Product.findByPk(productId);
     const account = await Account.findByPk(AccountId);
     console.log("Product.........." + product);
+    console.log("Product Color Id........." + productColor);
     console.log("Account.........." + account);
     if (!product || !account) {
       return res.status(404).json({
@@ -65,7 +90,10 @@ exports.createCart = async (req, res) => {
       quantity,
     };
     if (ProductColorId) {
-      cartData.ProductColorId = ProductColorId;
+      cart.ProductColorId = ProductColorId;
+    }
+    if (ProductColorConfigId) {
+      cart.ProductColorConfigId = ProductColorConfigId;
     }
     const createCart = await Cart.create(cart);
     if (!createCart) {

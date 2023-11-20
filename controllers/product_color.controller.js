@@ -1,14 +1,17 @@
 const cloudinary = require("cloudinary").v2;
-const { Product_Color } = require("../models");
+const { productcolor, Color, Product } = require("../models");
 exports.createProductColor = async (req, res) => {
   const { productId, colorId, image } = req.body;
   const fileData = req.file;
   try {
-    if (!productId || !colorId) {
-      return res.status(404).json({
-        status: 404,
-        message: "Product or Color not found",
-      });
+    const product = await Product.findByPk(productId);
+    const color = await Color.findByPk(colorId);
+    console.log(product);
+    console.log(color);
+    if (!product || !color) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Product or color not found" });
     }
     if (!image && !fileData) {
       if (fileData) {
@@ -29,11 +32,11 @@ exports.createProductColor = async (req, res) => {
     }
 
     const productColor = { productId, colorId, image: imageUrl };
-    const createProductColor = Product_Color.create(productColor);
+    const createProductColor = await productcolor.create(productColor);
     if (!createProductColor) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
     return res.status(201).json({ status: 201, data: productColor });
   } catch (error) {
@@ -47,7 +50,7 @@ exports.createProductColor = async (req, res) => {
 exports.deleteProductColor = async (req, res) => {
   const id = req.params.id;
   try {
-    const whereId = Product_Color.findByPk(id);
+    const whereId = ProductColor.findByPk(id);
 
     if (!whereId) {
       return res

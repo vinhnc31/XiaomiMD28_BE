@@ -1,19 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product_Color = sequelize.define("Product_Color", {
+  const ProductColor = sequelize.define("productcolor", {
     image: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   });
-  
-  Product_Color.associate = (models) => {
-    Product_Color.belongsTo(models.Product, { foreignKey: "productId" });
-    Product_Color.belongsTo(models.Color, { foreignKey: "colorId" });
-    Product_Color.hasMany(models.Cart, {
+
+  ProductColor.associate = (models) => {
+    ProductColor.belongsTo(models.Product, { foreignKey: "productId" });
+    ProductColor.belongsTo(models.Color, { foreignKey: "colorId" });
+    ProductColor.hasMany(models.Cart, {
       foreignKey: "ProductColorId",
       as: "colorProducts",
     });
+
+    ProductColor.hasMany(models.ProductColorConfig, {
+      foreignKey: "ProductColorId",
+      as: "colorConfigs", // Changed alias for clarity
+    });
   };
-  
-  return Product_Color;
-  };
+
+  return ProductColor;
+};

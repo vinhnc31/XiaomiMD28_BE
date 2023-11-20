@@ -131,13 +131,12 @@ const router = express.Router();
 const productController = require("../controllers/product.controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
 
-
 router.get("/product", productController.getProduct);
 router.get("/product/:id", productController.getProductId);
 router.get("/product/category/:CategoryId", productController.getCategoryID);
 router.post(
   "/product",
-  cloudinary.single("image"),
+  cloudinary.single("file"),
   productController.addCategory
 );
 router.delete("/product/:id", productController.deleteProduct);

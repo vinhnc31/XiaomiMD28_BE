@@ -13,16 +13,25 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     });
+
     Cart.belongsTo(models.Account, {
       foreignKey: {
         name: "AccountId",
         allowNull: false,
       },
     });
-    Cart.belongsTo(models.Product_Color, {
+
+    Cart.belongsTo(models.productcolor, {
       foreignKey: {
         name: "ProductColorId",
-        allowNull: true,
+        allowNull: false,
+      },
+    });
+
+    Cart.belongsTo(models.ProductColorConfig, {
+      foreignKey: {
+        name: "ProductColorConfigId",
+        allowNull: false,
       },
     });
   };

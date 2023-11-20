@@ -23,8 +23,8 @@ exports.createColor = async (req, res) => {
     const addColor = await Color.create(color);
     if (!addColor) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
     return res.status(201).json({ status: 201, data: addColor });
   } catch (error) {
@@ -38,15 +38,15 @@ exports.createColor = async (req, res) => {
 exports.deleteColor = async (req, res) => {
   const id = req.params.id;
   try {
-    const deleteColor = Color.findByPk(id);
+    const deleteColor = await Config.findByPk(id); // Add 'await' here
     if (!deleteColor) {
       return res.status(404).json({ status: 404, message: "Color not found" });
     }
-    const DeleteColor = deleteColor.destroy();
-    if (!DeleteColor) {
+    const deleteResult = await deleteColor.destroy(); // Use 'deleteConfig.destroy()'
+    if (!deleteResult) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
     return res
       .status(204)
