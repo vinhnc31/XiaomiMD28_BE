@@ -10,10 +10,5 @@ router.get(
 );
 router.post("/cart", cartController.createCart);
 router.put("/cart/:id", authMidleWare.apiAuth, cartController.updateCart);
-router.delete(
-  "/cart/:id",
-  authMidleWare.apiAuth,
-  authMidleWare.apiAuth,
-  cartController.deleteCart
-);
+router.delete("/cart/:id", authMidleWare.apiAuth, cartController.deleteCart);
 module.exports = router;

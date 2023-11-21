@@ -77,6 +77,7 @@ exports.createCart = async (req, res) => {
     console.log("Product.........." + product);
     console.log("Product Color Id........." + productColor);
     console.log("Account.........." + account);
+    console.log("Product Color Config Id......." + productColorConfig);
     if (!product || !account) {
       return res.status(404).json({
         status: 404,

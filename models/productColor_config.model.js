@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
   });
 
   ProductColorConfig.associate = (models) => {
@@ -14,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     console.log("bbbbbbbbb" + models.Config); // Check if this logs the correct model
     ProductColorConfig.belongsTo(models.Config, {
       foreignKey: "configId",
+    });
+    ProductColorConfig.hasMany(models.Cart, {
+      foreignKey: "ProductColorConfigId",
+      as: "colorConfigs", // Changed alias for clarity
     });
   };
 

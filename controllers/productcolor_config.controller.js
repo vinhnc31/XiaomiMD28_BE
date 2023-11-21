@@ -1,9 +1,9 @@
 const { ProductColorConfig, Config, productcolor } = require("../models");
 
 exports.createProductColorConfig = async (req, res) => {
-  const { quantity, configId, ProductColorId } = req.body;
+  const { quantity, configId, ProductColorId, price } = req.body;
   try {
-    if (!quantity) {
+    if (!quantity || !price) {
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
@@ -16,7 +16,7 @@ exports.createProductColorConfig = async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Config or Product Color not found" });
     }
-    const createConfig = { quantity, configId, ProductColorId };
+    const createConfig = { quantity, configId, ProductColorId, price };
     const createProductColorConfig = await ProductColorConfig.create(
       createConfig
     );

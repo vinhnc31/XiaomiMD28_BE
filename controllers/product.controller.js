@@ -1,5 +1,12 @@
 const cloudinary = require("cloudinary").v2;
-const { Product, Product_Color, Color, Category } = require("../models");
+const {
+  Product,
+  ProductColor,
+  Color,
+  Category,
+  ProductColorConfig,
+  Config,
+} = require("../models");
 exports.getProduct = async (req, res) => {
   try {
     const listProduct = await Product.findAll();
@@ -18,30 +25,45 @@ exports.getProduct = async (req, res) => {
 
 exports.getProductId = async (req, res) => {
   const id = req.params.id;
+
   try {
+    // Check if ID is provided
     if (!id) {
       return res
         .status(404)
         .json({ status: 404, message: "Product not found" });
     }
-    const product = await Product.findAll({
+    const product = await Product.findOne({
       where: { id: id },
       include: [
         {
-          model: Product_Color,
-          as: "colorProducts",
-          include: [Color],
+          model: ProductColor,
+          include: [
+            {
+              model: Color,
+            },
+          ],
+        },
+        {
+          model: ProductColorConfig,
+          include: [
+            {
+              model: Config,
+            },
+          ],
         },
       ],
     });
     if (!product) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(404)
+        .json({ status: 404, message: "Product not found" });
     }
+
+    // Return the product data
     return res.status(200).json({ status: 200, data: product });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
