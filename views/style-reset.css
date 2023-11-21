@@ -1,0 +1,138 @@
+.box {
+    width: 1198px;
+    height: 671px;
+}
+
+.box .group {
+    position: fixed;
+    width: 1214px;
+    height: 671px;
+    top: 0;
+    left: 0;
+}
+
+.box .overlap-group {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 4px #00000040;
+    background-image: url(./img/group-27.png);
+    background-size: 100% 100%;
+}
+
+.box .rectangle {
+    position: absolute;
+    width: 1197px;
+    height: 671px;
+    top: 0;
+    left: 0;
+    background-color: #ff6900;
+    border-radius: 0px 0px 0px 901px;
+}
+
+.box .div {
+    position: absolute;
+    width: 625px;
+    height: 368px;
+    top: 153px;
+    left: 47px;
+    background-color: #ffffff;
+    border-radius: 62px;
+    box-shadow: 1px 1px 4px #00000040;
+}
+
+.box .text-wrapper {
+    position: absolute;
+    width: 431px;
+    top: 194px;
+    left: 81px;
+    font-family: "Libre Baskerville", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.box .rectangle-2 {
+    position: absolute;
+    width: 359px;
+    height: 56px;
+    top: 296px;
+    left: 81px;
+    background-color: #f6f6f6;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px #00000040;
+}
+
+.box .text-wrapper-2 {
+    position: absolute;
+    width: 124px;
+    top: 314px;
+    left: 126px;
+    font-family: "Libre Baskerville", Helvetica;
+    font-weight: 400;
+    color: #a3a3a3;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.box .mail {
+    position: absolute;
+    width: 20px;
+    height: 18px;
+    top: 315px;
+    left: 97px;
+    object-fit: cover;
+}
+
+.box .text-wrapper-3 {
+    position: absolute;
+    width: 166px;
+    top: 463px;
+    left: 182px;
+    font-family: "Libre Baskerville", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.box .rectangle-3 {
+    position: absolute;
+    width: 359px;
+    height: 49px;
+    top: 377px;
+    left: 81px;
+    background-color: #ff7f37;
+    border-radius: 19px;
+    box-shadow: 0px 4px 4px #00000040;
+}
+
+.box .text-wrapper-4 {
+    position: absolute;
+    width: 110px;
+    top: 389px;
+    left: 227px;
+    font-family: "Libre Baskerville", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 18px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.box .rectangle-4 {
+    position: absolute;
+    width: 485px;
+    height: 671px;
+    top: 0;
+    left: 712px;
+    background-color: #ffffff;
+    border-radius: 65px 0px 0px 65px;
+}

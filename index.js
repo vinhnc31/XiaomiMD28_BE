@@ -50,7 +50,7 @@ app.use("/api", account);
 app.use("/api", accounts_google);
 
 app.get("/", function(req, res){
-  res.render('home');
+  res.render('addCustomer');
 });
 
 db.sequelize.sync().then(() => {
