@@ -1,6 +1,12 @@
-const { Cart, Product, Account, Product_Color } = require("../models");
+const {
+  Cart,
+  Product,
+  Account,
+  productcolor,
+  ProductColorConfig,
+} = require("../models");
 exports.getCartByAccount = async (req, res) => {
-  const AccountId = req.params.AccountId;
+  const AccountId = +req.params.AccountId;
   try {
     const account = Account.findByPk(AccountId);
     console.log("Account.........." + account);
@@ -12,10 +18,16 @@ exports.getCartByAccount = async (req, res) => {
     console.log("chạy");
     const listCart = await Cart.findAll({ where: { AccountId: AccountId } });
     console.log("ok");
+    let total_Price = 0;
+
+    for (const cartItem of listCart) {
+      const product = await Product.findByPk(cartItem.productId);
+      total_Price += product.price * cartItem.quantity;
+    }
     if (!listCart) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
     return res.status(200).json({ status: 200, data: listCart });
   } catch (error) {
@@ -27,24 +39,45 @@ exports.getCartByAccount = async (req, res) => {
 };
 
 exports.createCart = async (req, res) => {
-  const { productId, AccountId, ProductColorId, quantity } = req.body;
+  const {
+    productId,
+    AccountId,
+    ProductColorId,
+    quantity,
+    ProductColorConfigId,
+  } = req.body;
   console.log(req.body);
   try {
+    let productColor = null;
     if (ProductColorId) {
-      const ProductColor = await Product_Color.findByPk(ProductColorId);
-      if (!ProductColor) {
+      productColor = await productcolor.findByPk(ProductColorId);
+      if (!productColor) {
         return res.status(404).json({
           status: 404,
-          message: "ProductColor not found",
+          message: "productColor not found",
+        });
+      }
+    }
+    let productColorConfig = null;
+    if (ProductColorId) {
+      productColorConfig = await ProductColorConfig.findByPk(
+        ProductColorConfigId
+      );
+      if (!productColor) {
+        return res.status(404).json({
+          status: 404,
+          message: "productColor not found",
         });
       }
     }
 
+    console.log("vào");
     const product = await Product.findByPk(productId);
     const account = await Account.findByPk(AccountId);
     console.log("Product.........." + product);
+    console.log("Product Color Id........." + productColor);
     console.log("Account.........." + account);
-    console.log("total......" + product.price);
+    console.log("Product Color Config Id......." + productColorConfig);
     if (!product || !account) {
       return res.status(404).json({
         status: 404,
@@ -55,11 +88,14 @@ exports.createCart = async (req, res) => {
     const cart = {
       productId,
       AccountId,
-      ProductColorId,
       quantity,
-      total_Price: product.price * quantity,
     };
-    console.log(cart.total_Price);
+    if (ProductColorId) {
+      cart.ProductColorId = ProductColorId;
+    }
+    if (ProductColorConfigId) {
+      cart.ProductColorConfigId = ProductColorConfigId;
+    }
     const createCart = await Cart.create(cart);
     if (!createCart) {
       return res

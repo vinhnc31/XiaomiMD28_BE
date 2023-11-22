@@ -1,5 +1,12 @@
 const cloudinary = require("cloudinary").v2;
-const { Product, Product_Color, Color, Category } = require("../models");
+const {
+  Product,
+  ProductColor,
+  Color,
+  Category,
+  ProductColorConfig,
+  Config,
+} = require("../models");
 exports.getProduct = async (req, res) => {
   try {
     const listProduct = await Product.findAll();
@@ -18,30 +25,45 @@ exports.getProduct = async (req, res) => {
 
 exports.getProductId = async (req, res) => {
   const id = req.params.id;
+
   try {
+    // Check if ID is provided
     if (!id) {
       return res
         .status(404)
         .json({ status: 404, message: "Product not found" });
     }
-    const product = await Product.findAll({
+    const product = await Product.findOne({
       where: { id: id },
       include: [
         {
-          model: Product_Color,
-          as: "colorProducts",
-          include: [Color],
+          model: ProductColor,
+          include: [
+            {
+              model: Color,
+            },
+          ],
+        },
+        {
+          model: ProductColorConfig,
+          include: [
+            {
+              model: Config,
+            },
+          ],
         },
       ],
     });
     if (!product) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(404)
+        .json({ status: 404, message: "Product not found" });
     }
+
+    // Return the product data
     return res.status(200).json({ status: 200, data: product });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
@@ -76,24 +98,19 @@ exports.getCategoryID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const { name, images, price, description, quantity, CategoryId } = req.body;
-    console.log(req.body);
-    const filedata = req.file;
+    const { name, price, description, CategoryId, images } = req.body;
+    const fileData = req.files; // Use req.files for multiple files
 
-    if (!name || (!images && !filedata) || !price || !quantity) {
-      if (filedata) {
-        // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
-        cloudinary.uploader.destroy(filedata.filename);
-      }
+    if (!name || !price || (!images && !fileData)) {
+      // Handle other required fields
+
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
 
-    const category = await Category.findByPk(CategoryId); // Đợi cho truy vấn hoàn thành
+    const category = await Category.findByPk(CategoryId);
 
-    console.log("aaaaaaa");
-    // Kiểm tra nếu CategoryId đã được xác định
     if (!category) {
       return res.status(400).json({
         status: 400,
@@ -102,34 +119,32 @@ exports.addCategory = async (req, res) => {
     }
 
     let imageUrl = "";
-    if (filedata) {
+    if (fileData) {
       // Tiến hành tải lên hình ảnh lên Cloudinary
-      const result = await cloudinary.uploader.upload(filedata.path);
+      const result = await cloudinary.uploader.upload(fileData.path);
       imageUrl = result.secure_url;
     } else if (images) {
       imageUrl = images;
     }
-
     const product = {
       name,
-      images: imageUrl,
+      images: imageUrl, // Store multiple image URLs as a comma-separated string or an array in your database
       price,
       description,
-      quantity,
       CategoryId,
     };
 
     const addProduct = await Product.create(product);
-    console.log(addProduct);
+
     if (!addProduct) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to the database" });
     }
 
     return res.status(201).json({ status: 201, data: addProduct });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });

@@ -1,5 +1,22 @@
 const { Orders, Account, Address, Pay, Cart, Promotion } = require("../models");
 
+exports.getListOrder = async (req, res) => {
+  try {
+    const listOrder = await Orders.findAll();
+    if (!listOrder) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
+    }
+    return res.status(200).json({ status: 200, data: listOrder });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.createOrder = async (req, res) => {
   const { message, status, AccountId, AddressId, PayId, CartId, PromotionId } =
     req.body;
@@ -43,17 +60,38 @@ exports.createOrder = async (req, res) => {
     } else {
       order.total = cart.total_Price;
     }
-
-    if (pay.id == 1) {
-      const createOrder = await Orders.create(order);
-      if (!createOrder) {
-        return res
-          .status(500)
-          .json({ status: 500, message: "Error connecting to database" });
-      }
-      return res.status(201).json({ status: 201, data: createOrder });
-    } else {
+    const createOrder = await Orders.create(order);
+    if (!createOrder) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
+    return res.status(201).json({ status: 201, data: createOrder });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.updateOrder = async (req, res) => {
+  const id = req.params.id;
+  const { status } = req.body;
+  try {
+    const whereId = await Orders.findByPk(id);
+    if (!whereId) {
+      return res.status(404).json({ status: 404, message: "Order not found" });
+    }
+    const updateOrder = await Orders.update(status);
+    if (!updateOrder) {
+      return res
+        .status(500)
+        .json({ status: 400, message: "Error connecting to database" });
+    }
+    return res
+      .status(200)
+      .json({ status: 200, message: "Update successfully" });
   } catch (error) {
     console.log(error);
     return res

@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
   Color.associate = (models) => {
-    Color.hasMany(models.Product_Color, {
-      onDelete: "CASCADE", 
-      foreignKey: "colorId", 
-      as: "colorProducts", 
+    Color.hasMany(models.productcolor, {
+      onDelete: "CASCADE",
+      foreignKey: "colorId",
+      as: "colorProducts",
     });
   };
   return Color;

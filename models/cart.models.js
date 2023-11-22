@@ -4,10 +4,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    total_Price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
   });
 
   Cart.associate = (models) => {
@@ -17,26 +13,27 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     });
+
     Cart.belongsTo(models.Account, {
       foreignKey: {
         name: "AccountId",
         allowNull: false,
       },
     });
-    Cart.belongsTo(models.Product_Color, {
+
+    Cart.belongsTo(models.productcolor, {
       foreignKey: {
         name: "ProductColorId",
         allowNull: false,
       },
     });
-    // Cart.hasMany(models.Order, {
-    //   onDelete: "CASCADE",
-    //   foreignKey: {
-    //     name: "CartId",
-    //     allowNull: false,
-    //   },
-    //   as: "carts",
-    // });
+
+    Cart.belongsTo(models.ProductColorConfig, {
+      foreignKey: {
+        name: "ProductColorConfigId",
+        allowNull: false,
+      },
+    });
   };
 
   return Cart;

@@ -16,8 +16,10 @@ const favorites = require("./routers/favorites.router");
 const accounts_google = require("./routers/accounts_google.router");
 const color = require("./routers/color.router");
 const product_color = require("./routers/product_color.router");
-const cart = require("./routers/cart.router")
+const cart = require("./routers/cart.router");
+const config = require("./routers/config.router");
 const db = require("./models");
+const product_color_config = require("./routers/productcolor_config.router");
 const PORT = process.env.POST || 3000;
 
 app.set("view engine", "ejs");
@@ -26,8 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use(express.static('views'));
-
+app.use(express.static("views"));
 
 const options = {
   definition: {
@@ -58,9 +59,10 @@ app.use("/api", favorites);
 app.use("/api", color);
 app.use("/api", product_color);
 app.use("/api", cart);
-
-app.get("/", function(req, res){
-  res.render('home');
+app.use("/api", config);
+app.use("/api", product_color_config);
+app.get("/", function (req, res) {
+  res.render("home");
 });
 
 db.sequelize.sync().then(() => {
