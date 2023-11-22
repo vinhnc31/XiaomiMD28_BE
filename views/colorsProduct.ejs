@@ -1,98 +1,197 @@
 <%- include('head') %>
-    <%- include('aside') %>
-        <main class="app-content">
-            <div class="app-title">
-                <ul class="app-breadcrumb breadcrumb side">
-                    <li class="breadcrumb-item active">
-                        <a href="#">
-                            <b>Danh sách sản phẩm</b></a>
-                    </li>
-                    <li class="breadcrumb-item"><a href="#">
-                            Thêm sản phẩm
-                        </a></li>
-                    <li class="breadcrumb-item"><a href="#">
-                            Màu sản phẩm
-                        </a></li>
-                </ul>
 
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg"
+                width="50px" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name"><b>Admin</b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="tile">
-                        <div class="tile-body">
-                            <div class="row element-button">
-                                <div class="col-sm-2">
-                                    <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addcolor"
-                                        title="Thêm"><i class="fas fa-plus"></i>
-                                        Thêm màu</a>
-                                </div>
-                                <div class="col-sm-2">
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i
+                        class='app-menu__icon fa fa-shopping-cart'></i>
+                    <span class="app-menu__label">Xioami VN</span></a></li>
+            <li><a class="app-menu__item " href="index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        class="app-menu__label">Bảng điều khiển</span></a></li>
+            <li><a class="app-menu__item " href="table-data-table.html"><i class='app-menu__icon bx bx-id-card'></i>
+                    <span class="app-menu__label">Quản lý nhân viên</span></a></li>
+            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
+                        class="app-menu__label">Quản lý khách hàng</span></a></li>
+            <li><a class="app-menu__item active" href="/products"><i
+                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
+                        phẩm</span></a>
+            </li>
+            <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+                        class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
+                        class="app-menu__label">Quản lý nội bộ
+                    </span></a></li>
+            <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
+            </li>
 
-                                    <a class="btn btn-add btn-sm" href="/products/add" title="Thêm"><i
-                                            class="fas fa-plus"></i>
-                                        Thêm màu sản phẩm</a>
+        </ul>
+    </aside>
+
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb side">
+                <li class="breadcrumb-item active">
+                    <a href="#">
+                        <b>Danh sách sản phẩm</b></a>
+                </li>
+                <li class="breadcrumb-item"><a href="#">
+                        Thêm sản phẩm
+                    </a></li>
+                <li class="breadcrumb-item"><a href="#">
+                        Màu sản phẩm
+                    </a></li>
+            </ul>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="tile-body">
+                        <div class="row element-button">
+                            <div class="col-sm-2">
+                                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addcolor"
+                                    title="Thêm"><i class="fas fa-plus"></i>
+                                    Thêm màu</a>
+                            </div>
+                            <div class="col-sm-2">
+
+                                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addProduct_color"
+                                    title="Thêm"><i class="fas fa-plus"></i>
+                                    Thêm màu sản phẩm</a>
+                            </div>
+                        </div>
+                        <div id="sampleTable_wrapper"
+                            class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable"
+                                        role="grid" aria-describedby="sampleTable_info">
+                                        <thead>
+                                            <tr role="row">
+
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="Mã sản phẩm: activate to sort column ascending"
+                                                    style="width: 118.662px;">Mã màu</th>
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="Tên sản phẩm: activate to sort column ascending"
+                                                    style="width: 150px;">Tên màu</th>
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1" aria-label="Ảnh: activate to sort column ascending"
+                                                    style="width: 147.2625px;">Ảnh</th>
+
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="Chức năng: activate to sort column ascending"
+                                                    style="width: 98.8375px;">Tính năng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if(data){ data.map(function(product){%>
+                                                <tr role="row" class="odd">
+                                                    <td>
+                                                        <%=product.Color.id%>
+                                                    </td>
+                                                    <td>
+                                                        <%=product.Color.name%>
+                                                    </td>
+                                                    <td>
+                                                        <img src="<%=product.image%>" alt="" width="100px;">
+                                                    </td>
+
+                                                    <td><button class="btn btn-primary btn-sm trash" type="button"
+                                                            title="Xóa" data-toggle="modal"
+                                                            data-target="#<%=product.id%>"><i
+                                                                class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                        <!-- model xóa -->
+                                                        <div class="modal fade" id="<%=product.id%>" tabindex="-1"
+                                                            role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                            data-backdrop="static" data-keyboard="false">
+                                                            <div class="modal-dialog modal-dialog-centered"
+                                                                role="document">
+                                                                <div class="modal-content text-center">
+                                                                    <div class="modal-header text-center  ">
+                                                                        <h2 class="modal-title w-100">
+                                                                            fa</h2>
+
+                                                                    </div>
+
+                                                                    <div class="modal-body text-center text-dark ">
+                                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                        <h5>Bạn có chắc muốn xóa sản phẩm này không?
+                                                                        </h5>
+
+                                                                        <BR>
+                                                                        <form class="text-right"
+                                                                            action="/products/delete/<%=product.id%>"
+                                                                            method="post">
+
+                                                                            <a class="btn btn-cancel"
+                                                                                data-dismiss="modal" href="#">Hủy
+                                                                                bỏ</a>
+                                                                            <input type="hidden" value="<%=product.id%>"
+                                                                                name="<%=product.id%>">
+                                                                            <button class="btn btn-save"
+                                                                                type="submit">Đồng ý</button>
+                                                                        </form>
+                                                                        <BR>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+
+                                                        <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                                            href="/products/update/<%=product.id%>"><i
+                                                                class="fas fa-edit"></i></a>
+
+                                                    </td>
+                                                </tr>
+                                                <%})}%>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div id="sampleTable_wrapper"
-                                class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table class="table table-hover table-bordered dataTable no-footer"
-                                            id="sampleTable" role="grid" aria-describedby="sampleTable_info">
-                                            <thead>
-                                                <tr role="row">
-
-                                                    <th class="sorting" tabindex="0" aria-controls="sampleTable"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Mã sản phẩm: activate to sort column ascending"
-                                                        style="width: 118.662px;">Mã màu</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="sampleTable"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Tên sản phẩm: activate to sort column ascending"
-                                                        style="width: 150px;">Tên màu</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="sampleTable"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Ảnh: activate to sort column ascending"
-                                                        style="width: 147.2625px;">Ảnh</th>
-
-                                                    <th class="sorting" tabindex="0" aria-controls="sampleTable"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Chức năng: activate to sort column ascending"
-                                                        style="width: 98.8375px;">Tính năng</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
+                                        Hiện
+                                        1 đến 10 của 16 danh mục</div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="sampleTable_info" role="status"
-                                            aria-live="polite">
-                                            Hiện
-                                            1 đến 10 của 16 danh mục</div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-7">
-                                        <div class="dataTables_paginate paging_simple_numbers"
-                                            id="sampleTable_paginate">
-                                            <ul class="pagination">
-                                                <li class="paginate_button page-item previous disabled"
-                                                    id="sampleTable_previous"><a href="#" aria-controls="sampleTable"
-                                                        data-dt-idx="0" tabindex="0" class="page-link">Lùi</a></li>
-                                                <li class="paginate_button page-item active"><a href="#"
-                                                        aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                        class="page-link">1</a></li>
-                                                <li class="paginate_button page-item "><a href="#"
-                                                        aria-controls="sampleTable" data-dt-idx="2" tabindex="0"
-                                                        class="page-link">2</a></li>
-                                                <li class="paginate_button page-item next" id="sampleTable_next"><a
-                                                        href="#" aria-controls="sampleTable" data-dt-idx="3"
-                                                        tabindex="0" class="page-link">Tiếp</a></li>
-                                            </ul>
-                                        </div>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
+                                        <ul class="pagination">
+                                            <li class="paginate_button page-item previous disabled"
+                                                id="sampleTable_previous"><a href="#" aria-controls="sampleTable"
+                                                    data-dt-idx="0" tabindex="0" class="page-link">Lùi</a></li>
+                                            <li class="paginate_button page-item active"><a href="#"
+                                                    aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                    class="page-link">1</a></li>
+                                            <li class="paginate_button page-item "><a href="#"
+                                                    aria-controls="sampleTable" data-dt-idx="2" tabindex="0"
+                                                    class="page-link">2</a></li>
+                                            <li class="paginate_button page-item next" id="sampleTable_next"><a href="#"
+                                                    aria-controls="sampleTable" data-dt-idx="3" tabindex="0"
+                                                    class="page-link">Tiếp</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -100,50 +199,105 @@
                     </div>
                 </div>
             </div>
-        </main>
-        <!-- model mau -->
-        <div class="modal fade" id="addcolor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-            data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
+        </div>
+    </main>
+    <!-- model mau -->
+    <div class="modal fade" id="addcolor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
 
-                    <div class="modal-body">
-                        <form action="/products/add/colorProduct" method="post">
-                            <div class="row">
-                                <div class="form-group  col-md-12">
-                                    <span class="thong-tin-thanh-toan">
-                                        <h5>Thêm mới màu </h5>
-                                    </span>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label class="control-label">Nhập tên màu mới</label>
-                                    <input class="form-control" type="text" name="newColor" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label class="control-label">Danh mục màu hiện đang có</label>
-                                    <ul style="padding-left: 20px;">
-                                        <% color.map(function(color){%>
-                                            <li>
-                                                <%=color.name %>
-                                            </li>
-                                            <%})%>
-
-                                    </ul>
-                                </div>
+                <div class="modal-body">
+                    <form action="/products/add/colorProduct" method="post">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <span class="thong-tin-thanh-toan">
+                                    <h5>Thêm mới màu </h5>
+                                </span>
                             </div>
-                            <BR>
-                            <button class="btn btn-save" type="submit">Lưu lại</button>
-                            <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                            <BR>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Nhập tên màu mới</label>
+                                <input class="form-control" type="text" name="newColor" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Danh mục màu hiện đang có</label>
+                                <ul style="padding-left: 20px;">
+                                    <% color.map(function(color){%>
+                                        <li>
+                                            <%=color.name %>
+                                        </li>
+                                        <%})%>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <BR>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <BR>
+                    </form>
+                </div>
+                <div class="modal-footer">
                 </div>
             </div>
         </div>
+    </div>
+    <!-- model them mau sp -->
+
+    <div class="modal fade" id="addProduct_color" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form action="/products/add/colorProduct/<%=productId%>" method="post">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <span class="thong-tin-thanh-toan">
+                                    <h5>Thêm màu sản phẩm </h5>
+                                </span>
+                            </div>
+                            <div class="form-group  col-md-12">
+                                <label for="exampleSelect1" class="control-label">Màu:</label>
+                                <select class="form-control" name="colorId" required>
+                                    <option>-- Chọn màu --</option>
+                                    <% color.map(function(color){%>
+                                        <option value="<%=color.id %>">
+                                            <%=color.name %>
+                                        </option>
+                                        <%})%>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Ảnh sản phẩm</label>
+                                <div id="myfileupload">
+                                    <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                </div>
+                                <div id="thumbbox">
+                                    <img height="450" width="400" alt="Thumb image" id="thumbimage" />
+                                    <a class="removeimg" href="javascript:"></a>
+                                </div>
+                                <div id="boxchoice">
+                                    <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
+                                        Chọn ảnh</a>
+                                    <p style="clear:both"></p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <BR>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <BR>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
-        <%- include('footer') %>
+    <%- include('footer') %>

@@ -15,7 +15,13 @@ router.post(
   productController.updateProduct
 );
 router.post("/addCategory", productController.addCategory);
-router.get("/add/colorProduct", productController.indexColorProduct);
-router.post("/add/colorProduct", productController.addColor);
+router.get("/add/colorProduct/:id", productController.indexColorProduct);
+router.post("/add/color", productController.addColor);
+router.post(
+  "/add/colorProduct/:id",
+  cloudinary.single("image"),
+  productController.addProductColor
+);
+router.get("/aa", productController.color);
 
 module.exports = router;

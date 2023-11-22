@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const { name } = require("ejs");
-const { Product, Category, Color } = require("../models");
+const { Product, Category, Color, Product_Color } = require("../models");
 const { Op } = require("sequelize");
 exports.index = async (req, res) => {
   try {
@@ -142,7 +142,8 @@ exports.addProduct = async (req, res) => {
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
-    return res.redirect("/products");
+
+    return res.redirect("/products/add/colorProduct/" + addProduct.id);
   } catch (error) {
     console.log(error);
     return res
@@ -254,12 +255,38 @@ exports.addCategory = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
+exports.color = async (req, res) => {
+  try {
+    const productColor = await Product_Color.findAll({
+      include: [
+        {
+          model: Color,
+        },
+      ],
+    });
+    res.json(productColor);
+  } catch (error) {
+    console.log(error);
+  }
+};
 exports.indexColorProduct = async (req, res, next) => {
+  const productId = req.params.id;
+  console.log(productId);
   try {
     const listColor = await Color.findAll();
+    const productColor = await Product_Color.findAll({
+      include: [
+        {
+          model: Color,
+        },
+      ],
+    });
 
     res.render("colorsProduct", {
       color: listColor,
+      productId: productId,
+      data: productColor,
     });
   } catch (error) {
     console.log(error);
@@ -274,6 +301,51 @@ exports.addColor = async (req, res, next) => {
     const addColor = await Color.create({ name: newColor });
 
     return res.redirect("/products/add/colorProduct");
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.addProductColor = async (req, res, next) => {
+  const { colorId, image } = req.body;
+  const productId = req.params.id;
+
+  const fileData = req.file;
+  try {
+    if (!productId || !colorId) {
+      return res.status(404).json({
+        status: 404,
+        message: "Product or Color not found",
+      });
+    }
+    if (!image && !fileData) {
+      if (fileData) {
+        // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
+        cloudinary.uploader.destroy(fileData.filename);
+      }
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
+    let imageUrl = "";
+    if (fileData) {
+      // Tiến hành tải lên hình ảnh lên Cloudinary
+      const result = await cloudinary.uploader.upload(fileData.path);
+      imageUrl = result.secure_url;
+    } else if (image) {
+      imageUrl = image;
+    }
+
+    const productColor = { productId, colorId, image: imageUrl };
+    const createProductColor = Product_Color.create(productColor);
+    if (!createProductColor) {
+      return res
+        .status(500)
+        .json({ status: 500, message: "Error connecting to database" });
+    }
+    return res.redirect("/products/add/colorProduct/" + productId);
   } catch (error) {
     console.log(error);
     return res

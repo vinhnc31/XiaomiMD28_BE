@@ -42,7 +42,7 @@
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb">
                 <li class="breadcrumb-item"><a href="/products">Danh sách sản phẩm</a></li>
-                <li class="breadcrumb-item"><a href="/products/add">
+                <li class="breadcrumb-item "><a href="/products/add">
                         Thêm sản phẩm
                     </a></li>
             </ul>
@@ -58,16 +58,10 @@
                                     <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#adddanhmuc"><i
                                             class="fas fa-folder-plus"></i> Thêm danh mục</a>
                                 </div>
-                                <div class="col-sm-2">
-                                    <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addtinhtrang"><i
-                                            class="fas fa-folder-plus"></i> Thêm tình trạng</a>
-                                </div>
+
                             </div>
                             <div class="row">
-                                <!-- <div class="form-group col-md-4">
-                                    <label class="control-label">Mã sản phẩm </label>
-                                    <input class="form-control" type="number" placeholder="">
-                                </div> -->
+
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Tên sản phẩm</label>
                                     <input class="form-control" type="text" name="name" value="<%=product.name%>"
@@ -80,14 +74,7 @@
                                     <input class="form-control" type="number" name="quantity"
                                         value="<%=product.quantity%>" required>
                                 </div>
-                                <div class="form-group col-md-4 ">
-                                    <label for="exampleSelect1" class="control-label">Tình trạng</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>-- Chọn tình trạng --</option>
-                                        <option>Còn hàng</option>
-                                        <option>Hết hàng</option>
-                                    </select>
-                                </div>
+
                                 <div class="form-group col-md-4">
                                     <label for="exampleSelect1" class="control-label">Danh mục</label>
                                     <select class="form-control" name="CategoryId" value="<%=product.CategoryId%>"
@@ -108,7 +95,8 @@
                                         required>
                                 </div>
 
-                                <div class="form-group col-md-12">
+                                <!-- <div class="form-group col-md-12">
+
                                     <label class="control-label">Ảnh sản phẩm</label>
                                     <div id="myfileupload">
                                         <input type="file" id="uploadfile" name="image" required />
@@ -125,7 +113,26 @@
                                         <p style="clear:both"></p>
                                     </div>
 
+                                </div> -->
+
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ảnh sản phẩm</label>
+                                    <div id="myfileupload">
+                                        <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                    </div>
+                                    <div id="thumbbox">
+                                        <img height="450" width="400" alt="Thumb image" id="thumbimage"
+                                            style="display: none" />
+                                        <a class="removeimg" href="javascript:"></a>
+                                    </div>
+                                    <div id="boxchoice">
+                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
+                                            Chọn ảnh</a>
+                                        <p style="clear:both"></p>
+                                    </div>
+
                                 </div>
+
                                 <div class="form-group col-md-12">
 
                                     <div class="box box-info">
@@ -201,6 +208,26 @@
     </div>
     <script>
         CKEDITOR.replace('description');
+    </script>
+    <script>
+        const inpFile = document.getElementById("inpFile");
+        const loadFile = document.getElementById("loadFile");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".image-preview__image");
+        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+        inpFile.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                previewDefaultText.style.display = "none";
+                previewImage.style.display = "block";
+                reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
     </script>
 
     <%- include('footer') %>
