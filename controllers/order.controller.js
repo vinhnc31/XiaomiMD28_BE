@@ -1,4 +1,13 @@
-const { Orders, Account, Address, Pay, Cart, Promotion } = require("../models");
+const {
+  Orders,
+  Account,
+  Address,
+  Pay,
+  Product,
+  Promotion,
+  productcolor,
+  ProductColorConfig,
+} = require("../models");
 
 exports.getListOrder = async (req, res) => {
   try {
@@ -17,9 +26,39 @@ exports.getListOrder = async (req, res) => {
   }
 };
 
+exports.getListOrderInAccountAndStatus = async (req, res) => {
+  const { AccountId, statusOrder } = req.params;
+
+  try {
+    const listOrder = Orders.findAll({
+      where: { AccountId: AccountId, status: statusOrder },
+    });
+    if (!listOrder) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "fail connecting database" });
+    }
+    return res.status(200).json({ status: 200, data: listOrder });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.createOrder = async (req, res) => {
-  const { message, status, AccountId, AddressId, PayId, CartId, PromotionId } =
-    req.body;
+  const {
+    message,
+    status,
+    AccountId,
+    AddressId,
+    PayId,
+    PromotionId,
+    productId,
+    ProductColorId,
+    ProductColorConfigId,
+  } = req.body;
   const date = new Date();
   const order = {
     message,
@@ -27,7 +66,6 @@ exports.createOrder = async (req, res) => {
     AccountId,
     AddressId,
     PayId,
-    CartId,
     PromotionId,
     total,
   };
@@ -35,38 +73,18 @@ exports.createOrder = async (req, res) => {
     const account = await Account.findByPk(AccountId);
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
-    const cart = await Cart.findByPk(CartId);
     const promotion = await Promotion.findByPk(PromotionId);
-    if (!account || !address || !pay || !cart) {
+    const product = await Product.findByPk(productId);
+    const productColor = await productcolor.findByPk(ProductColorId);
+    const productColorConfig = await ProductColorConfig.findByPk(
+      ProductColorConfigId
+    );
+    if (!account || !address || !pay || !product) {
       return res.status(404).json({
         status: 404,
-        message: "Account or Address or Pay or Cart not found",
+        message: "Account or Address or Pay or Product not found",
       });
     }
-    if (PromotionId) {
-      if (!promotion) {
-        return res
-          .status(404)
-          .json({ status: 404, message: "Promotion not found" });
-      }
-
-      if (promotion.endDate < date) {
-        return res
-          .status(410)
-          .json({ status: 410, message: "Promotion expired" });
-      } else {
-        order.total = cart.total_Price * (1 - promotion.discount / 100);
-      }
-    } else {
-      order.total = cart.total_Price;
-    }
-    const createOrder = await Orders.create(order);
-    if (!createOrder) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Error connecting to database" });
-    }
-    return res.status(201).json({ status: 201, data: createOrder });
   } catch (error) {
     console.log(error);
     return res

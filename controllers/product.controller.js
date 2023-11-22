@@ -1,7 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const {
   Product,
-  ProductColor,
+  productcolor,
   Color,
   Category,
   ProductColorConfig,
@@ -37,18 +37,20 @@ exports.getProductId = async (req, res) => {
       where: { id: id },
       include: [
         {
-          model: ProductColor,
+          model: productcolor,
+          as: "colorProducts",
           include: [
             {
               model: Color,
             },
-          ],
-        },
-        {
-          model: ProductColorConfig,
-          include: [
             {
-              model: Config,
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config, // Adjust this based on your actual association
+                },
+              ],
             },
           ],
         },

@@ -16,7 +16,14 @@ exports.getCartByAccount = async (req, res) => {
         .json({ status: 404, message: "Account not found" });
     }
     console.log("chạy");
-    const listCart = await Cart.findAll({ where: { AccountId: AccountId } });
+    const listCart = await Cart.findAll({
+      where: { AccountId: AccountId },
+      include: [
+        { model: Product },
+        // { model: productcolor, as: "colorProducts" },
+        // { model: ProductColorConfig, as: "colorConfigs" },
+      ],
+    });
     console.log("ok");
     let total_Price = 0;
 
@@ -29,7 +36,9 @@ exports.getCartByAccount = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Error connecting to database" });
     }
-    return res.status(200).json({ status: 200, data: listCart });
+    return res
+      .status(200)
+      .json({ status: 200, data: { data: listCart, totalPrice: total_Price } });
   } catch (error) {
     console.log(error);
     return res
