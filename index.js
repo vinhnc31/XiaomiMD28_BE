@@ -50,8 +50,36 @@ app.use("/api", account);
 app.use("/api", accounts_google);
 
 app.get("/", function(req, res){
+  res.render('login');
+});
+app.get("/homeTest", function(req, res){
+  res.render('home');
+});
+app.get("/staffManagerTest", function(req, res){
+  res.render('staffManager');
+});
+app.get("/updateStaffTest", function(req, res){
+  res.render('updateStaff');
+});
+app.get("/passTest", function(req, res){
+  res.render('reset-password');
+});
+app.get("/salesTest", function(req, res){
+  res.render('salesReport');
+});
+app.get("/customerTest", function(req, res){
+  res.render('customerManager');
+});
+app.get("/addCustomer", function(req, res){
   res.render('addCustomer');
 });
+app.get("/InternalManagement", function(req, res){
+  res.render('InternalManagement');
+});
+app.get("/salaryStatement", function(req, res){
+  res.render('salaryStatement');
+});
+
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

@@ -29,7 +29,7 @@
                     <div class="text-wrapper-5">Email</div>
                     <div class="text-wrapper-6">Quên mật khẩu ?</div>
                     <div class="div-wrapper">
-                        <button class="text-wrapper-7">Đăng nhập</button>
+                        <button onclick="redirectToAnotherPage()" class="text-wrapper-7">Đăng nhập</button>
                     </div>
                 </div>
                 <div class="overlap-3">
@@ -42,6 +42,14 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        function redirectToAnotherPage() {
+            // Chuyển hướng đến trang mong muốn
+            window.location.href = 'http://localhost:3000/homeTest';
+        }
+    </script>
 </body>
 
 </html>
