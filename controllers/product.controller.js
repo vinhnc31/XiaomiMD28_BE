@@ -24,11 +24,12 @@ exports.getProduct = async (req, res) => {
       listProduct = await Product.findAll();
     }
 
-    if (listProduct) {
-      return res.status(200).json({ status: 200, data: listProduct });
-    } else {
-      res.status(400).json({ status: 400, message: "false connexting db" });
+    if (!listProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
     }
+    return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);
     return res
@@ -37,6 +38,35 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+exports.getFilter = async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
+  try {
+    const priceRangeCondition = {
+      [Op.and]: [],
+    };
+    if (minPrice) {
+      priceRangeCondition[Op.and].push({ price: { [Op.gte]: minPrice } });
+    }
+
+    if (maxPrice) {
+      priceRangeCondition[Op.and].push({ price: { [Op.lte]: maxPrice } });
+    }
+    const listProduct = await Product.findAll({
+      where: priceRangeCondition,
+    });
+    if (!listProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
+    }
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
 exports.getProductId = async (req, res) => {
   const id = req.params.id;
 

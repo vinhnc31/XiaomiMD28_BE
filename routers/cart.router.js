@@ -5,10 +5,10 @@ const authMidleWare = require("../middleWare/auth.middlewere");
 
 router.get(
   "/cart/:AccountId",
-  authMidleWare.apiAuth,
+  // authMidleWare.apiAuth,
   cartController.getCartByAccount
 );
-router.post("/cart", authMidleWare.apiAuth, cartController.createCart);
+router.post("/cart", cartController.createCart);
 router.put("/cart/:id", authMidleWare.apiAuth, cartController.updateCart);
 router.delete("/cart/:id", authMidleWare.apiAuth, cartController.deleteCart);
 module.exports = router;
