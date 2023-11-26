@@ -1,23 +1,28 @@
 const cloudinary = require("cloudinary").v2;
-const { json } = require("body-parser");
 const { Promotion } = require("../models");
 exports.getData = async (req, res) => {
   try {
-    const listCategory = await Promotion.findAll(); // Gọi phương thức findAll trên đối tượng Promotion
-    return res.status(200).json({ status: 200, data: listCategory });
+    const listPromotion = await Promotion.findAll(); // Gọi phương thức findAll trên đối tượng Promotion
+    if (!listPromotion) {
+      return res
+        .status(400)
+        .json({ status: 500, message: "Create promotion false" });
+    }
+    return res.status(200).json({ status: 200, data: listPromotion });
   } catch (error) {
     console.log(error);
-    return res.status(404).json({ status: 404, message: "Not found" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 exports.createPromotion = async (req, res) => {
-  const { name, image, description, discount, startDate, endDate } = req.body;
+  const { name, image, discount, startDate, endDate } = req.body;
   const imageFlie = req.file;
   try {
     if (
       !name ||
       (!image && !imageFlie) ||
-      !description ||
       !discount ||
       !startDate ||
       !endDate
@@ -41,7 +46,6 @@ exports.createPromotion = async (req, res) => {
     const newpromotion = {
       name,
       image: imageUrl,
-      description,
       discount,
       startDate,
       endDate,

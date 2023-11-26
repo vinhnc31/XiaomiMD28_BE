@@ -3,13 +3,14 @@ const { User } = require("../models");
 const { Account } = require("../models");
 const bcrypt = require("bcrypt");
 const sendEmail = require("../untils/email");
-const SIGN_PRIVATE = "xiaomimd28";
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const { where } = require("sequelize");
+require("dotenv").config;
 exports.getUserId = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, SIGN_PRIVATE);
+    const decoded = jwt.verify(token, process.env.SIGN_PRIVATE);
     console.log(decoded);
     const user = await User.findOne({
       where: {
@@ -30,10 +31,10 @@ exports.getUserId = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.status(401).json({
-      status: 401,
-      message: "Invalid token",
-    });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 exports.register = async (req, res) => {
@@ -80,7 +81,7 @@ exports.register = async (req, res) => {
           token: require("crypto").randomBytes(32).toString("hex"),
         });
 
-        const emailMessage = `http://localhost:3000/account/verify/${checkEmail.id}/${newVerificationToken.token}
+        const emailMessage = `http://localhost:3000/api/verify/${checkEmail.id}/${newVerificationToken.token}
 `;
         console.log("email", checkEmail.email);
         await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
@@ -114,7 +115,7 @@ exports.register = async (req, res) => {
     });
     console.log("new token", new_token);
     // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/account/verify/${new_user.id}/${new_token.token}`;
+    const message = `http://localhost:3000/api/verify/${new_user.id}/${new_token.token}`;
     await sendEmail(new_account.email, "Verify Email", message);
 
     return res.status(201).json({
@@ -161,8 +162,10 @@ exports.verifyEmail = async (req, res) => {
       message: "Email verified successfully",
     });
   } catch (error) {
-    console.error(error);
-    return res.status(400).json({ status: 400, message: "An error occurred" });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 exports.login = async (req, res, next) => {
@@ -206,7 +209,7 @@ exports.login = async (req, res, next) => {
     // Tạo và lưu token cho người dùng
     const token = jwt.sign(
       { id: result.id, email: result.email },
-      SIGN_PRIVATE,
+      process.env.SIGN_PRIVATE,
       { expiresIn: "1y" }
     );
     await Token.create({ token: token, email: result.email });
@@ -222,37 +225,67 @@ exports.login = async (req, res, next) => {
       message: "Login successful!",
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: error.message });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
-exports.changPassword = async (req, res, next) => {
-  const { newPassword, reNewPassword } = req.body;
-  if (newPassword !== reNewPassword) {
-    res.status(400).json({
-      status: 400,
-      message: "Password and rePassword not match",
-    });
-  }
+exports.changePassword = async (req, res, next) => {
+  const { password, newPassword, reNewPassword } = req.body;
+  const id = req.params.id;
+
   try {
-    if (!req.user) {
-      return res.status(401).json({ status: 401, message: "Unauthorized" });
+    // Kiểm tra xem newPassword và reNewPassword có khớp nhau không
+    if (newPassword !== reNewPassword) {
+      return res.json({
+        status: 400,
+        message: "Password and rePassword do not match",
+      });
     }
+
+    // Kiểm tra xem tài khoản có tồn tại không
+    const account = await Account.findByPk(id);
+    if (!account) {
+      return res.json({ status: 400, message: "Account not found" });
+    }
+
+    // Kiểm tra xem mật khẩu hiện tại có đúng không
+    const isPasswordCorrect = await bcrypt.compare(password, account.password);
+    if (!isPasswordCorrect) {
+      return res.json({ status: 400, message: "Incorrect password" });
+    }
+
+    // Tạo salt mới cho mật khẩu mới
     const salt = await bcrypt.genSalt(15);
     const changedPassword = await bcrypt.hash(newPassword, salt);
-    await Account.update(
+
+    // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+    const updatedAccount = await Account.update(
       { password: changedPassword },
       {
         where: {
-          id: req.user.id,
+          id: id,
         },
       }
     );
-    return res
-      .status(201)
-      .json({ status: 201, message: "Change password successfully!" });
+
+    if (!updatedAccount) {
+      return res.json({
+        status: 400,
+        message: "Failed to connect to the database or update password",
+      });
+    }
+
+    return res.json({
+      status: 201,
+      message: "Password changed successfully!",
+    });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 exports.logout = async (req, res, next) => {
@@ -269,5 +302,37 @@ exports.logout = async (req, res, next) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
+  }
+};
+exports.forgotPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+    const checkEmail = await Account.findOne({ where: { email: email } });
+    if (!checkEmail) {
+      return res.status(404).json({ status: 404, message: "Email not found" });
+    }
+    if (!newPassword) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Passwords cannot be protected" });
+    }
+    const updatePassword = await Account.update(
+      { password: newPassword },
+      { where: { email: email } }
+    );
+    if (!updatePassword) {
+      return res.json({
+        status: 400,
+        message: "Failed to connect to the database or update password",
+      });
+    }
+    return res
+      .status(200)
+      .json({ status: 200, message: "Update password successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };

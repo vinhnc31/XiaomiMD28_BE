@@ -18,7 +18,8 @@ const color = require("./routers/color.router");
 const product_color = require("./routers/product_color.router");
 const cart = require("./routers/cart.router");
 const config = require("./routers/config.router");
-const order = require("./routers/order.router")
+const order = require("./routers/order.router");
+const vnPay = require("./routers/vnpay.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const PORT = process.env.POST || 3000;
@@ -63,6 +64,7 @@ app.use("/api", cart);
 app.use("/api", config);
 app.use("/api", product_color_config);
 app.use("/api", order);
+app.use("/api", vnPay);
 app.get("/", function (req, res) {
   res.render("home");
 });

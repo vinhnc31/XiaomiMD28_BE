@@ -27,18 +27,20 @@ exports.getListOrder = async (req, res) => {
 };
 
 exports.getListOrderInAccountAndStatus = async (req, res) => {
-  const { AccountId, status } = req.params;
+  const { AccountId, status } = req.query;
   console.log("AccountId:", AccountId);
   console.log("status:", status);
   try {
-    const listOrder = Orders.findAll({
+    const listOrder = await Orders.findAll({
       where: { AccountId: AccountId, status: status },
     });
+
     if (!listOrder) {
       return res
         .status(400)
         .json({ status: 400, message: "fail connecting database" });
     }
+
     return res.status(200).json({ status: 200, data: listOrder });
   } catch (error) {
     console.log(error);
@@ -49,110 +51,118 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
 };
 
 exports.createOrder = async (req, res) => {
-  const {
-    message,
-    status,
-    AccountId,
-    AddressId,
-    PayId,
-    quantity,
-    PromotionId,
-    productId,
-    ProductColorId,
-    ProductColorConfigId,
-  } = req.body;
+  const { message, status, AccountId, AddressId, PayId, products } = req.body;
   const date = new Date();
 
   try {
     const account = await Account.findByPk(AccountId);
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
-    const promotion = await Promotion.findByPk(PromotionId);
-    const product = await Product.findByPk(productId);
-    const productColor = await productcolor.findByPk(ProductColorId);
-    const productColorConfig = await ProductColorConfig.findByPk(
-      ProductColorConfigId
-    );
-    let totalPrice = 0;
-    console.log(
-      productColorConfig.price * quantity * (1 - promotion.discount / 100)
-    );
-    if (!account || !address || !pay || !product) {
+
+    if (!account || !address || !pay) {
       return res.status(404).json({
         status: 404,
-        message:
-          "Account or Address or Pay or Product or productColor or productColorConfig  not found",
+        message: "Account or Address or Pay not found",
       });
     }
 
-    if (ProductColorId && ProductColorConfigId) {
-      if (!productColor || !productColorConfig) {
+    let totalPrice = 0;
+
+    for (const productInfo of products) {
+      const {
+        quantity,
+        productId,
+        PromotionId,
+        ProductColorId,
+        ProductColorConfigId,
+      } = productInfo;
+      const product = await Product.findByPk(productId);
+      const productColor = await productcolor.findByPk(ProductColorId);
+      const productColorConfig = await ProductColorConfig.findByPk(
+        ProductColorConfigId
+      );
+
+      if (!product) {
         return res.status(404).json({
           status: 404,
-          message: " productColor or productColorConfig  not found",
+          message: "Product not found",
         });
       }
-      if (PromotionId) {
-        if (!promotion) {
+
+      if (ProductColorId && ProductColorConfigId) {
+        if (!productColor || !productColorConfig) {
           return res.status(404).json({
             status: 404,
-            message: "Promotion not found",
+            message: "ProductColor or ProductColorConfig not found",
           });
         }
-        if (promotion.endDate > date) {
-          return res.status(400).json({
-            status: 400,
-            message: "Promotion expired",
-          });
+        if (PromotionId) {
+          const promotion = await Promotion.findByPk(PromotionId);
+          if (!promotion) {
+            return res.status(404).json({
+              status: 404,
+              message: "Promotion not found",
+            });
+          }
+          if (promotion.endDate > date) {
+            return res.status(400).json({
+              status: 400,
+              message: "Promotion expired",
+            });
+          }
+          totalPrice +=
+            productColorConfig.price *
+            quantity *
+            (1 - promotion.discount / 100);
+        } else {
+          totalPrice += productColorConfig.price * quantity;
         }
-        totalPrice +=
-          productColorConfig.price * quantity * (1 - promotion.discount / 100);
       } else {
-        totalPrice += productColorConfig.price * quantity;
-      }
-    } else {
-      if (PromotionId) {
-        if (!promotion) {
-          return res.status(404).json({
-            status: 404,
-            message: "Promotion not found",
-          });
+        if (PromotionId) {
+          const promotion = await Promotion.findByPk(PromotionId);
+          if (!promotion) {
+            return res.status(404).json({
+              status: 404,
+              message: "Promotion not found",
+            });
+          }
+          if (promotion.endDate > date) {
+            return res.status(400).json({
+              status: 400,
+              message: "Promotion expired",
+            });
+          }
+          totalPrice +=
+            product.price * quantity * (1 - promotion.discount / 100);
+        } else {
+          totalPrice += product.price * quantity;
         }
-        if (promotion.endDate > date) {
-          return res.status(400).json({
-            status: 400,
-            message: "Promotion expired",
-          });
-        }
-        totalPrice += product.price * quantity * (1 - promotion.discount / 100);
-      } else {
-        totalPrice += product.price * quantity;
       }
     }
-    console.log("Final Total: ", totalPrice);
+
+    // Use the provided status from the request body
     const order = {
       message,
-      status: 1,
+      status: 0,
       AccountId,
       AddressId,
       PayId,
-      quantity,
-      productId,
+      ...products[0],
       total: totalPrice,
-      ProductColorId,
-      ProductColorConfigId,
     };
+    console.log("order:", order);
 
     const createOrder = await Orders.create(order);
+    console.log(createOrder);
     if (!createOrder) {
       return res.status(400).json({
         status: 400,
-        message: "fail connecting database",
+        message: "Fail connecting to the database",
       });
     }
     return res.status(201).json({ status: 201, data: createOrder });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });

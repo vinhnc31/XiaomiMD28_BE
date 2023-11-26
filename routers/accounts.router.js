@@ -93,6 +93,11 @@ router.post("/register", account.register);
 router.post("/login", account.login);
 router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
-router.post("/changePassword", authMidleWare.apiAuth, account.changPassword);
+router.post(
+  "/changePassword/:id",
+  authMidleWare.apiAuth,
+  account.changePassword
+);
+router.post("/forgotPassword", account.forgotPassword);
 
 module.exports = router;

@@ -41,12 +41,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "AccountId", // Tên trường khóa ngoại trong bảng "Favorites"
       as: "carts", // Tên thay thế cho quan hệ
     });
-
-    // Account.hasMany(models.Order, {
-    //   onDelete: "CASCADE", // Cascade xóa các Favorites liên quan khi một Product bị xóa
-    //   foreignKey: "AccountId", // Tên trường khóa ngoại trong bảng "Favorites"
-    //   as: "order", // Tên thay thế cho quan hệ
-    // });
   };
 
   return Account;
