@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     images: {
-      type: DataTypes.STRING, // Sửa kiểu dữ liệu thành TEXT
+      type: DataTypes.TEXT, // Chỉnh sửa kiểu dữ liệu thành TEXT nếu cần
       allowNull: false,
     },
   });
@@ -45,6 +45,13 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
       foreignKey: "productId",
       as: "carts",
+    });
+
+    // Thiết lập quan hệ một-nhiều với mô hình "Order"
+    Product.hasMany(models.OrdersProduct, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "orders",
     });
   };
 

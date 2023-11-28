@@ -132,6 +132,7 @@ const productController = require("../controllers/product.controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
 
 router.get("/product", productController.getProduct);
+router.get("/product/filter", productController.getFilter);
 router.get("/product/:id", productController.getProductId);
 router.get("/product/category/:CategoryId", productController.getCategoryID);
 router.post(

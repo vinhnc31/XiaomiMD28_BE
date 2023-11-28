@@ -5,7 +5,7 @@ const authMidleWare = require("../middleWare/auth.middlewere");
 
 router.get(
   "/cart/:AccountId",
-  authMidleWare.apiAuth,
+  // authMidleWare.apiAuth,
   cartController.getCartByAccount
 );
 router.post("/cart", cartController.createCart);

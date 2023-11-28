@@ -1,5 +1,27 @@
 const cloudinary = require("cloudinary").v2;
 const { productcolor, Color, Product } = require("../models");
+
+exports.getProductColor = async (req, res) => {
+  try {
+    const listProductColor = await productcolor.findAll();
+    if (!listProductColor) {
+      return res.status(400).json({
+        status: 400,
+        message: "fail connecting database",
+      });
+    }
+    return res.status(200).json({
+      status: 200,
+      data: listProductColor,
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.createProductColor = async (req, res) => {
   const { productId, colorId, image } = req.body;
   const fileData = req.file;
@@ -65,8 +87,8 @@ exports.deleteProductColor = async (req, res) => {
         .json({ status: 500, message: "Error connecting to database" });
     }
     return res
-      .status(204)
-      .json({ status: 204, message: "Delete Product_Color successfully" });
+      .status(200)
+      .json({ status: 200, message: "Delete Product_Color successfully" });
   } catch (error) {
     console.log(error);
     return res

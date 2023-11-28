@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "ProductColorConfigId",
       as: "colorConfigs", // Changed alias for clarity
     });
+    ProductColorConfig.hasMany(models.OrdersProduct, {
+      onDelete: "CASCADE",
+      foreignKey: "ProductColorConfigId",
+      as: "ordersProduct", // Changed alias for clarity
+    });
   };
 
   return ProductColorConfig;

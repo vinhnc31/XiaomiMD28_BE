@@ -4,6 +4,8 @@ const {
   Account,
   productcolor,
   ProductColorConfig,
+  Color,
+  Config,
 } = require("../models");
 exports.getCartByAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
@@ -16,14 +18,29 @@ exports.getCartByAccount = async (req, res) => {
         .json({ status: 404, message: "Account not found" });
     }
     console.log("chạy");
-    const listCart = await Cart.findAll({ where: { AccountId: AccountId } });
-    console.log("ok");
-    let total_Price = 0;
+    const listCart = await Cart.findAll({
+      where: { AccountId: AccountId },
+      include: [
+        { model: Product },
+        {
+          model: productcolor,
+          include: [
+            {
+              model: Color,
+            },
+          ],
+        },
+        {
+          model: ProductColorConfig,
+          include: [
+            {
+              model: Config,
+            },
+          ],
+        },
+      ],
+    });
 
-    for (const cartItem of listCart) {
-      const product = await Product.findByPk(cartItem.productId);
-      total_Price += product.price * cartItem.quantity;
-    }
     if (!listCart) {
       return res
         .status(400)
@@ -154,8 +171,8 @@ exports.deleteCart = async (req, res) => {
         .json({ status: 500, message: "Error connecting to database" });
     }
     return res
-      .status(204)
-      .json({ status: 204, message: "delete successfully" });
+      .status(200)
+      .json({ status: 200, message: "delete successfully" });
   } catch (error) {
     console.log(error);
     return res

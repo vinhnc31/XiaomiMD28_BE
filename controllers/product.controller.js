@@ -1,7 +1,8 @@
+const { Op } = require("sequelize");
 const cloudinary = require("cloudinary").v2;
 const {
   Product,
-  ProductColor,
+  productcolor,
   Color,
   Category,
   ProductColorConfig,
@@ -9,12 +10,26 @@ const {
 } = require("../models");
 exports.getProduct = async (req, res) => {
   try {
-    const listProduct = await Product.findAll();
-    if (listProduct) {
-      return res.status(200).json({ status: 200, data: listProduct });
+    const name = req.query.name;
+    let listProduct;
+    if (name) {
+      listProduct = await Product.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${name}%`, // Using 'like' for a partial match
+          },
+        },
+      });
     } else {
-      res.status(400).json({ status: 400, message: "false connexting db" });
+      listProduct = await Product.findAll();
     }
+
+    if (!listProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
+    }
+    return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);
     return res
@@ -23,6 +38,35 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+exports.getFilter = async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
+  try {
+    const priceRangeCondition = {
+      [Op.and]: [],
+    };
+    if (minPrice) {
+      priceRangeCondition[Op.and].push({ price: { [Op.gte]: minPrice } });
+    }
+
+    if (maxPrice) {
+      priceRangeCondition[Op.and].push({ price: { [Op.lte]: maxPrice } });
+    }
+    const listProduct = await Product.findAll({
+      where: priceRangeCondition,
+    });
+    if (!listProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
+    }
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
 exports.getProductId = async (req, res) => {
   const id = req.params.id;
 
@@ -37,18 +81,20 @@ exports.getProductId = async (req, res) => {
       where: { id: id },
       include: [
         {
-          model: ProductColor,
+          model: productcolor,
+          as: "colorProducts",
           include: [
             {
               model: Color,
             },
-          ],
-        },
-        {
-          model: ProductColorConfig,
-          include: [
             {
-              model: Config,
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config, // Adjust this based on your actual association
+                },
+              ],
             },
           ],
         },
@@ -169,7 +215,7 @@ exports.deleteProduct = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "false connexting db" });
     }
-    return res.status(204).json({ status: 204, message: "delete successfuly" });
+    return res.status(200).json({ status: 200, message: "delete successfuly" });
   } catch (error) {
     console.log(error);
     return res
