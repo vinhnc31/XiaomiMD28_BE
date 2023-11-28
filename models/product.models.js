@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     // Thiết lập quan hệ một-nhiều với mô hình "Order"
-    Product.hasMany(models.Orders, {
+    Product.hasMany(models.OrdersProduct, {
       onDelete: "CASCADE",
       foreignKey: "productId",
       as: "orders",

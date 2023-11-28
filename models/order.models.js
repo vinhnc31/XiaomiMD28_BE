@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
     message: { type: DataTypes.STRING, allowNull: false },
     total: { type: DataTypes.FLOAT, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false },
-    quantity: { type: DataTypes.INTEGER, allowNull: true },
   });
 
   Orders.associate = (models) => {
@@ -11,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     Orders.belongsTo(models.Address, { foreignKey: "AddressId" });
     Orders.belongsTo(models.Pay, { foreignKey: "PayId" });
     Orders.belongsTo(models.Promotion, { foreignKey: "PromotionId" });
+    Orders.hasMany(models.OrdersProduct, { foreignKey: "OrderId" });
   };
-
   return Orders;
 };

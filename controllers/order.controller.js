@@ -7,6 +7,8 @@ const {
   Promotion,
   productcolor,
   ProductColorConfig,
+  sequelize,
+  OrdersProduct,
 } = require("../models");
 
 exports.getListOrder = async (req, res) => {
@@ -51,15 +53,27 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
 };
 
 exports.createOrder = async (req, res) => {
-  const { message, status, AccountId, AddressId, PayId, products } = req.body;
+  const {
+    message,
+    status,
+    AccountId,
+    AddressId,
+    PayId,
+    PromotionId,
+    products,
+  } = req.body;
   const date = new Date();
+
+  const transaction = await sequelize.transaction(); // Assuming you're using Sequelize
 
   try {
     const account = await Account.findByPk(AccountId);
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
+    const promotion = await Promotion.findByPk(PromotionId);
 
     if (!account || !address || !pay) {
+      await transaction.rollback();
       return res.status(404).json({
         status: 404,
         message: "Account or Address or Pay not found",
@@ -68,45 +82,42 @@ exports.createOrder = async (req, res) => {
 
     let totalPrice = 0;
 
-    for (const productInfo of products) {
-      const {
-        quantity,
-        productId,
-        PromotionId,
-        ProductColorId,
-        ProductColorConfigId,
-      } = productInfo;
+    for (const productData of products) {
+      const { quantity, productId, ProductColorId, ProductColorConfigId } =
+        productData;
+
       const product = await Product.findByPk(productId);
       const productColor = await productcolor.findByPk(ProductColorId);
       const productColorConfig = await ProductColorConfig.findByPk(
         ProductColorConfigId
       );
 
-      if (!product) {
+      if (
+        !product ||
+        (!productColor && ProductColorId) ||
+        (!productColorConfig && ProductColorConfigId)
+      ) {
+        await transaction.rollback();
         return res.status(404).json({
           status: 404,
-          message: "Product not found",
+          message: "One or more products not found",
         });
       }
 
       if (ProductColorId && ProductColorConfigId) {
-        if (!productColor || !productColorConfig) {
-          return res.status(404).json({
-            status: 404,
-            message: "ProductColor or ProductColorConfig not found",
-          });
-        }
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
+            await transaction.rollback();
             return res.status(404).json({
               status: 404,
               message: "Promotion not found",
             });
           }
           if (promotion.endDate > date) {
+            await transaction.rollback();
             return res.status(400).json({
-              status: 400,
+              status: 404,
               message: "Promotion expired",
             });
           }
@@ -121,14 +132,16 @@ exports.createOrder = async (req, res) => {
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
+            await transaction.rollback();
             return res.status(404).json({
               status: 404,
               message: "Promotion not found",
             });
           }
           if (promotion.endDate > date) {
+            await transaction.rollback();
             return res.status(400).json({
-              status: 400,
+              status: 404,
               message: "Promotion expired",
             });
           }
@@ -138,34 +151,47 @@ exports.createOrder = async (req, res) => {
           totalPrice += product.price * quantity;
         }
       }
+
+      // Create record in the orders table
+      const createdOrder = await Orders.create(
+        {
+          message,
+          status: 0,
+          AccountId,
+          AddressId,
+          PayId,
+          PromotionId,
+          total: totalPrice,
+        },
+        { transaction }
+      );
+      // Create record in the ordersProduct table
+      const createdOrdersProduct = await OrdersProduct.create(
+        {
+          quantity,
+          productId,
+          ProductColorId,
+          ProductColorConfigId,
+          OrderId: createdOrder.id, // Assuming there is a foreign key relationship
+        },
+        { transaction }
+      );
     }
 
-    // Use the provided status from the request body
-    const order = {
-      message,
-      status: 0,
-      AccountId,
-      AddressId,
-      PayId,
-      ...products[0],
-      total: totalPrice,
-    };
-    console.log("order:", order);
+    await transaction.commit();
 
-    const createOrder = await Orders.create(order);
-    console.log(createOrder);
-    if (!createOrder) {
-      return res.status(400).json({
-        status: 400,
-        message: "Fail connecting to the database",
-      });
-    }
-    return res.status(201).json({ status: 201, data: createOrder });
+    // Return success response
+    return res.status(201).json({
+      status: 201,
+      message: "Order successfully",
+    });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
+    await transaction.rollback();
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+    });
   }
 };
 

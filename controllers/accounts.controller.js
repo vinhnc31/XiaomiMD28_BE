@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const sendEmail = require("../untils/email");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const { where } = require("sequelize");
 require("dotenv").config;
 exports.getUserId = async (req, res) => {
   try {
@@ -316,8 +315,10 @@ exports.forgotPassword = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Passwords cannot be protected" });
     }
+    const salt = await bcrypt.genSalt(15);
+    const changedPassword = await bcrypt.hash(newPassword, salt);
     const updatePassword = await Account.update(
-      { password: newPassword },
+      { password: changedPassword },
       { where: { email: email } }
     );
     if (!updatePassword) {
