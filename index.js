@@ -22,10 +22,20 @@ const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
+const productView = require("./routers/productView.router");
+
 const PORT = process.env.POST || 3000;
 
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -69,6 +79,7 @@ app.get("/", function (req, res) {
   res.render("home");
 });
 
+app.use("/products", productView);
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);

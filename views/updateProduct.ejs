@@ -1,0 +1,128 @@
+<%- include('head') %>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user">
+            <img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg" width="50px" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name"><b>Admin</b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i
+                        class='app-menu__icon fa fa-shopping-cart'></i>
+                    <span class="app-menu__label">Xioami VN</span></a></li>
+            <li><a class="app-menu__item " href="index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        class="app-menu__label">Bảng điều khiển</span></a></li>
+            <li><a class="app-menu__item " href="table-data-table.html"><i class='app-menu__icon bx bx-id-card'></i>
+                    <span class="app-menu__label">Quản lý nhân viên</span></a></li>
+            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
+                        class="app-menu__label">Quản lý khách hàng</span></a></li>
+            <li><a class="app-menu__item active" href="/products"><i
+                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
+                        phẩm</span></a>
+            </li>
+            <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+                        class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
+                        class="app-menu__label">Quản lý nội bộ
+                    </span></a></li>
+            <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
+            </li>
+
+        </ul>
+    </aside>
+
+
+
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item">Danh sách sản phẩm</li>
+                <li class="breadcrumb-item"><a href="#">
+                        Sửa sản phẩm
+                    </a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/products/update/<%=product.id%>" method="post" enctype="multipart/form-data">
+                    <div class="tile">
+                        <h3 class="tile-title">Sửa sản phẩm</h3>
+                        <div class="tile-body">
+                            <div class="row element-button">
+                                <div class="col-sm-2">
+                                    <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#adddanhmuc"><i
+                                            class="fas fa-folder-plus"></i> Thêm danh mục</a>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addtinhtrang"><i
+                                            class="fas fa-folder-plus"></i> Thêm tình trạng</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- <div class="form-group col-md-4">
+                                    <label class="control-label">Mã sản phẩm </label>
+                                    <input class="form-control" type="number" placeholder="">
+                                </div> -->
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Tên sản phẩm</label>
+                                    <input class="form-control" type="text" name="name" value="<%=product.name%>"
+                                        required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="exampleSelect1" class="control-label">Danh mục</label>
+                                    <select class="form-control" name="CategoryId" value="<%=product.CategoryId%>"
+                                        id="<%=product.CategoryId%>" required>
+                                        <% category.map(function(category){%>
+                                            <option value="<%=category.id %>">
+                                                <%=category.name %>
+                                            </option>
+                                            <%})%>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Giá bán</label>
+                                    <input class="form-control" type="text" name="price" value="<%=product.price%>"
+                                        required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ảnh sản phẩm</label>
+                                    <input class="form-control" type="text" name="image" value="<%=product.image%>"
+                                        required>
+                                    <div id="myfileupload">
+                                        <input type="file" id="uploadfile" name="image" required />
+                                    </div>
+                                    <div id="thumbbox">
+                                        <img height="450" width="400" src="<%=product.images%>" alt="Thumb image"
+                                            id="thumbimage" />
+                                        <a class="removeimg" href="javascript:"></a>
+                                    </div>
+                                    <div id="boxchoice">
+                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
+                                            Chọn
+                                            ảnh</a>
+                                        <p style="clear:both"></p>
+                                    </div>
+
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Mô tả sản phẩm</label>
+                                    <textarea class="form-control" name="description" id="description"
+                                        required> <%=product.description%></textarea>
+
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" href="/products">Hủy bỏ</a>
+                    </div>
+                </form>
+    </main>
+
+    <%- include('footer') %>

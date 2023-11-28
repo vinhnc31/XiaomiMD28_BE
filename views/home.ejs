@@ -18,7 +18,8 @@
           <div class="row">
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small primary coloured-icon" ><i class='icon bx bxs-user-account fa-3x' style="height: 100px;"></i>
+              <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng khách hàng</h4>
                   <p><b>56 khách hàng</b></p>
@@ -28,7 +29,7 @@
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small info coloured-icon" ><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
+              <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng sản phẩm</h4>
                   <p><b>1850 sản phẩm</b></p>
@@ -38,7 +39,8 @@
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small warning coloured-icon" ><i class='icon bx bxs-shopping-bags fa-3x' style="height: 100px;"></i>
+              <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng đơn hàng</h4>
                   <p><b>247 đơn hàng</b></p>
@@ -48,7 +50,8 @@
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small danger coloured-icon" ><i class='icon bx bxs-error-alt fa-3x' style="height: 100px;"></i>
+              <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
                   <h4>Sắp hết hàng</h4>
                   <p><b>4 sản phẩm</b></p>
@@ -166,14 +169,16 @@
               <div class="tile">
                 <h3 class="tile-title">Thống kê doanh thu tháng 6</h3>
                 <div class="embed-responsive embed-responsive-16by9">
-                  <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>                </div>
+                  <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>
+                </div>
               </div>
             </div>
             <div class="col-md-12">
               <div class="tile">
                 <h3 class="tile-title">Thống kê đơn theo hàng tháng</h3>
                 <div class="embed-responsive embed-responsive-16by9">
-                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>                </div>
+                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>
+                </div>
               </div>
             </div>
           </div>
@@ -201,70 +206,70 @@
 
     <script type="text/javascript">
 
-new Chart("myChart", {
-  type: "line",
-  data: {
-    labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
-    datasets: [{ 
-      label: "Doanh thu dự kiến",
-      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-      borderColor: "red",
-      fill: false
-    }, { 
-      label: "Doanh thu",
-      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-      borderColor: "green",
-      fill: false
-    }, { 
-      label: "Doanh thu thực tế",
-      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-      borderColor: "blue",
-      fill: false
-    }]
-  },
-  options: {
-    legend: {display: true}
-  }
-});
+      new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+          datasets: [{
+            label: "Doanh thu dự kiến",
+            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+            borderColor: "red",
+            fill: false
+          }, {
+            label: "Doanh thu",
+            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 7000],
+            borderColor: "green",
+            fill: false
+          }, {
+            label: "Doanh thu thực tế",
+            data: [300, 700, 2000, 5000, 6000, 4000, 2000, 1000, 200, 100],
+            borderColor: "blue",
+            fill: false
+          }]
+        },
+        options: {
+          legend: { display: true }
+        }
+      });
 
 
 
-var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
-var yValues = [55, 49, 44, 24, 15,50];
-var zValues = [30, 40, 60, 35, 70,39];
-var aValues = [15, 20, 25, 30, 80,19];
+      var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
+      var yValues = [55, 49, 44, 24, 15, 50];
+      var zValues = [30, 40, 60, 35, 70, 39];
+      var aValues = [15, 20, 25, 30, 80, 19];
 
 
-new Chart("myChartb", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [
-      {
-        label: "Chờ xác nhận",
-        backgroundColor: "purple",
-        data: yValues,
-      },
-      {
-        label: "Đang vận chuyển",
-        backgroundColor: "yellow",
-        data: zValues,
-      },
-      {
-        label: "Đã nhận",
-        backgroundColor: "green",
-        data: aValues,
-      },{
-        label: "Huỷ",
-        backgroundColor: "red",
-        data: aValues,
-      },
-    ],
-  },
-  options: {
-     legend: {display: true}
-  },
-});
+      new Chart("myChartb", {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              label: "Chờ xác nhận",
+              backgroundColor: "purple",
+              data: yValues,
+            },
+            {
+              label: "Đang vận chuyển",
+              backgroundColor: "yellow",
+              data: zValues,
+            },
+            {
+              label: "Đã nhận",
+              backgroundColor: "green",
+              data: aValues,
+            }, {
+              label: "Huỷ",
+              backgroundColor: "red",
+              data: aValues,
+            },
+          ],
+        },
+        options: {
+          legend: { display: true }
+        },
+      });
 
     </script>
     <script type="text/javascript">

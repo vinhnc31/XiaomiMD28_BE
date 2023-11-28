@@ -141,4 +141,5 @@ router.post(
   productController.addCategory
 );
 router.delete("/product/:id", productController.deleteProduct);
+
 module.exports = router;

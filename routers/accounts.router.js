@@ -89,15 +89,14 @@ const router = express.Router();
 const account = require("../controllers/accounts.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
 
-router.post("/register", account.register);
-router.post("/login", account.login);
-router.get("/verify/:id/:token", account.verifyEmail);
-router.get("/logout", authMidleWare.apiAuth, account.logout);
+router.post("/account/register", account.register);
+router.post("/account/login", account.login);
+router.get("/account/verify/:id/:token", account.verifyEmail);
+router.get("/account/logout", authMidleWare.apiAuth, account.logout);
 router.post(
-  "/changePassword/:id",
+  "/account/changePassword",
   authMidleWare.apiAuth,
   account.changePassword
 );
-router.post("/forgotPassword", account.forgotPassword);
 
 module.exports = router;
