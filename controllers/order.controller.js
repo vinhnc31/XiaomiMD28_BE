@@ -70,7 +70,6 @@ exports.createOrder = async (req, res) => {
     const account = await Account.findByPk(AccountId);
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
-    const promotion = await Promotion.findByPk(PromotionId);
 
     if (!account || !address || !pay) {
       await transaction.rollback();
@@ -81,6 +80,19 @@ exports.createOrder = async (req, res) => {
     }
 
     let totalPrice = 0;
+
+    const createdOrder = await Orders.create(
+      {
+        message,
+        status: 0,
+        AccountId,
+        AddressId,
+        PayId,
+        PromotionId,
+        total: totalPrice,
+      },
+      { transaction }
+    );
 
     for (const productData of products) {
       const { quantity, productId, ProductColorId, ProductColorConfigId } =
@@ -152,21 +164,8 @@ exports.createOrder = async (req, res) => {
         }
       }
 
-      // Create record in the orders table
-      const createdOrder = await Orders.create(
-        {
-          message,
-          status: 0,
-          AccountId,
-          AddressId,
-          PayId,
-          PromotionId,
-          total: totalPrice,
-        },
-        { transaction }
-      );
-      // Create record in the ordersProduct table
-      const createdOrdersProduct = await OrdersProduct.create(
+      // Create record in the ordersProduct table for each product
+      await OrdersProduct.create(
         {
           quantity,
           productId,
@@ -177,6 +176,9 @@ exports.createOrder = async (req, res) => {
         { transaction }
       );
     }
+
+    // Update the total price in the created order
+    await createdOrder.update({ total: totalPrice }, { transaction });
 
     await transaction.commit();
 
