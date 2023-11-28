@@ -1,11 +1,22 @@
 const cloudinary = require("cloudinary").v2;
 const { name } = require("ejs");
-const { Product, Category, Color, Product_Color } = require("../models");
+const {
+  Product,
+  Category,
+  Color,
+  ProductColorConfig,
+  Config,
+  productcolor,
+} = require("../models");
 const { Op } = require("sequelize");
 exports.index = async (req, res) => {
   try {
-    const _name = req.query.name;
-    //lấy trang hiện tại
+    let _name = req.query.name;
+    console.log(_name);
+    if (!_name) {
+      _name = "";
+    }
+
     let _page = req.query.page ? req.query.page : 1;
     let listProduct = [];
 
@@ -15,15 +26,7 @@ exports.index = async (req, res) => {
     _page = _page > 0 ? Math.floor(_page) : 1;
     _page = _page <= totalPage ? Math.floor(_page) : totalPage;
     let _start = (_page - 1) * _limit;
-    // const list = [
-    //   {
-    //     id: "fef",
-    //     name: "dădw",
-    //   },
-    // ];
-    // return res.render("product", {
-    //   data: list,
-    // });
+
     if (_name) {
       listProduct = await Product.findAll({
         include: [
@@ -95,28 +98,19 @@ exports.indexAddProduct = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
   try {
-    const { name, images, price, description, quantity, CategoryId } = req.body;
+    const { name, images, price, description, CategoryId } = req.body;
     console.log(req.body);
+    if (!name || (!images && !filedata) || !price || !CategoryId) {
+      if (filedata) {
+        // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
+        cloudinary.uploader.destroy(filedata.filename);
+      }
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
     const filedata = req.file;
     console.log(filedata);
-
-    // if (!name || (!images && !filedata) || !price || !quantity || !CategoryId) {
-    //   if (filedata) {
-    //     // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
-    //     cloudinary.uploader.destroy(filedata.filename);
-    //   }
-    //   return res
-    //     .status(400)
-    //     .json({ status: 400, message: "Fields cannot be left blank" });
-    // }
-    // // Check if CategoryId and PromotionId are defined
-    // if (!CategoryId) {
-    //   return res.status(400).json({
-    //     status: 400,
-    //     message: "CategoryId are required fields",
-    //   });
-    // }
-
     let imageUrl = "";
     if (filedata) {
       // Tiến hành tải lên hình ảnh lên Cloudinary
@@ -131,7 +125,6 @@ exports.addProduct = async (req, res) => {
       images: imageUrl,
       price,
       description,
-      quantity,
       CategoryId,
     };
 
@@ -169,6 +162,7 @@ exports.deleteProduct = async (req, res) => {
     res.status(400).json({ status: 400, message: "false connexting db" });
   }
 };
+
 exports.indexUpdateProduct = async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findOne({
@@ -193,9 +187,18 @@ exports.updateProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
     const product = await Product.findOne({ where: { id: id } });
-    const { name, images, price, description, quantity, CategoryId } = req.body;
+    const { name, images, price, description, CategoryId } = req.body;
     console.log(req.body);
     const filedata = req.file;
+    if (!name || (!images && !filedata) || !price || !Category) {
+      if (filedata) {
+        // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
+        cloudinary.uploader.destroy(filedata.filename);
+      }
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
 
     let imageUrl = product.images;
     if (filedata) {
@@ -211,7 +214,6 @@ exports.updateProduct = async (req, res, next) => {
       images: imageUrl,
       price,
       description,
-      quantity,
       CategoryId,
     };
 
@@ -234,6 +236,7 @@ exports.updateProduct = async (req, res, next) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.addCategory = async (req, res) => {
   try {
     const { newCategory } = req.body;
@@ -258,7 +261,7 @@ exports.addCategory = async (req, res) => {
 
 exports.color = async (req, res) => {
   try {
-    const productColor = await Product_Color.findAll({
+    const productColor = await productcolor.findAll({
       include: [
         {
           model: Color,
@@ -270,12 +273,16 @@ exports.color = async (req, res) => {
     console.log(error);
   }
 };
+
 exports.indexColorProduct = async (req, res, next) => {
   const productId = req.params.id;
   console.log(productId);
   try {
     const listColor = await Color.findAll();
-    const productColor = await Product_Color.findAll({
+    const productColor = await productcolor.findAll({
+      where: {
+        productId: productId,
+      },
       include: [
         {
           model: Color,
@@ -295,12 +302,14 @@ exports.indexColorProduct = async (req, res, next) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.addColor = async (req, res, next) => {
   const { newColor } = req.body;
+  const productId = req.params.id;
   try {
     const addColor = await Color.create({ name: newColor });
 
-    return res.redirect("/products/add/colorProduct");
+    return res.redirect("/products/add/colorProduct/" + productId);
   } catch (error) {
     console.log(error);
     return res
@@ -308,38 +317,44 @@ exports.addColor = async (req, res, next) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
-exports.addProductColor = async (req, res, next) => {
-  const { colorId, image } = req.body;
-  const productId = req.params.id;
 
-  const fileData = req.file;
+exports.addProductColor = async (req, res, next) => {
   try {
-    if (!productId || !colorId) {
-      return res.status(404).json({
-        status: 404,
-        message: "Product or Color not found",
-      });
+    const { colorId, images } = req.body;
+    console.log(req.body);
+    const productId = req.params.id;
+    const filedata = req.file;
+    console.log("ok" + filedata);
+    if ((!images && !filedata) || !colorId) {
+      if (filedata) {
+        // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
+        cloudinary.uploader.destroy(filedata.filename);
+      }
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    if (!image && !fileData) {
+
+    if (!images && !filedata) {
       if (fileData) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
-        cloudinary.uploader.destroy(fileData.filename);
+        cloudinary.uploader.destroy(filedata.filename);
       }
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
     let imageUrl = "";
-    if (fileData) {
+    if (filedata) {
       // Tiến hành tải lên hình ảnh lên Cloudinary
-      const result = await cloudinary.uploader.upload(fileData.path);
+      const result = await cloudinary.uploader.upload(filedata.path);
       imageUrl = result.secure_url;
-    } else if (image) {
-      imageUrl = image;
+    } else if (images) {
+      imageUrl = images;
     }
 
     const productColor = { productId, colorId, image: imageUrl };
-    const createProductColor = Product_Color.create(productColor);
+    const createProductColor = productcolor.create(productColor);
     if (!createProductColor) {
       return res
         .status(500)
@@ -351,5 +366,108 @@ exports.addProductColor = async (req, res, next) => {
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.deleteProductColor = async (req, res) => {
+  try {
+    const productColorId = req.params.productColorId;
+    const productId = req.params.id;
+    const del = await productcolor.destroy({
+      where: {
+        id: productColorId,
+      },
+    });
+    res.redirect("/products/add/colorProduct/" + productId);
+  } catch (error) {
+    res.status(400).json({
+      status: 400,
+      message: error,
+    });
+  }
+};
+
+exports.addConfig = async (req, res) => {
+  const { newConfig } = req.body;
+  const ProductColorId = req.params.id;
+  try {
+    const addConfig = await Config.create({ name: newConfig });
+
+    return res.redirect("/products/add/colorProduct_config/" + ProductColorId);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.indexConfigProductColor = async (req, res) => {
+  const productColorId = req.params.id;
+  console.log(productColorId);
+  try {
+    const listConfig = await Config.findAll();
+    const productColorConfig = await ProductColorConfig.findAll({
+      where: {
+        ProductColorId: productColorId,
+      },
+      include: [
+        {
+          model: Config,
+        },
+      ],
+    });
+
+    res.render("configProduct", {
+      config: listConfig,
+      productColorId: productColorId,
+      data: productColorConfig,
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.addConfigProductColor = async (req, res) => {
+  const { quantity, configId, price } = req.body;
+  const ProductColorId = req.params.id;
+  try {
+    if (!quantity || !price || !configId || !ProductColorId) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
+    const createConfig = { quantity, configId, ProductColorId, price };
+    const createProductColorConfig = await ProductColorConfig.create(
+      createConfig
+    );
+    if (!createProductColorConfig) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Error connecting to the database" });
+    }
+    return res.redirect("/products/add/colorProduct_config/" + ProductColorId);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.deleteProductColor_config = async (req, res) => {
+  try {
+    const productColorId = req.params.id;
+    const productColor_configId = req.params.productColor_configId;
+    const del = await ProductColorConfig.destroy({
+      where: {
+        id: productColor_configId,
+      },
+    });
+    res.redirect("/products/add/colorProduct_config/" + productColorId);
+  } catch (error) {
+    res.status(400).json({
+      status: 400,
+      message: error,
+    });
   }
 };

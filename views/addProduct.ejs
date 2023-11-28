@@ -68,13 +68,6 @@
                                         required>
                                 </div>
 
-
-                                <div class="form-group  col-md-4">
-                                    <label class="control-label">Số lượng</label>
-                                    <input class="form-control" type="number" name="quantity"
-                                        value="<%=product.quantity%>" required>
-                                </div>
-
                                 <div class="form-group col-md-4">
                                     <label for="exampleSelect1" class="control-label">Danh mục</label>
                                     <select class="form-control" name="CategoryId" value="<%=product.CategoryId%>"
@@ -94,31 +87,11 @@
                                     <input class="form-control" type="text" name="price" value="<%=product.price%>"
                                         required>
                                 </div>
-
-                                <!-- <div class="form-group col-md-12">
-
-                                    <label class="control-label">Ảnh sản phẩm</label>
-                                    <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="image" required />
-                                    </div>
-                                    <div id="thumbbox">
-                                        <img height="450" width="400" src="<%=product.images%>" alt="Thumb image"
-                                            id="thumbimage" style="display: none" />
-                                        <a class="removeimg" href="javascript:"></a>
-                                    </div>
-                                    <div id="boxchoice">
-                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
-                                            Chọn
-                                            ảnh</a>
-                                        <p style="clear:both"></p>
-                                    </div>
-
-                                </div> -->
-
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Ảnh sản phẩm</label>
+                                    <input class="form-control" type="text" name="images" id="editimg">
                                     <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                        <input type="file" id="uploadfile" name="images" onchange="readURL(this);" />
                                     </div>
                                     <div id="thumbbox">
                                         <img height="450" width="400" alt="Thumb image" id="thumbimage"
@@ -130,17 +103,12 @@
                                             Chọn ảnh</a>
                                         <p style="clear:both"></p>
                                     </div>
-
                                 </div>
-
                                 <div class="form-group col-md-12">
-
                                     <div class="box box-info">
                                         <div class="box-header">
                                             <h3 class="box-title">Mô tả sản phẩm
-
                                             </h3>
-
                                         </div>
                                         <!-- /.box-header -->
                                         <div class="box-body pad">

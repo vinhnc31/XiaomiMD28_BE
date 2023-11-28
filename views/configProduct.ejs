@@ -1,9 +1,8 @@
 <%- include('head') %>
 
-    <!-- Aside -->
     <aside class="app-sidebar">
-        <div class="app-sidebar__user">
-            <img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg" width="50px" alt="User Image">
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg"
+                width="50px" alt="User Image">
             <div>
                 <p class="app-sidebar__user-name"><b>Admin</b></p>
                 <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
@@ -20,8 +19,9 @@
                     <span class="app-menu__label">Quản lý nhân viên</span></a></li>
             <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
                         class="app-menu__label">Quản lý khách hàng</span></a></li>
-            <li><a class="app-menu__item active" href="/products"><i
-                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
+            <li><a class="app-menu__item " href="/products"><i
+                        class='app-menu__icon active bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+                        sản
                         phẩm</span></a>
             </li>
             <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
@@ -35,14 +35,25 @@
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
                         thu</span></a>
             </li>
-
         </ul>
     </aside>
-    <!-- Main -->
+
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Danh sách sản phẩm</b></a></li>
+                <li class="breadcrumb-item active">
+                    <a href="#">
+                        <b>Danh sách sản phẩm</b></a>
+                </li>
+                <li class="breadcrumb-item"><a href="#">
+                        Thêm sản phẩm
+                    </a></li>
+                <li class="breadcrumb-item"><a href="#">
+                        Màu sản phẩm
+                    </a></li>
+                <li class="breadcrumb-item"><a href="#">
+                        Phiên bản
+                    </a></li>
             </ul>
 
         </div>
@@ -52,77 +63,41 @@
                     <div class="tile-body">
                         <div class="row element-button">
                             <div class="col-sm-2">
-
-                                <a class="btn btn-add btn-sm" href="/products/add" title="Thêm"><i
-                                        class="fas fa-plus"></i>
-                                    Thêm sản phẩm</a>
+                                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addconfig"
+                                    title="Thêm"><i class="fas fa-plus"></i>
+                                    Thêm phiên bản</a>
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                                        class="fas fa-trash-alt"></i> Xóa tất cả </a>
+
+                                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addProduct_color_config"
+                                    title="Thêm"><i class="fas fa-plus"></i>
+                                    Phiên bản sản phẩm</a>
                             </div>
                         </div>
                         <div id="sampleTable_wrapper"
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="dataTables_length" id="sampleTable_length"><label>Hiện <select
-                                                name="sampleTable_length" aria-controls="sampleTable"
-                                                class="form-control form-control-sm">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select> danh mục</label></div>
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <form action="" method="get" role="form">
-                                        <div id="sampleTable_filter" class="dataTables_filter">
-                                            <label>Tìm kiếm:
-                                                <input type="search" class="form-control form-control-sm"
-                                                    placeholder="Nhập tên sản phẩm" name="name"
-                                                    aria-controls="sampleTable" value="<%=name%>">
-                                                <button class="btn btn-primary btn-sm" type="submit"><i
-                                                        class="fas fa-search"></i></button>
-                                            </label>
 
-                                        </div>
-                                    </form>
-                                </div>
-
-                            </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable"
                                         role="grid" aria-describedby="sampleTable_info">
                                         <thead>
                                             <tr role="row">
-                                                <th width="10" class="sorting_asc" tabindex="0"
-                                                    aria-controls="sampleTable" rowspan="1" colspan="1"
-                                                    aria-sort="ascending"
-                                                    aria-label=": activate to sort column descending"
-                                                    style="width: 13px;">
-                                                    <input type="checkbox" id="all">
-                                                </th>
+
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Mã sản phẩm: activate to sort column ascending"
-                                                    style="width: 118.662px;">Mã sản phẩm</th>
+                                                    style="width: 118.662px;">ID</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Tên sản phẩm: activate to sort column ascending"
-                                                    style="width: 256.65px;">Tên sản phẩm</th>
+                                                    style="width: 150px;">Phiên bản</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1" aria-label="Ảnh: activate to sort column ascending"
-                                                    style="width: 40.6125px;">Ảnh</th>
-
-
+                                                    style="width: 147.2625px;">Giá</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
-                                                    colspan="1" aria-label="Giá tiền: activate to sort column ascending"
-                                                    style="width: 115.325px;">Giá tiền</th>
-                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
-                                                    colspan="1" aria-label="Danh mục: activate to sort column ascending"
-                                                    style="width: 147.8px;">Danh mục</th>
+                                                    colspan="1" aria-label="Ảnh: activate to sort column ascending"
+                                                    style="width: 147.2625px;">số lượng</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Chức năng: activate to sort column ascending"
@@ -132,22 +107,17 @@
                                         <tbody>
                                             <% if(data){ data.map(function(product){%>
                                                 <tr role="row" class="odd">
-                                                    <td width="10" class="sorting_1"><input type="checkbox"
-                                                            name="check1" value="1"></td>
                                                     <td>
                                                         <%=product.id%>
                                                     </td>
                                                     <td>
-                                                        <%=product.name%>
-                                                    </td>
-                                                    <td>
-                                                        <img src="<%=product.images%>" alt="" width="100px;">
+                                                        <%=product.Config.name%>
                                                     </td>
                                                     <td>
                                                         <%=product.price%>
                                                     </td>
                                                     <td>
-                                                        <%=product.Category.name%>
+                                                        <%=product.quantity%>
                                                     </td>
                                                     <td><button class="btn btn-primary btn-sm trash" type="button"
                                                             title="Xóa" data-toggle="modal"
@@ -171,7 +141,7 @@
                                                                         </h5>
                                                                         <BR>
                                                                         <form class="text-right"
-                                                                            action="/products/delete/<%=product.id%>"
+                                                                            action="/products/add/colorProduct_config/delete/<%=productColorId%>/<%=product.id%>"
                                                                             method="post">
                                                                             <a class="btn btn-cancel"
                                                                                 data-dismiss="modal" href="#">Hủy
@@ -196,60 +166,11 @@
                                                 <%})}%>
                                         </tbody>
                                     </table>
+                                    <a class="btn btn-save" href="/products">Lưu lại</a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
-                                        Hiện
-                                        1 đến 10 của 16 danh mục</div>
-                                </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
-                                        <ul class="pagination">
-                                            <li class="paginate_button page-item previous " id="sampleTable_previous">
-                                                <%if(name){%>
-                                                    <a href="/products/?page=<%=page>1?page-1:1%>&name=<%=search%>"
-                                                        aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
-                                                        class="page-link">Lùi</a>
-                                                    <%}else{%>
-                                                        <a href="/products/?page=<%=page>1?page-1:1%>"
-                                                            aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
-                                                            class="page-link">Lùi</a>
-                                            </li>
-                                            <%}%>
-                                                <% for(i=1;i<=totalPage;i++){ if(name){ %>
-                                                    <li class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                        <a href="/products/?page=<%=i%>&name=<%=search%>"
-                                                            aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                            class="page-link">
-                                                            <%=i%>
-                                                        </a>
-                                                    </li>
-                                                    <%}else{ %>
-                                                        <li
-                                                            class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                            <a href="/products/?page=<%=i%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=i%>
-                                                            </a>
-                                                        </li>
-                                                        <%} }%>
-                                                            <li class="paginate_button page-item next"
-                                                                id="sampleTable_next">
-                                                                <%if(name){%>
-                                                                    <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
-                                                                        aria-controls="sampleTable" data-dt-idx="3"
-                                                                        tabindex="0" class="page-link">Tiếp</a>
-                                                                    <% }else{%>
-                                                                        <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>"
-                                                                            aria-controls="sampleTable" data-dt-idx="3"
-                                                                            tabindex="0" class="page-link">Tiếp</a>
-                                                                        <% }%>
-                                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -257,10 +178,96 @@
             </div>
         </div>
     </main>
+    <!-- model config -->
+    <div class="modal fade" id="addconfig" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form action="/products/add/config/<%=productColorId%>" method="post">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <span class="thong-tin-thanh-toan">
+                                    <h5>Thêm phiên bản </h5>
+                                </span>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Nhập tên phiên bản mới</label>
+                                <input class="form-control" type="text" name="newConfig" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Danh mục màu hiện đang có</label>
+                                <ul style="padding-left: 20px;">
+                                    <% config.map(function(color){%>
+                                        <li>
+                                            <%=color.name %>
+                                        </li>
+                                        <%})%>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <BR>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <BR>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- model them mau sp -->
+
+    <div class="modal fade" id="addProduct_color_config" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form action="/products/add/colorProduct_config/<%=productColorId%>" method="post">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <span class="thong-tin-thanh-toan">
+                                    <h5>Thêm phiên bản sản phẩm </h5>
+                                </span>
+                            </div>
+                            <div class="form-group  col-md-12">
+                                <label for="exampleSelect1" class="control-label">Phiên bản:</label>
+                                <select class="form-control" name="configId" required>
+                                    <option>-- Chọn phiên bản --</option>
+                                    <% config.map(function(config){%>
+                                        <option value="<%=config.id %>">
+                                            <%=config.name %>
+                                        </option>
+                                        <%})%>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Giá:</label>
+                                <input class="form-control" type="text" name="price">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" type="text" name="quantity">
+                            </div>
+
+                        </div>
+                        <BR>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <BR>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    <!--
-          MODAL CHỨC VỤ 
-        -->
+
 
     <%- include('footer') %>

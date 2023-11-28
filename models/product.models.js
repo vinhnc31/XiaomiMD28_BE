@@ -12,33 +12,37 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(10000),
       allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     images: {
-      type: DataTypes.TEXT, // Sửa kiểu dữ liệu thành TEXT
+      type: DataTypes.TEXT, // Chỉnh sửa kiểu dữ liệu thành TEXT nếu cần
       allowNull: false,
-      get() {
-        // Parse mảng từ chuỗi JSON
-        const images = this.getDataValue("images");
-        return images ? JSON.parse(images) : [];
-      },
-      set(value) {
-        // Chuyển mảng thành chuỗi JSON
-        this.setDataValue("images", JSON.stringify(value));
-      },
     },
   });
 
   Product.associate = (models) => {
+    // Thiết lập quan hệ một-nhiều với mô hình "Comment"
+    Product.hasMany(models.Comment, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "comments",
+    });
+
+    // Thiết lập quan hệ một-nhiều với mô hình "Favorites"
+    Product.hasMany(models.Favorites, {
+      onDelete: "CASCADE",
+      foreignKey: "productId",
+      as: "favorites",
+    });
+
     // Thiết lập quan hệ một-nhiều với mô hình "Product_Color"
-    Product.hasMany(models.Product_Color, {
+    Product.hasMany(models.productcolor, {
       onDelete: "CASCADE",
       foreignKey: "productId",
       as: "colorProducts",
     });
-    Product.belongsTo(models.Category, { foreignKey: "CategoryId" });
+    Product.belongsTo(models.Category, {
+      foreignKey: "CategoryId",
+    });
   };
+
   return Product;
 };

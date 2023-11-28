@@ -19,8 +19,9 @@
                     <span class="app-menu__label">Quản lý nhân viên</span></a></li>
             <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
                         class="app-menu__label">Quản lý khách hàng</span></a></li>
-            <li><a class="app-menu__item active" href="/products"><i
-                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
+            <li><a class="app-menu__item " href="/products"><i
+                        class='app-menu__icon active bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+                        sản
                         phẩm</span></a>
             </li>
             <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
@@ -127,19 +128,15 @@
                                                                     <div class="modal-header text-center  ">
                                                                         <h2 class="modal-title w-100">
                                                                             fa</h2>
-
                                                                     </div>
-
                                                                     <div class="modal-body text-center text-dark ">
                                                                         <h2 class="modal-title w-100">Cảnh báo</h2>
                                                                         <h5>Bạn có chắc muốn xóa sản phẩm này không?
                                                                         </h5>
-
                                                                         <BR>
                                                                         <form class="text-right"
-                                                                            action="/products/delete/<%=product.id%>"
+                                                                            action="/products/add/colorProduct/delete/<%=productId%>/<%=product.id%>"
                                                                             method="post">
-
                                                                             <a class="btn btn-cancel"
                                                                                 data-dismiss="modal" href="#">Hủy
                                                                                 bỏ</a>
@@ -155,45 +152,25 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
-
-
                                                         <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                                             href="/products/update/<%=product.id%>"><i
                                                                 class="fas fa-edit"></i></a>
+                                                        <a class="btn btn-primary btn-sm edit" type="button"
+                                                            title="Thêm phiên bản"
+                                                            href="/products/add/colorProduct_config/<%=product.id%>"><i
+                                                                class="fas fa-arrow-right"></i></a>
 
                                                     </td>
                                                 </tr>
                                                 <%})}%>
                                         </tbody>
                                     </table>
+                                    <a class="btn btn-save" href="/products">Lưu lại</a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
-                                        Hiện
-                                        1 đến 10 của 16 danh mục</div>
-                                </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
-                                        <ul class="pagination">
-                                            <li class="paginate_button page-item previous disabled"
-                                                id="sampleTable_previous"><a href="#" aria-controls="sampleTable"
-                                                    data-dt-idx="0" tabindex="0" class="page-link">Lùi</a></li>
-                                            <li class="paginate_button page-item active"><a href="#"
-                                                    aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                    class="page-link">1</a></li>
-                                            <li class="paginate_button page-item "><a href="#"
-                                                    aria-controls="sampleTable" data-dt-idx="2" tabindex="0"
-                                                    class="page-link">2</a></li>
-                                            <li class="paginate_button page-item next" id="sampleTable_next"><a href="#"
-                                                    aria-controls="sampleTable" data-dt-idx="3" tabindex="0"
-                                                    class="page-link">Tiếp</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -208,7 +185,7 @@
             <div class="modal-content">
 
                 <div class="modal-body">
-                    <form action="/products/add/colorProduct" method="post">
+                    <form action="/products/add/colorProduct/<%=productId%>" method="post">
                         <div class="row">
                             <div class="form-group  col-md-12">
                                 <span class="thong-tin-thanh-toan">
@@ -248,9 +225,9 @@
         data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-
                 <div class="modal-body">
-                    <form action="/products/add/colorProduct/<%=productId%>" method="post">
+                    <form action="/products/add/colorProduct/<%=productId%>" method="post"
+                        enctype="multipart/form-data">
                         <div class="row">
                             <div class="form-group  col-md-12">
                                 <span class="thong-tin-thanh-toan">
@@ -270,11 +247,13 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="control-label">Ảnh sản phẩm</label>
+                                <input class="form-control" type="text" name="images" id="editimg">
                                 <div id="myfileupload">
-                                    <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                    <input type="file" id="uploadfile" name="images" onchange="readURL(this);" />
                                 </div>
                                 <div id="thumbbox">
-                                    <img height="450" width="400" alt="Thumb image" id="thumbimage" />
+                                    <img height="450" width="400" alt="Thumb image" id="thumbimage"
+                                        style="display: none" />
                                     <a class="removeimg" href="javascript:"></a>
                                 </div>
                                 <div id="boxchoice">
@@ -282,7 +261,6 @@
                                         Chọn ảnh</a>
                                     <p style="clear:both"></p>
                                 </div>
-
                             </div>
                         </div>
                         <BR>
@@ -296,6 +274,26 @@
             </div>
         </div>
     </div>
+    <script>
+        const inpFile = document.getElementById("inpFile");
+        const loadFile = document.getElementById("loadFile");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".image-preview__image");
+        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+        inpFile.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                previewDefaultText.style.display = "none";
+                previewImage.style.display = "block";
+                reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
 
 
 

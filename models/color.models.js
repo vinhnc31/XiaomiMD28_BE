@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
   Color.associate = (models) => {
-    Color.hasMany(models.Product_Color, {
+    Color.hasMany(models.productcolor, {
       onDelete: "CASCADE",
       foreignKey: "colorId",
       as: "colorProducts",

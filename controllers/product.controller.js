@@ -45,11 +45,11 @@ exports.getProductID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const { name, images, price, description, quantity, CategoryId } = req.body;
+    const { name, images, price, description, CategoryId } = req.body;
     console.log(req.body);
     const filedata = req.file;
 
-    if (!name || (!images && !filedata) || !price || !quantity) {
+    if (!name || (!images && !filedata) || !price) {
       if (filedata) {
         // Nếu có lỗi và có tệp ảnh đã tải lên, hủy tệp ảnh trên Cloudinary
         cloudinary.uploader.destroy(filedata.filename);
@@ -84,7 +84,6 @@ exports.addCategory = async (req, res) => {
       images: imageUrl,
       price,
       description,
-      quantity,
       CategoryId,
     };
 
