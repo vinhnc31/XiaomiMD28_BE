@@ -20,7 +20,7 @@ exports.index = async (req, res) => {
     let _page = req.query.page ? req.query.page : 1;
     let listProduct = [];
 
-    let _limit = 2;
+    let _limit = 20;
     let totalRow = await Product.count();
     let totalPage = Math.ceil(totalRow / _limit);
     _page = _page > 0 ? Math.floor(_page) : 1;
