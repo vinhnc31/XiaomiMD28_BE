@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     phoneReceiver: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     note: {

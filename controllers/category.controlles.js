@@ -11,6 +11,7 @@ exports.getCategory = async (req, res) => {
     ],
     attributes: [
       "Category.id",
+      "id",
       "name",
       "image",
       [sequelize.fn("COUNT", sequelize.col("Products.id")), "productCount"],

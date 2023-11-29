@@ -223,3 +223,89 @@ exports.deleteProduct = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
+exports.getFilterInColor = async (req, res) => {
+  const { color } = req.query;
+  try {
+    const listFilter = await Product.findAll({
+      include: [
+        {
+          model: productcolor,
+          as: "colorProducts",
+          include: [
+            {
+              model: Color,
+              where: { nameColor: color },
+            },
+            {
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config, // Adjust this based on your actual association
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      where: {
+        "$colorProducts.colorId$": { [Op.ne]: null }, // Only include products with the specified color
+      },
+    });
+    if (!listFilter) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
+    }
+    return res.status(200).json({ status: 200, data: listFilter });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getFilterInConfig = async (req, res) => {
+  const { config } = req.query;
+  try {
+    const listFilter = await Product.findAll({
+      include: [
+        {
+          model: productcolor,
+          as: "colorProducts",
+          include: [
+            {
+              model: Color,
+            },
+            {
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config,
+                  where: { nameConfig: config }, // Adjust this based on your actual association
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      where: {
+        "$colorProducts.colorConfigs.configId$": { [Op.ne]: null }, // Only include products with the specified color
+      },
+    });
+    if (!listFilter) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connexting db" });
+    }
+    return res.status(200).json({ status: 200, data: listFilter });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};

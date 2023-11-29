@@ -130,6 +130,7 @@ exports.register = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.verifyEmail = async (req, res) => {
   try {
     const user = await Account.findOne({ id: req.params.id });

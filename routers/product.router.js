@@ -140,5 +140,7 @@ router.post(
   cloudinary.single("file"),
   productController.addCategory
 );
+router.get("/product/filter/Color", productController.getFilterInColor);
+router.get("/product/filter/Config", productController.getFilterInConfig);
 router.delete("/product/:id", productController.deleteProduct);
 module.exports = router;
