@@ -1,36 +1,23 @@
 const { Token } = require("../models");
-const { User } = require("../models");
 const { Account } = require("../models");
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
 const sendEmail = require("../untils/email");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 require("dotenv").config;
 exports.getUserId = async (req, res) => {
+  const { id } = req.query; // Access the 'id' parameter from req.query
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.SIGN_PRIVATE);
-    console.log(decoded);
-    const user = await User.findOne({
-      where: {
-        id: decoded.id,
-      },
+    const userId = await Account.findByPk(id, {
+      attributes: { exclude: ["password"] },
     });
-    console.log(user);
-    if (user) {
-      return res.status(200).json({
-        status: 200,
-        message: "User found",
-        user: user,
-      });
-    } else {
-      return res.status(404).json({
-        status: 404,
-        message: "User not found",
-      });
+    if (!userId) {
+      return res.status(400).json({ status: 400, message: "User not found" });
     }
+    return res.status(200).json({ status: 200, data: userId });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
@@ -38,52 +25,46 @@ exports.getUserId = async (req, res) => {
 };
 exports.register = async (req, res) => {
   try {
-    console.log(req.body);
-    if (!req.body.email || !req.body.password || !req.body.name) {
-      return res.status(401).json({ message: "Invalid email, password,name" });
+    const { email, password, name } = req.body;
+
+    // Check if required fields are present
+    if (!email || !password || !name) {
+      return res.status(401).json({
+        message: "Invalid email, password, name, dayOfBirth, or gender",
+      });
     }
 
-    const user = req.body;
-    console.log(user);
-    const checkEmail = await Account.findOne({
-      where: { email: req.body.email },
-    });
-    console.log(checkEmail);
-    if (checkEmail) {
-      console.log("verified email", checkEmail.verified);
-      if (checkEmail.verified) {
+    // Check if the email already exists
+    const existingAccount = await Account.findOne({ where: { email } });
+
+    if (existingAccount) {
+      if (existingAccount.verified) {
         return res.status(409).json({
           status: 409,
           message: "Email already exists and is verified.",
         });
       } else {
+        // If email is not verified, update the password and send verification email again
         const salt = await bcrypt.genSalt(15);
-        user.password = await bcrypt.hash(req.body.password, salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        checkEmail.password = user.password;
-        await User.update(
-          { name: user.name },
-          {
-            where: {
-              id: checkEmail.id,
-            },
-          }
+        await Account.update(
+          { password: hashedPassword, name },
+          { where: { id: existingAccount.id } }
         );
-        await Account.update(checkEmail, {
-          where: {
-            id: checkEmail.id,
-          },
-        });
 
         const newVerificationToken = await Token.create({
-          email: checkEmail.email,
-          token: require("crypto").randomBytes(32).toString("hex"),
+          email: existingAccount.email,
+          token: crypto.randomBytes(32).toString("hex"),
         });
 
-        const emailMessage = `http://localhost:3000/api/verify/${checkEmail.id}/${newVerificationToken.token}
-`;
-        console.log("email", checkEmail.email);
-        await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
+        const verificationLink = `http://localhost:3000/api/verify/${existingAccount.id}/${newVerificationToken.token}`;
+
+        await sendEmail(
+          existingAccount.email,
+          "Reverify Email",
+          verificationLink
+        );
 
         return res.status(200).json({
           status: 200,
@@ -93,38 +74,39 @@ exports.register = async (req, res) => {
       }
     }
 
-    const id = crypto.randomBytes(5).toString("hex");
-    user.id = id;
-    // Tạo salt và mã hóa mật khẩu
+    // If the email does not exist, create a new account
     const salt = await bcrypt.genSalt(15);
-    user.password = await bcrypt.hash(req.body.password, salt);
-    console.log("ok");
-    // Lưu tài khoản mới vào cơ sở dữ liệu
-    let new_user = await User.create(user);
-    console.log("new user", new_user);
-    let new_account = await Account.create({
-      email: req.body.email,
-      password: req.body.password,
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newAccount = await Account.create({
+      avatar:
+        "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701247814/wrumidwmedh4mfyeujtv.png",
+      email,
+      password: hashedPassword,
+      name,
+      dayOfBirth: "",
+      gender: "",
+      phone: "",
     });
-    console.log("new account", new_account);
-    // Tạo và lưu token xác minh email
-    let new_token = await Token.create({
-      email: new_account.email,
-      token: require("crypto").randomBytes(32).toString("hex"),
+
+    // Create a new verification token
+    const newToken = await Token.create({
+      email: newAccount.email,
+      token: crypto.randomBytes(32).toString("hex"),
     });
-    console.log("new token", new_token);
-    // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/api/verify/${new_user.id}/${new_token.token}`;
-    await sendEmail(new_account.email, "Verify Email", message);
+
+    // Create a verification email message and send the email
+    const verificationLink = `http://localhost:3000/api/verify/${newAccount.id}/${newToken.token}`;
+    await sendEmail(newAccount.email, "Verify Email", verificationLink);
 
     return res.status(201).json({
       status: 201,
-      data: new_account,
+      data: newAccount,
       message:
         "An email has been sent to your account. Please verify your email.",
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
@@ -333,6 +315,62 @@ exports.forgotPassword = async (req, res) => {
       .json({ status: 200, message: "Update password successfully" });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  const AccountId = req.params.id; // Assuming the route parameter is named 'id'
+  const { avatar, name, dayOfBirth, gender, phone } = req.body;
+  const fileData = req.file;
+
+  try {
+    console.log(req.body);
+    const checkAccount = await Account.findByPk(AccountId);
+
+    if (!checkAccount) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Account not found" });
+    }
+
+    let imageUrl = checkAccount.avatar;
+
+    // If there's a file, upload it to Cloudinary
+    if (fileData) {
+      try {
+        const result = await cloudinary.uploader.upload(fileData.path);
+        imageUrl = result.secure_url;
+      } catch (cloudinaryError) {
+        console.error("Cloudinary upload error:", cloudinaryError);
+        return res.status(500).json({
+          status: 500,
+          message: "Error uploading image to Cloudinary",
+        });
+      }
+    } else if (avatar) {
+      imageUrl = avatar;
+    }
+
+    // Update the account information
+    const updatedAccount = await Account.update(
+      { avatar: imageUrl, name, dayOfBirth, gender, phone },
+      { where: { id: AccountId } }
+    );
+    console.log(updatedAccount);
+    if (!updatedAccount) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Failed to update profile" });
+    }
+
+    return res
+      .status(200)
+      .json({ status: 200, message: "Profile updated successfully" });
+  } catch (error) {
+    console.error(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
