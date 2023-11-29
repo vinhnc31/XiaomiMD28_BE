@@ -6,6 +6,24 @@ const sendEmail = require("../untils/email");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 require("dotenv").config;
+
+exports.getAccounts = async (req, res) => {
+  try {
+    const listUser = await Account.findAll();
+    console.log(listUser);
+    if (!listUser || listUser.length === 0) {
+      return res.status(400).json({ status: 400, message: "No users found" });
+    }
+
+    return res.status(200).json({ status: 200, data: listUser });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.getUserId = async (req, res) => {
   const { id } = req.query; // Access the 'id' parameter from req.query
   try {
