@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
-      type: DataTypes.TEXT, // Sử dụng TEXT thay cho STRING cho mô tả dài hơn
-      allowNull: false,
-    },
     discount: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -28,6 +24,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
   return Promotion;
 };

@@ -12,6 +12,7 @@ exports.getProductId = async (req, res) => {
     const list = await Comment.findAll({ raw: true });
     console.log(list);
     const listcomment = await Comment.findAll({
+      include: Invoice,
       where: { ProductId: ProductId },
       raw: true,
     });
@@ -30,21 +31,21 @@ exports.getProductId = async (req, res) => {
 };
 
 exports.createComment = async (req, res) => {
-  const { ProductId, userId, commentBody } = req.body;
+  const { ProductId, AccountId, commentBody, image, star } = req.body;
   console.log(req.body);
   try {
-    if (!commentBody || !userId) {
+    if (!commentBody) {
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    if (!ProductId) {
+    if (!ProductId || !AccountId) {
       return res.status(400).json({
         status: 400,
         message: "ProductId are required fields",
       });
     }
-    const comment = { ProductId, userId, commentBody };
+    const comment = { ProductId, userId, commentBody, image, star };
     const addComment = await Comment.create(comment);
     if (!addComment) {
       return res

@@ -1,21 +1,22 @@
 const cloudinary = require("cloudinary").v2;
-const { Category,Product } = require("../models");
-const sequelize = require("sequelize")
+const { Category, Product } = require("../models");
+const sequelize = require("sequelize");
 exports.getCategory = async (req, res) => {
   const listCategory = await Category.findAll({
     include: [
       {
         model: Product,
-        attributes: ['name'],
+        attributes: ["name"],
       },
     ],
     attributes: [
       "Category.id",
+      "id",
       "name",
       "image",
       [sequelize.fn("COUNT", sequelize.col("Products.id")), "productCount"],
     ],
-    group: ['Category.id'],
+    group: ["Category.id"],
   });
   if (listCategory) {
     res.status(200).json({ status: 200, data: listCategory });
@@ -63,17 +64,22 @@ exports.createCategory = async (req, res) => {
     } else if (image) {
       imageUrl = image;
     }
-
+    const whereName = Category.findOne({ where: { name } });
+    if (whereName) {
+      return res.status(400).json({
+        status: 400,
+        message: "Category with this name already exists",
+      });
+    }
     const category = { name, image: imageUrl };
     const addCategory = await Category.create(category);
 
-    if (addCategory) {
-      return res.status(201).json({ status: 201, data: addCategory });
-    } else {
+    if (!addCategory) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
+    return res.status(201).json({ status: 201, data: addCategory });
   } catch (error) {
     console.log(error);
     return res
@@ -110,13 +116,12 @@ exports.updateCategory = async (req, res) => {
       where: { id: categoryId },
     });
 
-    if (updatedCategory) {
-      return res.status(201).json({ status: 201, data: updatedCategory });
-    } else {
+    if (!updatedCategory) {
       return res
-        .status(500)
-        .json({ status: 500, message: "Error connecting to database" });
+        .status(400)
+        .json({ status: 400, message: "Error connecting to database" });
     }
+    res.status(200).json({ status: 200, data: updatedCategory });
   } catch (error) {
     console.log(error);
     return res
@@ -134,7 +139,7 @@ exports.deleteCategory = async (req, res) => {
   }
   const deleteCategory = await category.destroy();
   if (deleteCategory) {
-    return res.status(201).json({ status: 201, message: "Delete successfuly" });
+    return res.status(200).json({ status: 200, message: "Delete successfuly" });
   } else {
     return res
       .status(500)

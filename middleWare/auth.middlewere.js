@@ -1,4 +1,4 @@
-const { User } = require("../models/index");
+const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const SIGN_PRIVATE = "xiaomimd28";
@@ -23,7 +23,7 @@ const apiAuth = async (req, res, next) => {
     // Tìm người dùng dựa trên dữ liệu từ token
     const user = await User.findOne({
       where: {
-        idUser: data?.idUser,
+        id: data?.id,
       },
     });
 
