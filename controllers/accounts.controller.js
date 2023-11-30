@@ -179,6 +179,7 @@ exports.verifyEmail = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.login = async (req, res, next) => {
   try {
     if (!req.body.email || !req.body.password) {
@@ -248,6 +249,7 @@ exports.login = async (req, res, next) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.changePassword = async (req, res, next) => {
   const { password, newPassword, reNewPassword } = req.body;
   const id = req.params.id;
@@ -305,6 +307,7 @@ exports.changePassword = async (req, res, next) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.logout = async (req, res, next) => {
   try {
     // Xóa token của người dùng để đăng xuất
@@ -321,6 +324,7 @@ exports.logout = async (req, res, next) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 exports.forgotPassword = async (req, res) => {
   const { email, newPassword } = req.body;
   try {

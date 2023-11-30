@@ -4,6 +4,8 @@ const {
   Address,
   Pay,
   Product,
+  Color,
+  Config,
   Promotion,
   productcolor,
   ProductColorConfig,
@@ -17,7 +19,11 @@ exports.getListOrder = async (req, res) => {
       include: [
         {
           model: OrdersProduct,
-          include: [{ model: productcolor }, { model: ProductColorConfig }],
+          include: [
+            { model: Product },
+            { model: productcolor, include: [{ model: Color }] },
+            { model: ProductColorConfig, include: { model: Config } },
+          ],
         },
         { model: Address },
       ],
@@ -46,7 +52,11 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
       include: [
         {
           model: OrdersProduct,
-          include: [{ model: productcolor }, { model: ProductColorConfig }],
+          include: [
+            { model: Product },
+            { model: productcolor, include: [{ model: Color }] },
+            { model: ProductColorConfig, include: { model: Config } },
+          ],
         },
         { model: Address },
       ],
