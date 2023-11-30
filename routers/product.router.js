@@ -137,7 +137,7 @@ router.get("/product/:id", productController.getProductId);
 router.get("/product/category/:CategoryId", productController.getCategoryID);
 router.post(
   "/product",
-  cloudinary.single("file"),
+  cloudinary.single("image"),
   productController.addCategory
 );
 router.get("/product/filter/Color", productController.getFilterInColor);

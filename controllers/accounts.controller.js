@@ -25,17 +25,28 @@ exports.getAccounts = async (req, res) => {
 };
 
 exports.getUserId = async (req, res) => {
-  const { id } = req.query; // Access the 'id' parameter from req.query
   try {
-    const userId = await Account.findByPk(id, {
-      attributes: { exclude: ["password"] },
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SIGN_PRIVATE);
+    console.log(decoded);
+    const user = await Account.findOne({
+      where: {
+        id: decoded.id,
+      },
     });
-    if (!userId) {
-      return res.status(400).json({ status: 400, message: "User not found" });
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        message: "User not found",
+      });
     }
-    return res.status(200).json({ status: 200, data: userId });
+    return res.status(200).json({
+      status: 200,
+      data: user,
+    });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
@@ -343,11 +354,10 @@ exports.updateProfile = async (req, res) => {
   const AccountId = req.params.id; // Assuming the route parameter is named 'id'
   const { avatar, name, dayOfBirth, gender, phone } = req.body;
   const fileData = req.file;
-
+  console.log(fileData);
   try {
     console.log(req.body);
     const checkAccount = await Account.findByPk(AccountId);
-
     if (!checkAccount) {
       return res
         .status(404)
@@ -355,19 +365,12 @@ exports.updateProfile = async (req, res) => {
     }
 
     let imageUrl = checkAccount.avatar;
-
+    console.log(imageUrl);
     // If there's a file, upload it to Cloudinary
     if (fileData) {
-      try {
-        const result = await cloudinary.uploader.upload(fileData.path);
-        imageUrl = result.secure_url;
-      } catch (cloudinaryError) {
-        console.error("Cloudinary upload error:", cloudinaryError);
-        return res.status(500).json({
-          status: 500,
-          message: "Error uploading image to Cloudinary",
-        });
-      }
+      // Tiến hành tải lên hình ảnh lên Cloudinary
+      const result = await cloudinary.uploader.upload(fileData.path);
+      imageUrl = result.secure_url;
     } else if (avatar) {
       imageUrl = avatar;
     }

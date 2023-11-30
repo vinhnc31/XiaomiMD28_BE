@@ -13,7 +13,15 @@ const {
 
 exports.getListOrder = async (req, res) => {
   try {
-    const listOrder = await Orders.findAll();
+    const listOrder = await Orders.findAll({
+      include: [
+        {
+          model: OrdersProduct,
+          include: [{ model: productcolor }, { model: ProductColorConfig }],
+        },
+        { model: Address },
+      ],
+    });
     if (!listOrder) {
       return res
         .status(400)
@@ -35,6 +43,13 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
   try {
     const listOrder = await Orders.findAll({
       where: { AccountId: AccountId, status: status },
+      include: [
+        {
+          model: OrdersProduct,
+          include: [{ model: productcolor }, { model: ProductColorConfig }],
+        },
+        { model: Address },
+      ],
     });
 
     if (!listOrder) {
@@ -71,6 +86,11 @@ exports.createOrder = async (req, res) => {
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
 
+    if (!AddressId || !AccountId || !PayId) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
     if (!account || !address || !pay) {
       await transaction.rollback();
       return res.status(404).json({

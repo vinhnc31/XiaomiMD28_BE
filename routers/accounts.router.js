@@ -88,7 +88,7 @@ const express = require("express");
 const router = express.Router();
 const account = require("../controllers/accounts.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
-
+const cloudinary = require("../middleWare/cloudinary.middlewere");
 router.post("/register", account.register);
 router.get("/profile", authMidleWare.apiAuth, account.getUserId);
 router.post("/login", account.login);
@@ -100,7 +100,12 @@ router.post(
   account.changePassword
 );
 router.post("/forgotPassword", account.forgotPassword);
-router.put("/updateProfile/:id", authMidleWare.apiAuth, account.updateProfile);
+router.put(
+  "/updateProfile/:id",
+  authMidleWare.apiAuth,
+  cloudinary.single("image"),
+  account.updateProfile
+);
 router.get("/account/listAccount", account.getAccounts);
 
 module.exports = router;
