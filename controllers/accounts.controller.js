@@ -229,10 +229,16 @@ exports.login = async (req, res, next) => {
       status: 200,
       data: {
         id: result.id,
+        avatar: result.avatar,
         email: result.email,
+        name: result.name,
+        password: result.password,
+        dayOfBirth: result.dayOfBirth,
+        gender: result.gender,
+        phone: result.phone,
         token: token,
-        verified: result.verified,
       },
+
       message: "Login successful!",
     });
   } catch (error) {
