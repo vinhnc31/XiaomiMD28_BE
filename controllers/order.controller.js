@@ -59,6 +59,7 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
           ],
         },
         { model: Address },
+        { model: Promotion },
       ],
     });
 
