@@ -1,5 +1,5 @@
-const { Comment } = require("../models");
-
+const { Comment, Account } = require("../models");
+const cloudinary = require("cloudinary").v2;
 exports.getProductId = async (req, res) => {
   const ProductId = +req.params.ProductId;
   try {
@@ -31,21 +31,50 @@ exports.getProductId = async (req, res) => {
 };
 
 exports.createComment = async (req, res) => {
-  const { ProductId, AccountId, commentBody, image, star } = req.body;
-  console.log(req.body);
+  const { productId, AccountId, commentBody, images, star } = req.body;
+  const fileData = req.file;
   try {
+    const checkUser = await Account.findByPk(AccountId);
+    if (!checkUser) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Account not found" });
+    }
+    const accountComment = await Comment.findOne({
+      where: { productId, AccountId },
+    });
+    if (accountComment) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Account Have evaluated" });
+    }
     if (!commentBody) {
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    if (!ProductId || !AccountId) {
+    if (!productId || !AccountId) {
       return res.status(400).json({
         status: 400,
         message: "ProductId are required fields",
       });
     }
-    const comment = { ProductId, userId, commentBody, image, star };
+    let imageUrl = "";
+    if (fileData) {
+      // Tiến hành tải lên hình ảnh lên Cloudinary
+      const result = await cloudinary.uploader.upload(fileData.path);
+      imageUrl = result.secure_url;
+    } else if (images) {
+      imageUrl = images;
+    }
+    const comment = {
+      productId,
+      AccountId,
+      commentBody,
+      images: imageUrl,
+      star,
+    };
+    console.log(comment.images);
     const addComment = await Comment.create(comment);
     if (!addComment) {
       return res
@@ -64,7 +93,8 @@ exports.createComment = async (req, res) => {
 
 exports.updateComment = async (req, res) => {
   const id = req.params.id;
-  const { ProductId, userId, commentBody } = req.body;
+  const { ProductId, AccountId, commentBody, images, star } = req.body;
+  const fileData = req.file;
   try {
     if (!ProductId) {
       return res.status(400).json({
@@ -72,13 +102,27 @@ exports.updateComment = async (req, res) => {
         message: "ProductId are required fields",
       });
     }
-    const category = await Comment.findByPk(id);
-    if (!category) {
+    const comments = await Comment.findByPk(id);
+    if (!comments) {
       return res
         .status(404)
         .json({ status: 404, message: "Comment not found" });
     }
-    const comment = { ProductId, userId, commentBody };
+    let imageUrl = comments.images;
+    if (fileData) {
+      // Tiến hành tải lên hình ảnh lên Cloudinary
+      const result = await cloudinary.uploader.upload(fileData.path);
+      imageUrl = result.secure_url;
+    } else if (images) {
+      imageUrl = images;
+    }
+    const comment = {
+      ProductId,
+      AccountId,
+      commentBody,
+      images: imageUrl,
+      star,
+    };
     const updateComment = await Comment.update(comment, { where: { id: id } });
     if (!updateComment) {
       return res
