@@ -1,4 +1,3 @@
-const sequelize = require("sequelize");
 const cloudinary = require("cloudinary").v2;
 const {
   Product,
@@ -218,7 +217,25 @@ exports.getCategoryID = async (req, res) => {
     }
     const product = await Product.findAll({
       where: { CategoryId: categoryID },
-      raw: true,
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
     });
     console.log(product);
     if (!product) {

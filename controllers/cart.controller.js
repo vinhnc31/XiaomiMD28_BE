@@ -7,6 +7,7 @@ const {
   Color,
   Config,
 } = require("../models");
+const jwt = require("jsonwebtoken");
 exports.getCartByAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
   try {
@@ -133,14 +134,30 @@ exports.createCart = async (req, res) => {
 
 exports.updateCart = async (req, res) => {
   const id = req.params.id;
-  const { productId, AccountId, ProductColorId, quantity } = req.body;
+  const quantity = req.body.quantity;
+  // Kiểm tra xem token có được chuyển lên không
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
   try {
+    // Giải mã token để lấy thông tin người dùng
+    const decodedToken = jwt.verify(token, process.env.SIGN_PRIVATE);
+
+    // Lấy thông tin người dùng từ decodedToken
+    const userId = decodedToken.id;
     const checkId = await Cart.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Cart not found" });
     }
-    const cart = { productId, AccountId, ProductColorId, quantity };
-    const updateCart = await Cart.update(cart, { where: { id: id } });
+    if (userId !== checkId.AccountId) {
+      return res.status(403).json({ status: 403, message: "Forbidden" });
+    }
+
+    const updateCart = await Cart.update(
+      { quantity: quantity },
+      { where: { id: id } }
+    );
     if (!updateCart) {
       return res
         .status(500)
@@ -159,10 +176,22 @@ exports.updateCart = async (req, res) => {
 
 exports.deleteCart = async (req, res) => {
   const id = req.params.id;
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
   try {
+    // Giải mã token để lấy thông tin người dùng
+    const decodedToken = jwt.verify(token, process.env.SIGN_PRIVATE);
+
+    // Lấy thông tin người dùng từ decodedToken
+    const userId = decodedToken.id;
     const checkId = await Cart.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Cart not found" });
+    }
+    if (userId !== whereId.userId) {
+      return res.status(403).json({ status: 403, message: "Forbidden" });
     }
     const deleteCart = await checkId.destroy();
     if (!deleteCart) {
