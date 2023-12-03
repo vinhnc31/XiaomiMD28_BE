@@ -90,6 +90,7 @@ const account = require("../controllers/accounts.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
 
 router.post("/register", account.register);
+router.get("/profile", authMidleWare.apiAuth, account.getUserId);
 router.post("/login", account.login);
 router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
@@ -99,5 +100,7 @@ router.post(
   account.changePassword
 );
 router.post("/forgotPassword", account.forgotPassword);
+router.put("/updateProfile/:id", authMidleWare.apiAuth, account.updateProfile);
+router.get("/account/listAccount", account.getAccounts);
 
 module.exports = router;

@@ -23,15 +23,16 @@ const vnPay = require("./routers/vnpay.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const PORT = process.env.POST || 3000;
+const path = require('path');
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(express.static("views"));
-
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -54,7 +55,7 @@ app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
-app.use("/api", account);
+app.use("/", account);
 app.use("/api", accounts_google);
 app.use("/api", address);
 app.use("/api", favorites);
@@ -69,8 +70,11 @@ app.use("/api", vnPay);
 app.get("/", function (req, res) {
   res.render("login");
 });
+app.get("/homeTest", function (req, res) {
+  res.render("home");
+});
 app.get("/staffManagerTest", function(req, res){
-  res.render('staffManager');
+  res.render('staffManager', {data: "Hung nd"});
 });
 app.get("/updateStaffTest", function(req, res){
   res.render('updateStaff');
