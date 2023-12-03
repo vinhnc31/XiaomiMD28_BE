@@ -19,5 +19,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     star: { type: DataTypes.INTEGER, allowNull: false },
   });
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.Account, {
+      foreignKey: {
+        name: "AccountId",
+        allowNull: false,
+      },
+    });
+  };
   return Comment;
 };

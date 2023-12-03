@@ -9,19 +9,16 @@ exports.getProductId = async (req, res) => {
         message: "ProductId are required fields",
       });
     }
-    const list = await Comment.findAll({ raw: true });
-    console.log(list);
     const listcomment = await Comment.findAll({
-      include: Invoice,
+      include: [{ model: Account }],
       where: { ProductId: ProductId },
-      raw: true,
     });
     if (!listcomment) {
       return res
         .status(404)
         .json({ status: 404, message: "Comment not found" });
     }
-    return res.status(200).json({ statu: 200, data: listcomment });
+    return res.status(200).json({ status: 200, data: listcomment });
   } catch (error) {
     console.log(error);
     return res
