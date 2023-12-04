@@ -1,4 +1,4 @@
-const { Staff } = require("../models");
+const { Staff, sequelize } = require("../models");
 
 const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;

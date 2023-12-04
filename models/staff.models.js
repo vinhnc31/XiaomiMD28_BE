@@ -41,5 +41,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
   });
+
+  Staff.associate = (models) => {
+    Staff.hasOne(models.Salaries, {
+      onDelete: "CASCADE",
+      foreignKey: "StaffId",
+      as: "staff",
+    });
+    Staff.hasOne(models.Internals, {
+      onDelete: "CASCADE",
+      foreignKey: "StaffId",
+      as: "staffInternals",
+    });
+  };
+
   return Staff;
 };

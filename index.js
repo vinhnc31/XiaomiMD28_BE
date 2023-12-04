@@ -19,6 +19,8 @@ const cart = require("./routers/cart.router");
 const config = require("./routers/config.router");
 const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
+const salary = require("./routers/salary.router");
+const internal = require("./routers/Internal.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
@@ -65,6 +67,8 @@ app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
 app.use("/api", staff);
+app.use("/api", salary);
+app.use("/api", internal);
 app.get("/", function (req, res) {
   res.render("home");
 });
