@@ -1,4 +1,4 @@
-const { Comment, Account } = require("../models");
+const { Comment, Account, Orders } = require("../models");
 const cloudinary = require("cloudinary").v2;
 exports.getProductId = async (req, res) => {
   const ProductId = +req.params.ProductId;
@@ -37,13 +37,14 @@ exports.createComment = async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Account not found" });
     }
-    const accountComment = await Comment.findOne({
-      where: { productId, AccountId },
+    const checkOrder = await Orders.findOne({
+      where: { AccountId, statusOrder: 0 },
     });
-    if (accountComment) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Account Have evaluated" });
+    if (!checkOrder) {
+      return res.status(400).json({
+        status: 400,
+        message: "User has not purchased the product yet",
+      });
     }
     if (!commentBody) {
       return res
@@ -73,12 +74,14 @@ exports.createComment = async (req, res) => {
     };
     console.log(comment.images);
     const addComment = await Comment.create(comment);
+
     if (!addComment) {
       return res
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
-
+    // Cập nhật trạng thái đơn hàng sau khi người dùng đã thêm bình luận
+    await checkOrder.update({ statusOrder: 1 });
     return res.status(201).json({ status: 201, data: addComment });
   } catch (error) {
     console.log(error);

@@ -88,6 +88,7 @@ exports.createOrder = async (req, res) => {
     PayId,
     PromotionId,
     products,
+    statusOrder,
   } = req.body;
   const date = new Date();
 
@@ -122,6 +123,7 @@ exports.createOrder = async (req, res) => {
         PayId,
         PromotionId,
         total: totalPrice,
+        statusOrder: 0,
       },
       { transaction }
     );
@@ -194,6 +196,10 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += product.price * quantity;
         }
+        await ProductColorConfig.update(
+          { quantity: sequelize.literal(`quantity - ${quantity}`) },
+          { where: { id: ProductColorConfigId }, transaction }
+        );
       }
 
       // Create record in the ordersProduct table for each product
@@ -213,6 +219,7 @@ exports.createOrder = async (req, res) => {
     await createdOrder.update({ total: totalPrice }, { transaction });
 
     await transaction.commit();
+    // Update the quantity in the product table
 
     // Return success response
     return res.status(201).json({

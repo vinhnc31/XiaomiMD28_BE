@@ -15,7 +15,8 @@ exports.createVnPay = async (req, res) => {
   let secretKey = process.env.VNP_HASHSECERT;
   let vnpUrl = process.env.VNP_URL;
   let returnUrl = process.env.VNP_URL;
-  let orderId = req.body.orderId;
+  console.log(tmnCode);
+  let orderId = +req.body.orderId;
   let amount = req.body.amount;
   let bankCode = req.body.bankCode;
 
@@ -25,10 +26,11 @@ exports.createVnPay = async (req, res) => {
   }
   let currCode = "VND";
   let vnp_Params = {};
+
   vnp_Params["vnp_Version"] = "2.1.0";
   vnp_Params["vnp_Command"] = "pay";
   vnp_Params["vnp_TmnCode"] = tmnCode;
-  vnp_Params["vnp_Locale"] = locale;
+  vnp_Params["vnp_Locale"] = "vn";
   vnp_Params["vnp_CurrCode"] = currCode;
   vnp_Params["vnp_TxnRef"] = orderId;
   vnp_Params["vnp_OrderInfo"] = "Thanh toan cho ma GD:" + orderId;
@@ -42,7 +44,6 @@ exports.createVnPay = async (req, res) => {
   }
 
   vnp_Params = sortObject(vnp_Params);
-
   let querystring = require("qs");
   let signData = querystring.stringify(vnp_Params, { encode: false });
   let crypto = require("crypto");
@@ -50,7 +51,6 @@ exports.createVnPay = async (req, res) => {
   let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-
   res.redirect(vnpUrl);
 };
 
