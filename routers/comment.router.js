@@ -123,12 +123,14 @@ const express = require("express");
 const router = express.Router();
 const commentController = require("../controllers/comment.controllers");
 const authMidleWare = require("../middleWare/auth.middlewere");
-router.get(
-  "/comment/:ProductId",
+const cloudinary = require("../middleWare/cloudinary.middlewere");
+router.get("/comment/:ProductId", commentController.getProductId);
+router.post(
+  "/comment",
   authMidleWare.apiAuth,
-  commentController.getProductId
+  cloudinary.single("image"),
+  commentController.createComment
 );
-router.post("/comment", authMidleWare.apiAuth, commentController.createComment);
 router.put(
   "/comment/:id",
   authMidleWare.apiAuth,

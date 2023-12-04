@@ -11,6 +11,7 @@ exports.getCategory = async (req, res) => {
     ],
     attributes: [
       "Category.id",
+      "id",
       "name",
       "image",
       [sequelize.fn("COUNT", sequelize.col("Products.id")), "productCount"],
@@ -63,13 +64,13 @@ exports.createCategory = async (req, res) => {
     } else if (image) {
       imageUrl = image;
     }
-    const whereName = Category.findOne({ where: { name } });
-    if (whereName) {
-      return res.status(400).json({
-        status: 400,
-        message: "Category with this name already exists",
-      });
-    }
+    // const whereName = Category.findOne({ where: { name } });
+    // if (whereName) {
+    //   return res.status(400).json({
+    //     status: 400,
+    //     message: "Category with this name already exists",
+    //   });
+    // }
     const category = { name, image: imageUrl };
     const addCategory = await Category.create(category);
 

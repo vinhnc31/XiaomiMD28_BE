@@ -142,18 +142,18 @@ const addressController = require("../controllers/address.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
 router.get(
   "/address/:AccountId",
-  //   authMidleWare.apiAuth,
+  authMidleWare.apiAuth,
   addressController.getAccountId
 );
 router.post("/address", addressController.createAddress);
 router.put(
   "/address/:id",
-  //   authMidleWare.apiAuth,
+  authMidleWare.apiAuth,
   addressController.updateAddress
 );
 router.delete(
   "/address/:id",
-  //   authMidleWare.apiAuth,
+  authMidleWare.apiAuth,
   addressController.deleteAddress
 );
 module.exports = router;

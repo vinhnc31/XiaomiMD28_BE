@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Color = sequelize.define("Color", {
-    name: {
+    nameColor: {
       type: DataTypes.STRING,
       allowNull: false,
     },
