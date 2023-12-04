@@ -23,6 +23,7 @@ const vnPay = require("./routers/vnpay.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const productView = require("./routers/productView.router");
+const orderView = require("./routers/orderView.router");
 
 const PORT = process.env.POST || 3000;
 
@@ -80,6 +81,7 @@ app.get("/", function (req, res) {
 });
 
 app.use("/products", productView);
+app.use("/order", orderView);
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);

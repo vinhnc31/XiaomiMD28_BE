@@ -1,4 +1,11 @@
 <%- include('head') %>
+    <script>
+        function onclickoption() {
+            var selectElement = document.getElementById("sampleTable_length");
+            var selectedValue = selectElement.value;
+            window.location.href = selectedValue; // Chuyển hướng đến liên kết tương ứng với giá trị đã chọn
+        }
+    </script>
 
     <!-- Aside -->
     <aside class="app-sidebar">
@@ -66,13 +73,37 @@
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <div class="dataTables_length" id="sampleTable_length"><label>Hiện <select
-                                                name="sampleTable_length" aria-controls="sampleTable"
-                                                class="form-control form-control-sm">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                    <div class="dataTables_length"><label>Hiện <select name="sampleTable_length"
+                                                onchange="onclickoption()" aria-controls="sampleTable"
+                                                id="sampleTable_length" class="form-control form-control-sm">
+                                                <% if(limit===10){%>
+                                                    <option value="/products?limit=10" selected="true">10</option>
+                                                    <%}else{%>
+                                                        <option value="/products?limit=10">10</option>
+                                                        <%}%>
+
+                                                            <% if(limit===25){%>
+                                                                <option value="/products?limit=25" selected="true">25
+                                                                </option>
+                                                                <%}else{%>
+                                                                    <option value="/products?limit=25">25</option>
+                                                                    <%}%>
+                                                                        <% if(limit===50){%>
+                                                                            <option value="/products?limit=50"
+                                                                                selected="true">50</option>
+                                                                            <%}else{%>
+                                                                                <option value="/products?limit=50">50
+                                                                                </option>
+                                                                                <%}%>
+                                                                                    <% if(limit===100){%>
+                                                                                        <option
+                                                                                            value="/products?limit=100"
+                                                                                            selected="true">100</option>
+                                                                                        <%}else{%>
+                                                                                            <option
+                                                                                                value="/products?limit=100">
+                                                                                                100</option>
+                                                                                            <%}%>
                                             </select> danh mục</label></div>
                                 </div>
                                 <div class="col-sm-12 col-md-6">
@@ -257,6 +288,7 @@
             </div>
         </div>
     </main>
+
 
 
     <!--

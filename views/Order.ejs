@@ -1,0 +1,224 @@
+<%- include('head') %>
+
+
+    <!-- Aside -->
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user">
+            <img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg" width="50px" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name"><b>Admin</b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i
+                        class='app-menu__icon fa fa-shopping-cart'></i>
+                    <span class="app-menu__label">Xioami VN</span></a></li>
+            <li><a class="app-menu__item " href="index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        class="app-menu__label">Bảng điều khiển</span></a></li>
+            <li><a class="app-menu__item " href="table-data-table.html"><i class='app-menu__icon bx bx-id-card'></i>
+                    <span class="app-menu__label">Quản lý nhân viên</span></a></li>
+            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
+                        class="app-menu__label">Quản lý khách hàng</span></a></li>
+            <li><a class="app-menu__item " href="/products"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                        class="app-menu__label">Quản lý sản
+                        phẩm</span></a>
+            </li>
+            <li><a class="app-menu__item active" href="/order"><i class='app-menu__icon bx bx-task'></i><span
+                        class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
+                        class="app-menu__label">Quản lý nội bộ
+                    </span></a></li>
+            <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
+            </li>
+
+        </ul>
+    </aside>
+    <!-- Main -->
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb side">
+                <li class="breadcrumb-item active"><a href="#"><b>Danh sách đơn hàng</b></a></li>
+            </ul>
+            <div id="clock"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="tile-body">
+                        <div class="row element-button">
+                            <div class="col-sm-2">
+                                <a class="btn btn-secondary btn-sm" href="form-add-don-hang.html" type="button"
+                                    title="Thêm">
+                                    Tất cả</a>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-info btn-sm" type="button" title="Nhập"> Chờ xác nhận</a>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-warning btn-sm " type="button" title="Đang giao hàng"> Đang giao
+                                    hàng</a>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-success btn-sm " type="button" title="Đã oàn thành"> Đã hoàn thành</a>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="badge bg-danger btn-sm " type="button" title="Đã hủy"> Đã hủy</a>
+                            </div>
+
+                        </div>
+                        <table class="table table-hover table-bordered" id="sampleTable">
+                            <thead>
+                                <tr>
+
+                                    <th>ID đơn hàng</th>
+                                    <th>Khách hàng</th>
+                                    <th>Đơn hàng</th>
+
+                                    <th>Tổng tiền</th>
+                                    <th>Tình trạng</th>
+                                    <th>Tính năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(data){ data.map(function(product){%>
+                                    <td>
+                                        <%=product.order.id%>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <% product.listproduct.map(function(product){%>
+                                            <label>
+                                                <%=product.name%> X <%=product.quantity%>
+                                            </label>
+
+                                            <%})%>
+                                    </td>
+
+                                    <td>
+                                        <%if (product.order.status=="0" ){ %>
+                                            <span class="badge bg-info">
+                                                Chờ xác nhận
+                                            </span>
+                                            <% } if(product.order.status=="1" ){%>
+                                                <span class="badge bg-warning ">
+                                                    Đang giao hàng
+                                                </span>
+                                                <%}if(product.order.status=="2"){%>
+                                                    <span class="badge bg-success ">
+                                                        Đã hoàn thành
+                                                    </span>
+                                                    <%}if(product.order.status=="3"){%>
+                                                        <span class="badge bg-danger ">
+                                                            Đã hủy
+                                                        </span>
+                                                        <%}%>
+                                    </td>
+                                    <td>
+                                        <%=product.order.price%>
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-primary btn-sm trash" type="button" title="Hủy"
+                                            data-toggle="modal" data-target="#<%=product.order.id%>"><i
+                                                class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <!-- model xóa -->
+                                        <div class="modal fade" id="<%=product.order.id%>" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
+                                            data-keyboard="false">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content text-center">
+                                                    <div class="modal-header text-center  ">
+                                                        <h2 class="modal-title w-100">
+                                                            fa</h2>
+
+                                                    </div>
+
+                                                    <div class="modal-body text-center text-dark ">
+                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                        <h5>Bạn có chắc muốn hủy đơn hàng này không?
+                                                        </h5>
+
+                                                        <BR>
+                                                        <form class="text-right"
+                                                            action="/order/update/<%=product.order.id%>/canceled"
+                                                            method="post">
+
+                                                            <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
+                                                                bỏ</a>
+                                                            <input type="hidden" value="huy" name="huy">
+                                                            <button class="btn btn-save" type="submit">Đồng
+                                                                ý</button>
+                                                        </form>
+                                                        <BR>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm edit" type="button" title="Xác nhận"
+                                            data-toggle="modal" data-target="#xacnhan"><i
+                                                class="fas fa-arrow-right"></i></button>
+                                        <!-- model xác nhận -->
+                                        <div class="modal fade" id="xacnhan" tabindex="-1" role="dialog"
+                                            aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
+                                            data-keyboard="false">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content text-center">
+                                                    <div class="modal-header text-center  ">
+                                                        <h2 class="modal-title w-100">
+                                                            fa</h2>
+
+                                                    </div>
+
+                                                    <div class="modal-body text-center text-dark ">
+                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                        <h5>Bạn có chắc đã chuyển đơn hàng này không?
+                                                        </h5>
+
+                                                        <BR>
+                                                        <form class="text-right"
+                                                            action="/order/update/<%=product.order.id%>/intransit"
+                                                            method="post">
+
+                                                            <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
+                                                                bỏ</a>
+                                                            <input type="hidden" value="xacnhan" name="xacnhan">
+                                                            <button class="btn btn-save" type="submit">Đồng
+                                                                ý</button>
+                                                        </form>
+                                                        <BR>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                    <%})}%>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!--
+          MODAL CHỨC VỤ 
+        -->
+
+    <%- include('footer') %>
