@@ -80,10 +80,26 @@
 const express = require("express");
 const router = express.Router();
 const favoritesController = require("../controllers/favorites.controller");
-
-router.get("/favorites/:AccountId", favoritesController.getAccount);
-router.get("/favorites", favoritesController.getFavorites);
-router.post("/favorites", favoritesController.createFavorites);
-router.delete("/favorites/:id", favoritesController.deleteFavorites);
+const authMidleWare = require("../middleWare/auth.middlewere");
+router.get(
+  "/favorites/:AccountId",
+  authMidleWare.apiAuth,
+  favoritesController.getAccount
+);
+router.get(
+  "/favorites",
+  authMidleWare.apiAuth,
+  favoritesController.getFavorites
+);
+router.post(
+  "/favorites",
+  authMidleWare.apiAuth,
+  favoritesController.createFavorites
+);
+router.delete(
+  "/favorites/:id",
+  authMidleWare.apiAuth,
+  favoritesController.deleteFavorites
+);
 
 module.exports = router;
