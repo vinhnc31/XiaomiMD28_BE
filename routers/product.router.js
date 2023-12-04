@@ -137,10 +137,12 @@ router.get("/product/:id", productController.getProductId);
 router.get("/product/category/:CategoryId", productController.getCategoryID);
 router.post(
   "/product",
-  cloudinary.single("file"),
+  cloudinary.single("image"),
   productController.addCategory
 );
 router.get("/product/filter/Color", productController.getFilterInColor);
 router.get("/product/filter/Config", productController.getFilterInConfig);
+router.get("/product/filter/sortPrice", productController.getFilterInPrice);
+router.get("/product/filter/start", productController.getFilterInStart);
 router.delete("/product/:id", productController.deleteProduct);
 module.exports = router;

@@ -87,11 +87,13 @@
 const express = require("express");
 const router = express.Router();
 const account = require("../controllers/accounts.controller");
+const accountGoogle = require("../controllers/accounts_google.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
-
+const cloudinary = require("../middleWare/cloudinary.middlewere");
 router.post("/register", account.register);
 router.get("/profile", authMidleWare.apiAuth, account.getUserId);
 router.post("/login", account.login);
+router.post("/login-google", accountGoogle.generateToken);
 router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
 router.post(
@@ -100,7 +102,12 @@ router.post(
   account.changePassword
 );
 router.post("/forgotPassword", account.forgotPassword);
-router.put("/updateProfile/:id", authMidleWare.apiAuth, account.updateProfile);
+router.put(
+  "/updateProfile/:id",
+  authMidleWare.apiAuth,
+  cloudinary.single("image"),
+  account.updateProfile
+);
 router.get("/account/listAccount", account.getAccounts);
 
 module.exports = router;

@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const cloudinary = require("cloudinary").v2;
 const {
   Product,
@@ -7,7 +6,11 @@ const {
   Category,
   ProductColorConfig,
   Config,
+  Comment,
 } = require("../models");
+
+const { Op, fn, col, literal } = require("sequelize");
+
 exports.getProduct = async (req, res) => {
   try {
     const name = req.query.name;
@@ -19,15 +22,54 @@ exports.getProduct = async (req, res) => {
             [Op.like]: `%${name}%`, // Using 'like' for a partial match
           },
         },
+        include: [{ model: Comment, as: "comments" }],
+        attributes: [
+          "id",
+          "name",
+          "price",
+          "images",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "CategoryId",
+          [fn("COUNT", col("comments.id")), "commentCount"],
+          [
+            literal(
+              "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+            ),
+            "averageRating",
+          ],
+        ],
+        group: ["Product.id"],
       });
     } else {
-      listProduct = await Product.findAll();
+      listProduct = await Product.findAll({
+        include: [{ model: Comment, as: "comments" }],
+        attributes: [
+          "id",
+          "name",
+          "price",
+          "images",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "CategoryId",
+          [fn("COUNT", col("comments.id")), "commentCount"],
+          [
+            literal(
+              "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+            ),
+            "averageRating",
+          ],
+        ],
+        group: ["Product.id"],
+      });
     }
 
     if (!listProduct) {
       return res
         .status(400)
-        .json({ status: 400, message: "false connexting db" });
+        .json({ status: 400, message: "false connecting db" });
     }
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
@@ -39,26 +81,55 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.getFilter = async (req, res) => {
-  const { minPrice, maxPrice } = req.query;
+  const { minPrice, maxPrice, categoryId } = req.query;
   try {
-    const priceRangeCondition = {
-      [Op.and]: [],
-    };
-    if (minPrice) {
-      priceRangeCondition[Op.and].push({ price: { [Op.gte]: minPrice } });
+    const whereCondition = {};
+
+    if (minPrice || maxPrice) {
+      whereCondition.price = {};
+
+      if (minPrice) {
+        whereCondition.price[Op.gte] = minPrice;
+      }
+
+      if (maxPrice) {
+        whereCondition.price[Op.lte] = maxPrice;
+      }
     }
 
-    if (maxPrice) {
-      priceRangeCondition[Op.and].push({ price: { [Op.lte]: maxPrice } });
+    if (categoryId) {
+      whereCondition.categoryId = categoryId;
     }
+
     const listProduct = await Product.findAll({
-      where: priceRangeCondition,
+      where: whereCondition,
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
     });
+
     if (!listProduct) {
       return res
         .status(400)
-        .json({ status: 400, message: "false connexting db" });
+        .json({ status: 400, message: "false connecting db" });
     }
+
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.error(error);
@@ -83,6 +154,7 @@ exports.getProductId = async (req, res) => {
         {
           model: productcolor,
           as: "colorProducts",
+          separate: true,
           include: [
             {
               model: Color,
@@ -98,7 +170,26 @@ exports.getProductId = async (req, res) => {
             },
           ],
         },
+        { model: Comment, as: "comments" },
       ],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id", "comments.id"],
     });
     if (!product) {
       return res
@@ -126,7 +217,25 @@ exports.getCategoryID = async (req, res) => {
     }
     const product = await Product.findAll({
       where: { CategoryId: categoryID },
-      raw: true,
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
     });
     console.log(product);
     if (!product) {
@@ -226,6 +335,7 @@ exports.deleteProduct = async (req, res) => {
 
 exports.getFilterInColor = async (req, res) => {
   const { color } = req.query;
+  const categoryId = +req.query.categoryId;
   try {
     const listFilter = await Product.findAll({
       include: [
@@ -248,10 +358,30 @@ exports.getFilterInColor = async (req, res) => {
             },
           ],
         },
+        { model: Comment, as: "comments" },
       ],
       where: {
         "$colorProducts.colorId$": { [Op.ne]: null }, // Only include products with the specified color
+        categoryId: categoryId,
       },
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
     });
     if (!listFilter) {
       return res
@@ -269,6 +399,7 @@ exports.getFilterInColor = async (req, res) => {
 
 exports.getFilterInConfig = async (req, res) => {
   const { config } = req.query;
+  const categoryId = +req.query.categoryId;
   try {
     const listFilter = await Product.findAll({
       include: [
@@ -291,17 +422,118 @@ exports.getFilterInConfig = async (req, res) => {
             },
           ],
         },
+        { model: Comment, as: "comments" },
       ],
       where: {
         "$colorProducts.colorConfigs.configId$": { [Op.ne]: null }, // Only include products with the specified color
+        categoryId: categoryId,
       },
+      attributes: [
+        "id",
+        "name",
+        "images",
+        "price",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
     });
     if (!listFilter) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "false connexting db" });
+      return res.status(400).json({ status: 400, message: "false connext db" });
     }
     return res.status(200).json({ status: 200, data: listFilter });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getFilterInPrice = async (req, res) => {
+  const sortPrice = +req.query.sortPrice;
+  const categoryId = +req.query.categoryId;
+  let order = [["price", "ASC"]];
+  console.log(order);
+  if (sortPrice) {
+    order = [["price", sortPrice === 1 ? "ASC" : "DESC"]];
+  }
+  try {
+    const listProduct = await Product.findAll({
+      order,
+      where: { categoryId: categoryId },
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
+    });
+
+    if (!listProduct) {
+      return res.status(400).json({ status: 400, message: "false connext db" });
+    }
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getFilterInStart = async (req, res) => {
+  try {
+    const listProduct = await Product.findAll({
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["Product.id"],
+      order: [[literal("averageRating"), "DESC"]], // Order by averageRating in descending order
+    });
+    if (!listProduct) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "false connecting db" });
+    }
+    return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);
     return res

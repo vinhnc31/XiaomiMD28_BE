@@ -13,7 +13,6 @@ const comment = require("./routers/comment.router");
 const account = require("./routers/accounts.router");
 const address = require("./routers/address.router");
 const favorites = require("./routers/favorites.router");
-const accounts_google = require("./routers/accounts_google.router");
 const color = require("./routers/color.router");
 const product_color = require("./routers/product_color.router");
 const cart = require("./routers/cart.router");
@@ -22,6 +21,7 @@ const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
+const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
 const path = require('path');
 
@@ -56,7 +56,7 @@ app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
 app.use("/", account);
-app.use("/api", accounts_google);
+app.use("/api", account);
 app.use("/api", address);
 app.use("/api", favorites);
 app.use("/api", color);
@@ -66,16 +66,14 @@ app.use("/api", config);
 app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
-
+app.use("/api", staff);
 app.get("/", function (req, res) {
   res.render("login");
 });
 app.get("/homeTest", function (req, res) {
   res.render("home");
 });
-app.get("/staffManagerTest", function(req, res){
-  res.render('staffManager', {data: "Hung nd"});
-});
+
 app.get("/updateStaffTest", function(req, res){
   res.render('updateStaff');
 });
@@ -85,11 +83,9 @@ app.get("/passTest", function(req, res){
 app.get("/salesTest", function(req, res){
   res.render('salesReport');
 });
-app.get("/customerTest", function(req, res){
-  res.render('customerManager');
-});
-app.get("/addCustomer", function(req, res){
-  res.render('addCustomer');
+
+app.get("/form-addStaff", function(req, res){
+  res.render('addStaff');
 });
 app.get("/InternalManagement", function(req, res){
   res.render('InternalManagement');
