@@ -124,11 +124,7 @@ const router = express.Router();
 const commentController = require("../controllers/comment.controllers");
 const authMidleWare = require("../middleWare/auth.middlewere");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
-router.get(
-  "/comment/:ProductId",
-  authMidleWare.apiAuth,
-  commentController.getProductId
-);
+router.get("/comment/:ProductId", commentController.getProductId);
 router.post(
   "/comment",
   authMidleWare.apiAuth,

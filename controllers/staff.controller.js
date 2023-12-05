@@ -1,4 +1,4 @@
-const { Staff } = require("../models");
+const { Staff, sequelize } = require("../models");
 
 const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
@@ -88,6 +88,7 @@ exports.createStaff = async (req, res) => {
     }
     const listStaff = await Staff.findAll();
     res.render('staffManager', {"staffs": listStaff });
+    // return res.redirect('/api/staff');
     // return res.status(201).json({ status: 201, data: createStaff });
   } catch (error) {
     console.log(error);
@@ -163,9 +164,11 @@ exports.deleteStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Error connecting to database" });
     }
-    return res
-      .status(200)
-      .json({ status: 200, message: "delete successfully" });
+    const listStaff = await Staff.findAll();
+    res.render('/staffManager', {"staffs": listStaff });
+    // return res
+    //   .status(200)
+    //   .json({ status: 200, message: "delete successfully" });
   } catch (error) {
     console.log(error);
     return res
