@@ -52,6 +52,7 @@ exports.createVnPay = async (req, res) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
   res.redirect(vnpUrl);
+  console.log(vnpUrl);
 };
 
 exports.getVnPayReturn = (req, res) => {

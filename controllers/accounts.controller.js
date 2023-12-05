@@ -116,6 +116,7 @@ exports.register = async (req, res) => {
       dayOfBirth: "",
       gender: "",
       phone: "",
+      fcmToken: "",
     });
 
     // Create a new verification token
@@ -181,6 +182,7 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.login = async (req, res, next) => {
+  const fcmToken = req.body.fcmToken;
   try {
     if (!req.body.email || !req.body.password) {
       return res
@@ -225,7 +227,7 @@ exports.login = async (req, res, next) => {
       { expiresIn: "1y" }
     );
     await Token.create({ token: token, email: result.email });
-
+    await result.update({ fcmToken: fcmToken });
     return res.status(200).json({
       status: 200,
       data: {

@@ -5,7 +5,7 @@ require("./untils/passport");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
-const admin = require("firebase-admin");
+
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -51,7 +51,6 @@ const options = {
   apis: ["./routers/*.js"],
 };
 const spacs = swaggerjsdoc(options);
-const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
@@ -73,10 +72,6 @@ app.use("/api", salary);
 app.use("/api", internal);
 app.get("/", function (req, res) {
   res.render("home");
-});
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
 });
 
 db.sequelize.sync().then(() => {
