@@ -154,8 +154,7 @@
                   </div>
 
                 </div>
-                <form class="row">
-
+                <form class="row" id="addStaffForm">
                   <div class="form-group col-md-4">
                     <label class="control-label">Họ và tên</label>
                     <input id="name" class="form-control" type="text" required>
@@ -292,16 +291,16 @@
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
-              name: newName,
+              name: "newName",
               avatar: "avatar",
-              address: address,
-              email: email,
-              dateOfBirth: dateOfBirth,
-              degree: degree,
-              phone: phone,
-              position: position,
-              password: password,
-              gender: gender
+              address: "address",
+              email: "email",
+              dateOfBirth: "dateOfBirth",
+              degree: "degree",
+              phone: "phone",
+              position: "position",
+              password: "password",
+              gender: "gender"
             }),
             success: function (data) {
               console.log(data);

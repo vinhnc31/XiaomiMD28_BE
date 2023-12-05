@@ -25,8 +25,8 @@
     position: absolute;
     width: 626px;
     height: 368px;
-    top: 153px;
-    left: 47px;
+    top: 185px;
+    left: 115px;
     background-color: #ffffff;
     border-radius: 62px;
     box-shadow: 1px 1px 4px #00000040;
@@ -188,8 +188,8 @@
 .box .text-wrapper-7 {
     position: absolute;
     width: 61px;
-    top: 24px;
-    left: 26px;
+    top: 25px;
+    left: 30px;
     font-family: "Libre Baskerville", Helvetica;
     font-weight: 400;
     color: #ffffff;
@@ -218,25 +218,25 @@
     position: absolute;
     width: 400px;
     height: 383px;
-    top: 145px;
-    left: 300px;
+    top: 220px;
+    left: 195px;
     object-fit: cover;
 }
 
 .box .element {
     position: absolute;
-    width: 179px;
-    height: 178px;
-    top: 0;
-    left: 130px;
+    width: 124px;
+    height: 124px;
+    top: 50px;
+    left: 180px;
     object-fit: cover;
 }
 
 .box .text-wrapper-8 {
     position: absolute;
     width: 234px;
-    top: 50px;
-    left: 290px;
+    top: 90px;
+    left: 350px;
     font-family: "Libre Baskerville", Helvetica;
     font-weight: 400;
     color: #000000;

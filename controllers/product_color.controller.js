@@ -25,7 +25,6 @@ exports.getProductColor = async (req, res) => {
 exports.createProductColor = async (req, res) => {
   const { productId, colorId, image } = req.body;
   const fileData = req.file;
-
   try {
     const product = await Product.findByPk(productId);
     const color = await Color.findByPk(colorId);

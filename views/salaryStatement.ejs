@@ -1,5 +1,4 @@
 <%- include('head') %>
-<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
   <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
       alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
@@ -10,23 +9,23 @@
   </div>
   <hr>
   <ul class="app-menu">
-    <li><a class="app-menu__item haha" href="http://localhost:3000/staffManagerTest"><i class='app-menu__icon bx bx-cart-alt'></i>
-        <span class="app-menu__label">Xioami VN</span></a></li>
+    <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
+        <span class="app-menu__label">MD VN</span></a></li>
     <li><a class="app-menu__item " href="http://localhost:3000/homeTest"><i class='app-menu__icon bx bx-tachometer'></i><span
           class="app-menu__label">Bảng điều khiển</span></a></li>
-    <li><a class="app-menu__item " href="http://localhost:3000/staffManagerTest" ><i class='app-menu__icon bx bx-id-card'></i> <span
+    <li><a class="app-menu__item " href="http://localhost:3000/api/staff" ><i class='app-menu__icon bx bx-id-card'></i> <span
           class="app-menu__label">Quản lý nhân viên</span></a></li>
-    <li><a class="app-menu__item" href="http://localhost:3000/customerTest"><i class='app-menu__icon bx bx-user-voice'></i><span
+    <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
           class="app-menu__label">Quản lý khách hàng</span></a></li>
-    <li><a class="app-menu__item" href="http://localhost:3000/customerTest"><i
+    <li><a class="app-menu__item" href="http://localhost:3000/products"><i
           class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
     </li>
-    <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i class='app-menu__icon bx bx-task'></i><span
+    <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-task'></i><span
           class="app-menu__label">Quản lý đơn hàng</span></a></li>
-    <li><a class="app-menu__item " href="http://localhost:3000/InternalManagement"><i class='app-menu__icon bx bx-run'></i><span
+    <li><a class="app-menu__item" href="http://localhost:3000/InternalManagement"><i class='app-menu__icon bx bx-run'></i><span
           class="app-menu__label">Quản lý nội bộ
         </span></a></li>
-    <li><a class="app-menu__item active" href="http://localhost:3000/salaryStatement"><i class='app-menu__icon bx bx-dollar'></i><span
+    <li><a class="app-menu__item active" href="http://localhost:3000/api/salary"><i class='app-menu__icon bx bx-dollar'></i><span
           class="app-menu__label">Bảng kê lương</span></a></li>
     <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
           class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
@@ -34,7 +33,8 @@
   </ul>
 
   
-</aside>        <main class="app-content">
+</aside>
+     <main class="app-content">
       <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
           <li class="breadcrumb-item active"><a href="#"><b>Bảng kê lương</b></a></li>
@@ -73,149 +73,24 @@
                                 </tr>
                             </thead>
                             <tbody>
+                              <% salaryList.forEach(salary => { %>
                                 <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Hồ Thị Thanh Ngân</td>
-                                    <td>Nữ</td>
-                                    <td>Bán hàng</td>
-                                    <td>7.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>7.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
+                                    <td width="10"><input type="checkbox" name="check1" value="<%= salary.StaffId %>"></td>
+                                    <td><%= salary.staff.name %></td>
+                                    <td><%= salary.staff.gender %></td>
+                                    <td><%= salary.staff.position %></td>
+                                    <td><%= salary.salary %> đ</td>
+                                    <td><%= salary.salaryDeduction %> đ</td>
+                                    <td><%= salary.bonus %> đ</td>
+                                    <td><%= salary.totalPrice %> đ</td>
+                                    <td><span class="badge bg-success"><%= salary.status %></span></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
+                                    </td>
                                 </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Trần Khả Ái</td>
-                                <td>Nữ</td>
-                                <td>Bán hàng</td>
-                                <td>7.500.000 đ</td>
-                                <td>Không</td>
-                                <td>1.000.000 đ</td>
-                                <td>8.500.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Phạm Thu Cúc</td>
-                                <td>Nữ</td>
-                                <td>Thu ngân</td>
-                                <td>7.000.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>7.000.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Trần Anh Khoa</td>
-                                <td>Nam</td>
-                                <td>Tư vấn</td>
-                                <td>7.000.000 đ</td>
-                                <td>Không</td>
-                                <td>500.000 đ</td>
-                                <td>7.500.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Nguyễn Thành Nhân</td>
-                                <td>Nam</td>
-                                <td>Bảo trì</td>
-                                <td>9.000.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>9.000.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Nguyễn Đặng Trọng Nhân</td>
-                                <td>Nam</td>
-                                <td>Dịch vụ</td>
-                                <td>6.500.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>6.500.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Nguyễn Thị Mai</td>
-                                <td>Nữ</td>
-                                <td>Tư vấn</td>
-                                <td>7.000.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>7.000.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Trương Nguyễn Trà My</td>
-                                <td>Nữ</td>
-                                <td>Thu ngân</td>
-                                <td>7.500.000 đ</td>
-                                <td>Không</td>
-                                <td>500.000 đ</td>
-                                <td>8.000.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Nguyễn Nhật Tân</td>
-                                <td>Nam</td>
-                                <td>Quản kho</td>
-                                <td>8.500.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>8.500.000 đ</td>
-                                <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Lâm Nguyễn Tuân</td>
-                                <td>Nam</td>
-                                <td>Quản kho</td>
-                                <td>8.500.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>8.500.000 đ</td>
-                                <td><span class="badge bg-danger">Chưa nhận tiền</span></td>
-                                <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
-                             <tr>
-                                <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                <td>Hồ Thanh Toàn</td>
-                                <td>Nam</td>
-                                <td>Quản kho</td>
-                                <td>8.500.000 đ</td>
-                                <td>Không</td>
-                                <td>Không</td>
-                                <td>8.500.000 đ</td>
-                                <td><span class="badge bg-danger">Chưa nhận tiền</span></td>
-                                 <td><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button></td>
-                             </tr>
+                            <% }); %>
+                             
                             </tbody>
                         </table>
                     </div>

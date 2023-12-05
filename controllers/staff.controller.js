@@ -87,8 +87,10 @@ exports.createStaff = async (req, res) => {
         .json({ status: 400, message: "connect fail database" });
     }
     const listStaff = await Staff.findAll();
-    res.render('staffManager', {"staffs": listStaff });
-    // return res.redirect('/api/staff');
+    // return res.render('/', {"staffs": listStaff });
+    // return res.redirect('/api/staff', {"staffs": listStaff });
+    // res.render('staffManager', {"staffs": listStaff });
+    res.redirect('staffManager')
     // return res.status(201).json({ status: 201, data: createStaff });
   } catch (error) {
     console.log(error);
@@ -165,7 +167,8 @@ exports.deleteStaff = async (req, res) => {
         .json({ status: 400, message: "Error connecting to database" });
     }
     const listStaff = await Staff.findAll();
-    res.render('/staffManager', {"staffs": listStaff });
+    // res.render('/staffManager', {"staffs": listStaff });
+    return res.redirect("/products/add/colorProduct/", {"staffs": listStaff });
     // return res
     //   .status(200)
     //   .json({ status: 200, message: "delete successfully" });

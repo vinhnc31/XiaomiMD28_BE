@@ -24,11 +24,21 @@ const internal = require("./routers/Internal.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
+const productView = require("./routers/productView.router");
+
 const PORT = process.env.POST || 3000;
 const path = require('path');
 
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
@@ -94,11 +104,10 @@ app.get("/form-addStaff", function(req, res){
 app.get("/InternalManagement", function(req, res){
   res.render('InternalManagement');
 });
-app.get("/salaryStatement", function(req, res){
-  res.render('salaryStatement');
-});
 
 
+
+app.use("/products", productView);
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);
