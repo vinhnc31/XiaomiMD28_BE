@@ -9,8 +9,9 @@ exports.getStaff = async (req, res) => {
     if (!listStaff) {
       return res.status(404).json({ status: 404, message: "No staff found" });
     }
+    res.render('staffManager', {"staffs": listStaff });
 
-    return res.status(200).json({ status: 200, data: listStaff });
+    // return res.status(200).json({ status: 200, data: listStaff });
   } catch (error) {
     console.error(error);
     return res
@@ -85,13 +86,19 @@ exports.createStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res.status(201).json({ status: 201, data: createStaff });
+    const listStaff = await Staff.findAll();
+    // return res.render('/', {"staffs": listStaff });
+    // return res.redirect('/api/staff', {"staffs": listStaff });
+    // res.render('staffManager', {"staffs": listStaff });
+    res.redirect('staffManager')
+    // return res.status(201).json({ status: 201, data: createStaff });
   } catch (error) {
     console.log(error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
   }
+  
 };
 
 exports.updateStaff = async (req, res) => {
@@ -159,9 +166,12 @@ exports.deleteStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Error connecting to database" });
     }
-    return res
-      .status(200)
-      .json({ status: 200, message: "delete successfully" });
+    const listStaff = await Staff.findAll();
+    // res.render('/staffManager', {"staffs": listStaff });
+    return res.redirect("/products/add/colorProduct/", {"staffs": listStaff });
+    // return res
+    //   .status(200)
+    //   .json({ status: 200, message: "delete successfully" });
   } catch (error) {
     console.log(error);
     return res

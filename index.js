@@ -25,16 +25,27 @@ const internal = require("./routers/Internal.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
+const productView = require("./routers/productView.router");
+
 const PORT = process.env.POST || 3000;
+const path = require('path');
 
 app.set("view engine", "ejs");
-app.use(express.static("public"));
+app.use(
+  express.static("public", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(express.static("views"));
-
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -58,6 +69,7 @@ app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
+app.use("/", account);
 app.use("/api", account);
 app.use("/api", address);
 app.use("/api", favorites);
@@ -72,6 +84,9 @@ app.use("/api", staff);
 app.use("/api", salary);
 app.use("/api", internal);
 app.get("/", function (req, res) {
+  res.render("login");
+});
+app.get("/homeTest", function (req, res) {
   res.render("home");
 });
 
@@ -79,6 +94,26 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+app.get("/updateStaffTest", function(req, res){
+  res.render('updateStaff');
+});
+app.get("/passTest", function(req, res){
+  res.render('reset-password');
+});
+app.get("/salesTest", function(req, res){
+  res.render('salesReport');
+});
+
+app.get("/form-addStaff", function(req, res){
+  res.render('addStaff');
+});
+app.get("/InternalManagement", function(req, res){
+  res.render('InternalManagement');
+});
+
+
+
+app.use("/products", productView);
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);

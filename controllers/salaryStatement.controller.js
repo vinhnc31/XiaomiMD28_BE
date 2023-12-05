@@ -9,7 +9,8 @@ exports.getSalary = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res.status(200).json({ status: 200, data: listSalary });
+    res.render('salaryStatement', {"salaryList": listSalary });
+    console.log(listSalary)
   } catch (error) {
     console.log(error);
     return res
