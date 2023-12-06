@@ -22,6 +22,8 @@ const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
 const salary = require("./routers/salary.router");
 const internal = require("./routers/Internal.router");
+const notify = require("./routers/notify.router");
+const home = require("./routers/home.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
@@ -70,6 +72,8 @@ app.use("/api", vnPay);
 app.use("/api", staff);
 app.use("/api", salary);
 app.use("/api", internal);
+app.use("/api", notify);
+app.use("/home", home);
 app.get("/", function (req, res) {
   res.render("home");
 });

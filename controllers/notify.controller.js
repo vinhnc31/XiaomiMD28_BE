@@ -1,9 +1,9 @@
 const admin = require("firebase-admin");
 const FCM = require("fcm-node");
 const { Account, Notify, notifyAccount } = require("../models");
-
+const serviceAccount = require("../config/xioami-md28-firebase-adminsdk-xzypw-b20593eec4.json");
 admin.initializeApp({
-  credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const fcm = new FCM(process.env.FCM);
@@ -16,7 +16,7 @@ exports.sendMessage = async (req, res) => {
     // Retrieve the user's fcmToken from the Account model
     const user = await Account.findByPk(AccountId);
     const registrationToken = user.fcmToken;
-
+    console.log(registrationToken);
     const message = {
       notification: {
         title: title,
@@ -30,19 +30,31 @@ exports.sendMessage = async (req, res) => {
       },
       token: registrationToken,
     };
+    console.log(message);
+    // Send the notification with a callback function
+    console.log(fcm);
+    fcm.send(message, async (err, response) => {
+      if (err) {
+        console.error("Error sending message:", err);
+        return res
+          .status(500)
+          .json({ status: 500, message: "Internal server error" });
+      }
 
-    // Send the notification
-    const response = await fcm.send(message);
+      // Save the notification in the Notify model
+      await notifyAccount.create({
+        title: title,
+        content: content,
+        AccountId: AccountId,
+      });
 
-    // Save the notification in the Notify model
-    await notifyAccount.create({ title: title, content: content });
-
-    console.log("Successfully sent message:", response);
-    res
-      .status(200)
-      .json({ status: 200, message: "Notification sent successfully" });
+      console.log("Successfully sent message:", response);
+      res
+        .status(200)
+        .json({ status: 200, message: "Notification sent successfully" });
+    });
   } catch (error) {
-    console.error("Error sending message:", error);
+    console.error("Error:", error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });

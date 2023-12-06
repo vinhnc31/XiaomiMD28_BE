@@ -62,6 +62,7 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
         { model: Address },
         { model: Promotion },
       ],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!listOrder) {
