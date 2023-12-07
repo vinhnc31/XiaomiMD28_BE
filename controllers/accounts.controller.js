@@ -14,8 +14,9 @@ exports.getAccounts = async (req, res) => {
     if (!listUser || listUser.length === 0) {
       return res.status(400).json({ status: 400, message: "No users found" });
     }
+    res.render("customerManager", { accounts: listUser });
 
-    return res.status(200).json({ status: 200, data: listUser });
+    // return res.status(200).json({ status: 200, data: listUser });
   } catch (error) {
     console.error(error);
     return res

@@ -31,6 +31,7 @@ const orderView = require("./routers/orderView.router");
 
 const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
+const path = require("path");
 
 app.set("view engine", "ejs");
 app.use(
@@ -45,9 +46,9 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(express.static("views"));
-
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -70,6 +71,7 @@ app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
+app.use("/", account);
 app.use("/api", account);
 app.use("/api", address);
 app.use("/api", favorites);
@@ -86,11 +88,35 @@ app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.get("/", function (req, res) {
+  res.render("login");
+});
+app.get("/homeTest", function (req, res) {
   res.render("home");
 });
 
 app.use("/products", productView);
 app.use("/order", orderView);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+app.get("/updateStaffTest", function (req, res) {
+  res.render("updateStaff");
+});
+app.get("/passTest", function (req, res) {
+  res.render("reset-password");
+});
+app.get("/salesTest", function (req, res) {
+  res.render("salesReport");
+});
+
+app.get("/form-addStaff", function (req, res) {
+  res.render("addStaff");
+});
+app.get("/InternalManagement", function (req, res) {
+  res.render("InternalManagement");
+});
+
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);

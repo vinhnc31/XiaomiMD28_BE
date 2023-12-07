@@ -1,0 +1,275 @@
+<%- include('head') %>
+<aside class="app-sidebar">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
+      alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+    <div>
+      <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
+      <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
+        <span class="app-menu__label">MD VN</span></a></li>
+    <li><a class="app-menu__item " href="http://localhost:3000/homeTest"><i class='app-menu__icon bx bx-tachometer'></i><span
+          class="app-menu__label">Bảng điều khiển</span></a></li>
+    <li><a class="app-menu__item active" href="http://localhost:3000/api/staff" ><i class='app-menu__icon bx bx-id-card'></i> <span
+          class="app-menu__label">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
+          class="app-menu__label">Quản lý khách hàng</span></a></li>
+    <li><a class="app-menu__item" href="http://localhost:3000/products"><i
+          class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+    </li>
+    <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-task'></i><span
+          class="app-menu__label">Quản lý đơn hàng</span></a></li>
+    <li><a class="app-menu__item" href="http://localhost:3000/InternalManagement"><i class='app-menu__icon bx bx-run'></i><span
+          class="app-menu__label">Quản lý nội bộ
+        </span></a></li>
+    <li><a class="app-menu__item" href="http://localhost:3000/api/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+          class="app-menu__label">Bảng kê lương</span></a></li>
+    <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
+          class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
+    </li>
+  </ul>
+
+  
+</aside>
+
+  <body onload="time()" class="app sidebar-mini rtl">
+
+    <main class="app-content">
+      <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a href="#"><b>Danh sách nhân viên</b></a></li>
+        </ul>
+        <div id="clock"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+
+              <div class="row element-button">
+                <div class="col-sm-2">
+
+                  <a class="btn btn-add btn-sm" href="http://localhost:3000/form-addStaff" title="Thêm"><i
+                      class="fas fa-plus"></i>
+                    Thêm nhân viên</a>
+                </div>
+                <div class="col-sm-2">
+                  <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
+                      class="fas fa-trash-alt"></i> Xóa tất cả </a>
+                </div>
+              </div>
+              <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0"
+                id="sampleTable">
+                <thead>
+                  <tr>
+                    <th width="10"><input type="checkbox" id="all"></th>
+                    <th>ID nhân viên</th>
+                    <th width="150">Họ và tên</th>
+                    <th width="20">Ảnh thẻ</th>
+                    <th width="300">Địa chỉ</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>SĐT</th>
+                    <th>Chức vụ</th>
+                    <th width="100">Tính năng</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <% staffs.forEach(staff=> { %>
+                    <tr>
+                      <td width="10"><input type="checkbox" name="check1" value="<%= staff.id %>"></td>
+                      <td>#<%= staff.id %>
+                      </td>
+                      <td>
+                        <%= staff.name %>
+                      </td>
+                      <td><img class="img-card-person" src="<%= staff.avatar %>" alt=""></td>
+                      <td>
+                        <%= staff.address %>
+                      </td>
+                      <td>
+                        <% if (staff.dateOfBirth) { %>
+                            <% const date = new Date(staff.dateOfBirth); %>
+                            <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
+                        <% } else { %>
+                            Ngày sinh không khả dụng
+                        <% } %>
+                    </td>
+                    
+                      <td>
+                        <%= staff.gender %>
+                      </td>
+                      <td>
+                        <%= staff.phone %>
+                      </td>
+                      <td>
+                        <%= staff.degree %>
+                      </td>
+                      <td class="table-td-center"><button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                          onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"
+                          data-toggle="modal" data-target="#ModalUP"><i class="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <% }); %>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Essential javascripts for application to work-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="src/jquery.table2excel.js"></script>
+    <script src="js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <!-- Thêm thư viện SweetAlert -->
+
+
+    <script>
+      function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("myTable").deleteRow(i);
+      }
+      jQuery(function () {
+        jQuery(".trash").click(function () {
+          swal({
+            title: "Cảnh báo",
+            text: "Bạn có chắc chắn là muốn xóa nhân viên này?",
+            buttons: ["Hủy bỏ", "Đồng ý"],
+          })
+            .then((willDelete) => {
+              if (willDelete) {
+                // Lấy id của nhân viên từ hàng chứa nút xóa
+                const staffId = jQuery(this).closest('tr').find('[name="check1"]').val();
+                // Gọi hàm xóa với id đã lấy
+                deleteStaff(staffId);
+              }
+            });
+        });
+      });
+      oTable = $('#sampleTable').dataTable();
+      $('#all').click(function (e) {
+        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+        e.stopImmediatePropagation();
+      });
+
+      function deleteStaff(id) {
+        // Gọi API xóa với id của nhân viên
+        // Sử dụng thư viện fetch hoặc axios để thực hiện HTTP request
+        fetch(`/api/staff/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            // Các header khác nếu cần thiết
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Xử lý kết quả từ API (có thể cập nhật giao diện, hiển thị thông báo, v.v.)
+            console.log('Staff deleted successfully:', data);
+            // Thực hiện các bước cần thiết sau khi xóa, nếu có
+          })
+          .catch(error => {
+            console.error('Error deleting staff:', error);
+            // Xử lý lỗi nếu cần thiết
+          });
+      }
+
+
+      //Thời Gian
+      function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Chủ Nhật";
+        weekday[1] = "Thứ Hai";
+        weekday[2] = "Thứ Ba";
+        weekday[3] = "Thứ Tư";
+        weekday[4] = "Thứ Năm";
+        weekday[5] = "Thứ Sáu";
+        weekday[6] = "Thứ Bảy";
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        nowTime = h + " giờ " + m + " phút " + s + " giây";
+        if (dd < 10) {
+          dd = '0' + dd
+        }
+        if (mm < 10) {
+          mm = '0' + mm
+        }
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+          '</span>';
+        document.getElementById("clock").innerHTML = tmp;
+        clocktime = setTimeout("time()", "1000", "Javascript");
+
+        function checkTime(i) {
+          if (i < 10) {
+            i = "0" + i;
+          }
+          return i;
+        }
+      }
+      //In dữ liệu
+      var myApp = new function () {
+        this.printTable = function () {
+          var tab = document.getElementById('sampleTable');
+          var win = window.open('', '', 'height=700,width=700');
+          win.document.write(tab.outerHTML);
+          win.document.close();
+          win.print();
+        }
+      }
+      //     //Sao chép dữ liệu
+      //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
+
+      // copyTextareaBtn.addEventListener('click', function(event) {
+      //   var copyTextarea = document.querySelector('.js-copytextarea');
+      //   copyTextarea.focus();
+      //   copyTextarea.select();
+
+      //   try {
+      //     var successful = document.execCommand('copy');
+      //     var msg = successful ? 'successful' : 'unsuccessful';
+      //     console.log('Copying text command was ' + msg);
+      //   } catch (err) {
+      //     console.log('Oops, unable to copy');
+      //   }
+      // });
+
+
+      //Modal
+      $("#show-emp").on("click", function () {
+        $("#ModalUP").modal({ backdrop: false, keyboard: false })
+      });
+    </script>
+  </body>
+
+  </html>
