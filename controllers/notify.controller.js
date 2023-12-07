@@ -62,11 +62,17 @@ exports.sendMessage = async (req, res) => {
 };
 exports.sendMessageAll = async (req, res) => {
   const { title, content } = req.body;
+  const AccountIds = req.body.AccountIds; // Assuming AccountIds is an array of user IDs
 
   try {
-    // Retrieve the user's fcmToken from the Account model
-    const user = await Account.findAll();
-    const registrationToken = user.fcmToken;
+    // Fetch FCM tokens for all users
+    const users = await Account.findAll({
+      where: {
+        id: AccountIds,
+      },
+    });
+
+    const registrationTokens = users.map((user) => user.fcmToken);
 
     const message = {
       notification: {
@@ -79,22 +85,36 @@ exports.sendMessageAll = async (req, res) => {
             "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
         },
       },
-      registration_ids: registrationToken,
+      tokens: registrationTokens,
     };
 
-    // Send the notification
-    const response = await fcm.send(message);
+    // Send the notification to all users
+    fcm.sendMulticast(message, async (err, response) => {
+      if (err) {
+        console.error("Error sending multicast message:", err);
+        return res
+          .status(500)
+          .json({ status: 500, message: "Internal server error" });
+      }
 
-    // Save the notification in the Notify model
-    await Notify.create({ title: title, content: content });
+      // Save the notification in the Notify model for each user
+      const notifications = registrationTokens.map((token, index) => ({
+        title: title,
+        content: content,
+        AccountId: AccountIds[index],
+      }));
+      await notifyAccount.bulkCreate(notifications);
 
-    console.log("Successfully sent message:", response);
-    res
-      .status(200)
-      .json({ status: 200, message: "Notification sent successfully" });
+      console.log("Successfully sent multicast message:", response);
+      res
+        .status(200)
+        .json({ status: 200, message: "Notifications sent successfully" });
+    });
   } catch (error) {
-    console.error("Error sending message:", error);
-    res.status(500).json({ status: 500, message: "Internal server error" });
+    console.error("Error:", error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 

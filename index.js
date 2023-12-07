@@ -29,6 +29,7 @@ const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
 const productView = require("./routers/productView.router");
 
+const statistical = require("./routers/statistical.router");
 const PORT = process.env.POST || 3000;
 const path = require('path');
 
@@ -86,6 +87,7 @@ app.use("/", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
+app.use("/statistical", statistical);
 app.get("/", function (req, res) {
   res.render("login");
 });

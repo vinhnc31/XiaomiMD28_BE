@@ -8,5 +8,7 @@ router.get("/totalStaff", homeController.getStaff);
 router.get("/Order", homeController.getOrderNew);
 router.get("/AccountNew", homeController.getAccountNew);
 router.get("/", homeController.getAllData);
+router.get("/OrderInMonth", homeController.getOrderInMonth);
+router.get("/RevenueInMonth", homeController.getRevenueInMonth);
 module.exports = router;
   
