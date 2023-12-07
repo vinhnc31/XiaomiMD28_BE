@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 const FCM = require("fcm-node");
-const { Account, Notify, notifyAccount } = require("../models");
+const { Account, notifyAccount } = require("../models");
 const serviceAccount = require("../config/xioami-md28-firebase-adminsdk-xzypw-b20593eec4.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -28,7 +28,7 @@ exports.sendMessage = async (req, res) => {
             "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
         },
       },
-      token: registrationToken,
+      to: registrationToken,
     };
     console.log(message);
     // Send the notification with a callback function
@@ -85,11 +85,11 @@ exports.sendMessageAll = async (req, res) => {
             "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
         },
       },
-      tokens: registrationTokens,
+      registration_ids: registrationTokens,
     };
 
     // Send the notification to all users
-    fcm.sendMulticast(message, async (err, response) => {
+    fcm.send(message, async (err, response) => {
       if (err) {
         console.error("Error sending multicast message:", err);
         return res
