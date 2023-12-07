@@ -48,7 +48,7 @@ exports.createSalaryStatement = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res.status(201).json({ status: 201, data: createSalary });
+    return res.redirect("/salary");
   } catch (error) {
     console.log(error);
     return res
@@ -59,13 +59,13 @@ exports.createSalaryStatement = async (req, res) => {
 
 exports.updateSalary = async (req, res) => {
   const id = req.params.id;
-  const { StaffId, salary, salaryDeduction, status } = req.body;
+  const { status } = req.body;
   try {
     const checkId = await Salaries.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Salary not found" });
     }
-    const salaries = { StaffId, salary, salaryDeduction, status };
+    const salaries = { status };
 
     const updateSalary = await Salaries.update(salaries, { where: { id: id } });
 
@@ -75,9 +75,7 @@ exports.updateSalary = async (req, res) => {
         .json({ status: 400, message: "connect fail database" });
     }
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "update successfully" });
+    return res.redirect("/salary");
   } catch (error) {
     console.log(error);
     return res
@@ -89,6 +87,9 @@ exports.updateSalary = async (req, res) => {
 exports.deleteSalary = async (req, res) => {
   const id = req.params.id;
   try {
+    console.log(id)
+    const salary = await Salaries.findAll();
+    console.log(salary)
     const checkId = await Salaries.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Salary not found" });
@@ -99,9 +100,7 @@ exports.deleteSalary = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res
-      .status(200)
-      .json({ status: 200, message: "delete successfully" });
+    return res.redirect("/salary");
   } catch (error) {
     console.log(error);
     return res
@@ -109,3 +108,31 @@ exports.deleteSalary = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+exports.viewAdd = async (req, res) => {
+  const listStaff = await Staff.findAll();
+
+    if (!listStaff) {
+      return res.status(404).json({ status: 404, message: "No staff found" });
+    }
+  return res.render('AddSalary', {"staffs": listStaff });
+};
+
+exports.viewUpdateSalary = async (req, res, next) => {
+  const id = req.params.id;
+  const salaries = await Salaries.findOne({
+    where: {
+      id: id,
+    },
+  });
+ console.log(salaries)
+ const staff = await Staff.findOne({
+  where: {
+    id: salaries.StaffId,
+  },
+});
+  res.render("updateSalary", {
+    staff: staff,
+    Salaries: salaries,
+    title: "Sửa lương",
+  });
+}; 

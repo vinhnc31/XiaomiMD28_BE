@@ -80,8 +80,8 @@ app.use("/api", config);
 app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
-app.use("/api", staff);
-app.use("/api", salary);
+app.use("/", staff);
+app.use("/", salary);
 app.use("/api", internal);
 app.get("/", function (req, res) {
   res.render("login");
@@ -114,6 +114,7 @@ app.get("/InternalManagement", function(req, res){
 
 
 app.use("/products", productView);
+
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log("server start loacalhost: " + PORT);
