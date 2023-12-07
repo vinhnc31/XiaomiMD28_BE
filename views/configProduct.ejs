@@ -24,13 +24,17 @@
                         sản
                         phẩm</span></a>
             </li>
-            <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+            <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
                         class="app-menu__label">Quản lý đơn hàng</span></a></li>
             <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
                         class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
             <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                        class="app-menu__label">Quản lý
+                        Voucher</span></a>
+            </li>
             <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
                         thu</span></a>
@@ -111,7 +115,7 @@
                                                         <%=product.id%>
                                                     </td>
                                                     <td>
-                                                        <%=product.Config.name%>
+                                                        <%=product.Config.nameConfig%>
                                                     </td>
                                                     <td>
                                                         <%=product.price%>
@@ -197,11 +201,11 @@
                                 <input class="form-control" type="text" name="newConfig" required>
                             </div>
                             <div class="form-group col-md-12">
-                                <label class="control-label">Danh mục màu hiện đang có</label>
+                                <label class="control-label">Danh mục phiên bản hiện đang có</label>
                                 <ul style="padding-left: 20px;">
                                     <% config.map(function(color){%>
                                         <li>
-                                            <%=color.name %>
+                                            <%=color.nameConfig %>
                                         </li>
                                         <%})%>
 

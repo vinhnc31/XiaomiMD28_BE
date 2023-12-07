@@ -24,13 +24,17 @@
                         sản
                         phẩm</span></a>
             </li>
-            <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+            <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
                         class="app-menu__label">Quản lý đơn hàng</span></a></li>
             <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
                         class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
             <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                        class="app-menu__label">Quản lý
+                        Voucher</span></a>
+            </li>
             <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
                         thu</span></a>
@@ -107,7 +111,7 @@
                                                         <%=product.Color.id%>
                                                     </td>
                                                     <td>
-                                                        <%=product.Color.name%>
+                                                        <%=product.Color.nameColor%>
                                                     </td>
                                                     <td>
                                                         <img src="<%=product.image%>" alt="" width="100px;">
@@ -201,7 +205,7 @@
                                 <ul style="padding-left: 20px;">
                                     <% color.map(function(color){%>
                                         <li>
-                                            <%=color.name %>
+                                            <%=color.nameColor %>
                                         </li>
                                         <%})%>
 
@@ -240,7 +244,7 @@
                                     <option>-- Chọn màu --</option>
                                     <% color.map(function(color){%>
                                         <option value="<%=color.id %>">
-                                            <%=color.name %>
+                                            <%=color.nameColor %>
                                         </option>
                                         <%})%>
                                 </select>

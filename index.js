@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 require("./untils/passport");
+const moment = require("moment");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
@@ -29,6 +30,7 @@ const product_color_config = require("./routers/productcolor_config.router");
 const productView = require("./routers/productView.router");
 const orderView = require("./routers/orderView.router");
 const loginView = require("./routers/login.router");
+const voucherView = require("./routers/voucher.router");
 
 const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
@@ -66,7 +68,6 @@ const options = {
   apis: ["./routers/*.js"],
 };
 const spacs = swaggerjsdoc(options);
-const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
@@ -90,6 +91,7 @@ app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.use("/", loginView);
+app.use("/", voucherView);
 app.get("/", function (req, res) {
   res.render("login", { message: "", email: "", password: "" });
 });
@@ -99,9 +101,6 @@ app.get("/homeTest", function (req, res) {
 
 app.use("/products", productView);
 app.use("/order", orderView);
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 app.get("/updateStaffTest", function (req, res) {
   res.render("updateStaff");

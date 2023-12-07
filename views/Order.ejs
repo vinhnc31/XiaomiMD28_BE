@@ -4,7 +4,8 @@
     <!-- Aside -->
     <aside class="app-sidebar">
         <div class="app-sidebar__user">
-            <img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg" width="50px" alt="User Image">
+            <img class="app-sidebar__user-avatar" src="/images/hay.jpg" alt="User Image" width="50px"
+                style="border-radius: 50%; width: 50px; height: 50px;">
             <div>
                 <p class="app-sidebar__user-name"><b>Admin</b></p>
                 <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
@@ -32,6 +33,10 @@
                     </span></a></li>
             <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                        class="app-menu__label">Quản lý
+                        Voucher</span></a>
+            </li>
             <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
                         thu</span></a>
@@ -51,6 +56,7 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="tile-body">
+
                         <div class="row element-button">
                             <div class="col-sm-2">
                                 <% if(status===-1){%>
@@ -110,262 +116,497 @@
                             </div>
 
                         </div>
-                        <table class="table table-hover table-bordered" id="sampleTable">
-                            <thead>
-                                <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Khách hàng</th>
-                                    <th>Đơn hàng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Tình trạng</th>
-                                    <%if(status===0){%>
-                                        <th>Tính năng</th>
-                                        <%}%>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-hover table-bordered" id="sampleTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID đơn hàng</th>
+                                            <th>Khách hàng</th>
+                                            <th>Đơn hàng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Tình trạng</th>
+                                            <%if(status===0){%>
+                                                <th>Tính năng</th>
+                                                <%}%>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if(data){ data.map(function(product){%>
-                                    <tr>
-                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
-                                            <%=product.order.id%>
-                                        </td>
-                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
-                                            <%=product.order.Account.name%>
-                                        </td>
-                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
-                                            <% product.listproduct.map(function(product){%>
-                                                <span>
-                                                    <%=product.name%>
-                                                </span>
-
-                                                <%})%>
-                                        </td>
-                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
-                                            <%=product.order.total%>
-                                        </td>
-
-                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
-                                            <%if (product.order.status=="0" ){ %>
-                                                <span class="badge bg-info">
-                                                    Chờ xác nhận
-                                                </span>
-                                                <% } if(product.order.status=="1" ){%>
-                                                    <span class="badge bg-warning ">
-                                                        Đang giao hàng
-                                                    </span>
-                                                    <%}if(product.order.status=="2"){%>
-                                                        <span class="badge bg-success ">
-                                                            Đã hoàn thành
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if(data){ data.map(function(product){%>
+                                            <tr>
+                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                    <%=product.id%>
+                                                </td>
+                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                    <%=product.Account.name%>
+                                                </td>
+                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                    <% product.OrdersProducts.map(function(product){%>
+                                                        <span>
+                                                            <%=product.Product.name%>
                                                         </span>
-                                                        <%}if(product.order.status=="3"){%>
-                                                            <span class="badge bg-danger ">
-                                                                Đã hủy
+
+                                                        <%})%>
+                                                </td>
+                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                    <%=product.total%>
+                                                </td>
+
+                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                    <%if (product.status=="0" ){ %>
+                                                        <span class="badge bg-info">
+                                                            Chờ xác nhận
+                                                        </span>
+                                                        <% } if(product.status=="1" ){%>
+                                                            <span class="badge bg-warning ">
+                                                                Đang giao hàng
                                                             </span>
-                                                            <%}%>
-                                        </td>
+                                                            <%}if(product.status=="2"){%>
+                                                                <span class="badge bg-success ">
+                                                                    Đã hoàn thành
+                                                                </span>
+                                                                <%}if(product.status=="3"){%>
+                                                                    <span class="badge bg-danger ">
+                                                                        Đã hủy
+                                                                    </span>
+                                                                    <%}%>
+                                                                        <div class="modal fade"
+                                                                            id="chitietorder<%=product.id%>"
+                                                                            tabindex="-1" role="dialog"
+                                                                            aria-labelledby="exampleModalCenterTitle"
+                                                                            data-backdrop="static"
+                                                                            data-keyboard="false">
+                                                                            <div class="modal-dialog modal-dialog-centered"
+                                                                                role="document">
+                                                                                <div class="modal-content ">
+                                                                                    <div
+                                                                                        class="modal-header text-center  ">
+                                                                                        <h2
+                                                                                            class="modal-title w-100 text-dark">
+                                                                                            Chi tiết đơn hàng</h2>
+                                                                                    </div>
+                                                                                    <div class="modal-body  text-dark ">
+                                                                                        <h4 class="modal-title w-100">Mã
+                                                                                            đơn hàng:
+                                                                                            <%=product.id%>
+                                                                                        </h4>
+                                                                                        <table
+                                                                                            class="table table-hover table-bordered"
+                                                                                            id="sampleTable">
+                                                                                            <thead>
+                                                                                                <tr>
+                                                                                                    <th>Tên sản phẩm
+                                                                                                    </th>
+                                                                                                    <th>Số lượng</th>
+                                                                                                    <th>Màu</th>
+                                                                                                    <th>Phiên bản</th>
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+                                                                                                <%
+                                                                                                    product.OrdersProducts.map(function(product){%>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <%=product.Product.name%>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <%=product.quantity%>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <%=product.productcolor.Color.nameColor%>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <%
+                                                                                                                if(!product.ProductColorConfig){%>
+                                                                                                                <span>Tiêu
+                                                                                                                    chuẩn</span>
+                                                                                                                <%}else{%>
+                                                                                                                    <span>
+                                                                                                                        <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                                                                    </span>
+                                                                                                                    <%}%>
+                                                                                                        </td>
+                                                                                                    </tr>
 
-                                        <%if(status===0){%>
-                                            <td>
-                                                <h6 class="btn" type="button" title="Xác nhận đơn hàng"
-                                                    style="padding: 0;margin: 0;" data-toggle="modal"
-                                                    data-target="#xacnhan<%=product.order.id%>">
-                                                    Xác nhận
-                                                </h6>
-                                                <br>
-                                                <h6 class="btn" type="button" title="Hủy đơn hàng" data-toggle="modal"
-                                                    style="padding: 0;margin: 0;"
-                                                    data-target="#huy<%=product.order.id%>">Hủy</h6>
-                                                <br>
-                                                <h6 class="btn" style="padding: 0;margin: 0;"
-                                                    onclick="printJS('printJS-form<%=product.order.id%>', 'html')">In
-                                                    hóa đơn</h6>
-                                                <!-- model xác nhận -->
-                                                <div class="modal fade" id="xacnhan<%=product.order.id%>" tabindex="-1"
-                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                                    data-backdrop="static" data-keyboard="false">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content text-center">
-                                                            <div class="modal-header text-center  ">
-                                                                <h2 class="modal-title w-100">
-                                                                    fa</h2>
-                                                            </div>
-                                                            <div class="modal-body text-center text-dark ">
-                                                                <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                                <h5>Bạn có chắc muốn xác nhận đơn hàng này không?
-                                                                </h5>
+                                                                                                    <%})%>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                        <BR>
+                                                                                        <a class="btn btn-cancel"
+                                                                                            data-dismiss="modal"
+                                                                                            href="#">Hủy
+                                                                                            bỏ</a>
+                                                                                        <BR>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                </td>
 
-                                                                <BR>
-                                                                <form class="text-right"
-                                                                    action="/order/changeStatus/<%=product.order.id%>"
-                                                                    method="post">
+                                                <%if(status===0){%>
+                                                    <td>
+                                                        <h6 class="btn" type="button" title="Xác nhận đơn hàng"
+                                                            style="padding: 0;margin: 0;" data-toggle="modal"
+                                                            data-target="#xacnhan<%=product.id%>">
+                                                            Xác nhận
+                                                        </h6>
+                                                        <br>
+                                                        <h6 class="btn" type="button" title="Hủy đơn hàng"
+                                                            data-toggle="modal" style="padding: 0;margin: 0;"
+                                                            data-target="#huy<%=product.id%>">Hủy
+                                                        </h6>
+                                                        <br>
+                                                        <h6 class="btn" style="padding: 0;margin: 0;"
+                                                            onclick="printJS('printJS-form<%=product.id%>', 'html')">In
+                                                            hóa đơn</h6>
+                                                        <!-- model xác nhận -->
+                                                        <div class="modal fade" id="xacnhan<%=product.id%>"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="exampleModalCenterTitle"
+                                                            data-backdrop="static" data-keyboard="false">
+                                                            <div class="modal-dialog modal-dialog-centered"
+                                                                role="document">
+                                                                <div class="modal-content text-center">
+                                                                    <div class="modal-header text-center  ">
+                                                                        <h2 class="modal-title w-100">
+                                                                            fa</h2>
+                                                                    </div>
+                                                                    <div class="modal-body text-center text-dark ">
+                                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                        <h5>Bạn có chắc muốn xác nhận đơn hàng này
+                                                                            không?
+                                                                        </h5>
 
-                                                                    <a class="btn btn-cancel" data-dismiss="modal"
-                                                                        href="#">Hủy
-                                                                        bỏ</a>
-                                                                    <input type="hidden" value="1" name="status">
-                                                                    <button class="btn btn-save" type="submit">Đồng
-                                                                        ý</button>
-                                                                </form>
-                                                                <BR>
-                                                            </div>
-                                                            <div class="modal-footer">
+                                                                        <BR>
+                                                                        <form class="text-right"
+                                                                            action="/order/changeStatus/<%=product.id%>"
+                                                                            method="post">
+
+                                                                            <a class="btn btn-cancel"
+                                                                                data-dismiss="modal" href="#">Hủy
+                                                                                bỏ</a>
+                                                                            <input type="hidden" value="1"
+                                                                                name="status">
+                                                                            <button class="btn btn-save"
+                                                                                type="submit">Đồng
+                                                                                ý</button>
+                                                                        </form>
+                                                                        <BR>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <!-- model xác nhận hủy -->
-                                                <div class="modal fade" id="huy<%=product.order.id%>" tabindex="-1"
-                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                                    data-backdrop="static" data-keyboard="false">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content text-center">
-                                                            <div class="modal-header text-center  ">
-                                                                <h2 class="modal-title w-100">
-                                                                    fa</h2>
+                                                        <!-- model xác nhận hủy -->
+                                                        <div class="modal fade" id="huy<%=product.id%>" tabindex="-1"
+                                                            role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                            data-backdrop="static" data-keyboard="false">
+                                                            <div class="modal-dialog modal-dialog-centered"
+                                                                role="document">
+                                                                <div class="modal-content text-center">
+                                                                    <div class="modal-header text-center  ">
+                                                                        <h2 class="modal-title w-100">
+                                                                            fa</h2>
 
-                                                            </div>
+                                                                    </div>
 
-                                                            <div class="modal-body text-center text-dark ">
-                                                                <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                                <h5>Bạn có chắc muốn hủy đơn hàng này không?
-                                                                </h5>
+                                                                    <div class="modal-body text-center text-dark ">
+                                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                        <h5>Bạn có chắc muốn hủy đơn hàng này không?
+                                                                        </h5>
 
-                                                                <BR>
-                                                                <form class="text-right"
-                                                                    action="/order/changeStatus/<%=product.order.id%>"
-                                                                    method="post">
+                                                                        <BR>
+                                                                        <form class="text-right"
+                                                                            action="/order/changeStatus/<%=product.id%>"
+                                                                            method="post">
 
-                                                                    <a class="btn btn-cancel" data-dismiss="modal"
-                                                                        href="#">Hủy
-                                                                        bỏ</a>
-                                                                    <input type="hidden" value="3" name="status">
-                                                                    <button class="btn btn-save" type="submit">Đồng
-                                                                        ý</button>
-                                                                </form>
-                                                                <BR>
-                                                            </div>
-                                                            <div class="modal-footer">
+                                                                            <a class="btn btn-cancel"
+                                                                                data-dismiss="modal" href="#">Hủy
+                                                                                bỏ</a>
+                                                                            <input type="hidden" value="3"
+                                                                                name="status">
+                                                                            <button class="btn btn-save"
+                                                                                type="submit">Đồng
+                                                                                ý</button>
+                                                                        </form>
+                                                                        <BR>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <!-- model chi tiết -->
-                                                <div class="modal fade" id="chitietorder<%=product.order.id%>"
-                                                    tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
-                                                    data-keyboard="false">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content ">
-                                                            <div class="modal-header text-center  ">
-                                                                <h2 class="modal-title w-100 text-dark">
-                                                                    Chi tiết đơn hàng</h2>
-                                                            </div>
-                                                            <div class="modal-body  text-dark ">
-                                                                <h4 class="modal-title w-100">Mã đơn hàng:
-                                                                    <%=product.order.id%>
-                                                                </h4>
-                                                                <table class="table table-hover table-bordered"
-                                                                    id="sampleTable">
-                                                                    <thead>
+                                                        <!-- model chi tiết -->
+
+                                                        <div class="modal fade row" id="printJS-form<%=product.id%>"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="exampleModalCenterTitle"
+                                                            data-backdrop="static" data-keyboard="false">
+                                                            <p>Mã đơn hàng:<%=product.id%>
+                                                            </p>
+                                                            <p>Tên người nhận:<%=product.Address.nameReceiver%>
+                                                            </p>
+                                                            <p>SĐT:<%=product.Address.phoneReceiver%>
+                                                            </p>
+                                                            <p>Địa chỉ:<%=product.Address.address%>
+                                                            </p>
+                                                            <p>Ghi chú:<%=product.Address.note%>
+                                                            </p>
+                                                            <p>Nội dung đơn hàng:</p>
+                                                            <table class="table table-bordered" id="sampleTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="col-sm-5">Tên sản phẩm</th>
+                                                                        <th class="col-sm-2">Số lượng</th>
+                                                                        <th class="col-sm-2">Màu</th>
+                                                                        <th class="col-sm-3">Phiên bản</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <% product.OrdersProducts.map(function(product){%>
                                                                         <tr>
-                                                                            <th>Tên sản phẩm</th>
-                                                                            <th>Số lượng</th>
-                                                                            <th>Màu</th>
-                                                                            <th>Phiên bản</th>
+                                                                            <td class="col-sm-5">
+                                                                                <%=product.Product.name%>
+                                                                            </td>
+                                                                            <td class="col-sm-2">
+                                                                                <%=product.quantity%>
+                                                                            </td>
+                                                                            <td class="col-sm-2">
+                                                                                <%=product.productcolor.Color.nameColor%>
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                            </td>
                                                                         </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <% product.listproduct.map(function(product){%>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <%=product.name%>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <%=product.quantity%>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <%=product.color%>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <%=product.config%>
-                                                                                </td>
-                                                                            </tr>
 
-                                                                            <%})%>
-                                                                    </tbody>
-                                                                </table>
-                                                                <BR>
-                                                                <a class="btn btn-cancel" data-dismiss="modal"
-                                                                    href="#">Hủy
-                                                                    bỏ</a>
-                                                                <BR>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                            </div>
+                                                                        <%})%>
+                                                                </tbody>
+                                                            </table>
+                                                            <p style="font-size: 20px">Tổng tiền:<%=product.total%>đ
+                                                            </p>
+
+
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal fade row" id="printJS-form<%=product.order.id%>"
-                                                    tabindex="-1" role="dialog"
-                                                    aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
-                                                    data-keyboard="false">
-                                                    <p>Mã đơn hàng:<%=product.order.id%>
-                                                    </p>
-                                                    <p>Tên người nhận:<%=product.address.nameReceiver%>
-                                                    </p>
-                                                    <p>SĐT:<%=product.address.phoneReceiver%>
-                                                    </p>
-                                                    <p>Địa chỉ:<%=product.address.address%>
-                                                    </p>
-                                                    <p>Ghi chú:<%=product.address.note%>
-                                                    </p>
-                                                    <p>Nội dung đơn hàng:</p>
-                                                    <table class="table table-bordered" id="sampleTable">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="col-sm-5">Tên sản phẩm</th>
-                                                                <th class="col-sm-2">Số lượng</th>
-                                                                <th class="col-sm-2">Màu</th>
-                                                                <th class="col-sm-3">Phiên bản</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <% product.listproduct.map(function(product){%>
-                                                                <tr>
-                                                                    <td class="col-sm-5">
-                                                                        <%=product.name%>
-                                                                    </td>
-                                                                    <td class="col-sm-2">
-                                                                        <%=product.quantity%>
-                                                                    </td>
-                                                                    <td class="col-sm-2">
-                                                                        <%=product.color%>
-                                                                    </td>
-                                                                    <td class="col-sm-3">
-                                                                        <%=product.config%>
-                                                                    </td>
-                                                                </tr>
+                                                    </td>
+                                                    <%}%>
 
-                                                                <%})%>
-                                                        </tbody>
-                                                    </table>
-                                                    <p style="font-size: 20px">Tổng tiền:<%=product.order.total%>đ
-                                                    </p>
+                                            </tr>
+                                            <%})}%>
 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-10">
+                                <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
+                                    <ul class="pagination">
+                                        <li class="paginate_button page-item previous " id="sampleTable_previous">
+                                            <%if(name){%>
+                                                <a href="/products/?page=<%=page>1?page-1:1%>&name=<%=search%>"
+                                                    aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
+                                                    class="page-link">Lùi</a>
+                                                <%}else{%>
+                                                    <a href="/products/?page=<%=page>1?page-1:1%>"
+                                                        aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
+                                                        class="page-link">Lùi</a>
+                                        </li>
+                                        <%}%>
+                                            <%if(totalPage>5){%>
+                                                <%if(page>3&&page<=(totalPage-2)){ %>
+                                                        <li class="paginate_button page-item ">
+                                                            <a href="/products/?page=1" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
+                                                                <i class="fas fa-angle-double-left"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="paginate_button page-item ">
+                                                            <button aria-controls="sampleTable" data-dt-idx="1"
+                                                                tabindex="0" class="page-link">
+                                                                <i class="fas fa-ellipsis-h"></i>
+                                                            </button>
+                                                        </li>
 
-                                                </div>
-                                            </td>
-                                            <%}%>
-                                    </tr>
-                                    <%})}%>
+                                                        <li class="paginate_button page-item   ">
+                                                            <a href="/products/?page=<%=page-2%>"
+                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                                class="page-link">
+                                                                <%=page-2%>
+                                                            </a>
+                                                        </li>
+                                                        <li class="paginate_button page-item   ">
+                                                            <a href="/products/?page=<%=page-1%>"
+                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                                class="page-link">
+                                                                <%=page-1%>
+                                                            </a>
+                                                        </li>
+                                                        <li class="paginate_button page-item  active">
+                                                            <a href="/products/?page=<%=page%>"
+                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                                class="page-link">
+                                                                <%=page%>
+                                                            </a>
+                                                        </li>
+                                                        <li class="paginate_button page-item   ">
+                                                            <a href="/products/?page=<%=page+1%>"
+                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                                class="page-link">
+                                                                <%=page+1%>%>
+                                                            </a>
+                                                        </li>
+                                                        <li class="paginate_button page-item   ">
+                                                            <a href="/products/?page=<%=page+2%>"
+                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
+                                                                class="page-link">
+                                                                <%=page+2%>%>
+                                                            </a>
+                                                        </li>
+                                                        <% }else if(page<=3){%>
+                                                            <% for(i=1;i<=5;i++){ if(name){ %>
+                                                                <li
+                                                                    class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                        aria-controls="sampleTable" data-dt-idx="1"
+                                                                        tabindex="0" class="page-link">
+                                                                        <%=i%>
+                                                                    </a>
+                                                                </li>
+                                                                <%}else{ %>
+                                                                    <li
+                                                                        class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                        <a href="/products/?page=<%=i%>"
+                                                                            aria-controls="sampleTable" data-dt-idx="1"
+                                                                            tabindex="0" class="page-link">
+                                                                            <%=i%>
+                                                                        </a>
+                                                                    </li>
+                                                                    <%} }}else if(page>(totalPage-2)){%>
+                                                                        <li class="paginate_button page-item ">
+                                                                            <a href="/products/?page=1"
+                                                                                aria-controls="sampleTable"
+                                                                                data-dt-idx="1" tabindex="0"
+                                                                                class="page-link">
+                                                                                <i class="fas fa-angle-double-left"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="paginate_button page-item ">
+                                                                            <button aria-controls="sampleTable"
+                                                                                data-dt-idx="1" tabindex="0"
+                                                                                class="page-link">
+                                                                                <i class="fas fa-ellipsis-h"></i>
+                                                                            </button>
+                                                                        </li>
+                                                                        <% for(i=(totalPage-5);i<=totalPage;i++){
+                                                                            if(name){%>
+                                                                            <li
+                                                                                class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                    aria-controls="sampleTable"
+                                                                                    data-dt-idx="1" tabindex="0"
+                                                                                    class="page-link">
+                                                                                    <%=i%>
+                                                                                </a>
+                                                                            </li>
+                                                                            <%}else{ %>
+                                                                                <li
+                                                                                    class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                    <a href="/products/?page=<%=i%>"
+                                                                                        aria-controls="sampleTable"
+                                                                                        data-dt-idx="1" tabindex="0"
+                                                                                        class="page-link">
+                                                                                        <%=i%>
+                                                                                    </a>
+                                                                                </li>
 
-                            </tbody>
-                        </table>
+                                                                                <%}}}%>
+
+                                                                                    <%if(page<(totalPage-2)){%>
+                                                                                        <li
+                                                                                            class="paginate_button page-item ">
+                                                                                            <button
+                                                                                                aria-controls="sampleTable"
+                                                                                                data-dt-idx="1"
+                                                                                                tabindex="0"
+                                                                                                class="page-link">
+                                                                                                <i
+                                                                                                    class="fas fa-ellipsis-h"></i>
+                                                                                            </button>
+                                                                                        </li>
+                                                                                        <li
+                                                                                            class="paginate_button page-item ">
+                                                                                            <a href="/products/?page=<%=totalPage%>"
+                                                                                                aria-controls="sampleTable"
+                                                                                                data-dt-idx="1"
+                                                                                                tabindex="0"
+                                                                                                class="page-link">
+                                                                                                <i
+                                                                                                    class="fas fa-angle-double-right"></i>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                        <%}}else{%>
+                                                                                            <% for(i=1;i<=totalPage;i++){
+                                                                                                if(name){ %>
+                                                                                                <li
+                                                                                                    class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                                        aria-controls="sampleTable"
+                                                                                                        data-dt-idx="1"
+                                                                                                        tabindex="0"
+                                                                                                        class="page-link">
+                                                                                                        <%=i%>
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                <%}else{ %>
+                                                                                                    <li
+                                                                                                        class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                                        <a href="/products/?page=<%=i%>"
+                                                                                                            aria-controls="sampleTable"
+                                                                                                            data-dt-idx="1"
+                                                                                                            tabindex="0"
+                                                                                                            class="page-link">
+                                                                                                            <%=i%>
+                                                                                                        </a>
+                                                                                                    </li>
+                                                                                                    <%} }%>
+                                                                                                        <%}%>
+                                                                                                            <li class="paginate_button page-item next"
+                                                                                                                id="sampleTable_next">
+                                                                                                                <%if(name){%>
+                                                                                                                    <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
+                                                                                                                        aria-controls="sampleTable"
+                                                                                                                        data-dt-idx="3"
+                                                                                                                        tabindex="0"
+                                                                                                                        class="page-link">Tiếp</a>
+                                                                                                                    <%
+                                                                                                                        }else{%>
+                                                                                                                        <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                                            aria-controls="sampleTable"
+                                                                                                                            data-dt-idx="3"
+                                                                                                                            tabindex="0"
+                                                                                                                            class="page-link">Tiếp</a>
+                                                                                                                        <%
+                                                                                                                            }%>
+                                                                                                            </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
 

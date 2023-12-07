@@ -9,6 +9,7 @@ const {
   ProductColorConfig,
   Config,
 } = require("../models/index");
+
 exports.index = async (req, res) => {
   try {
     let _name = req.query.name;
@@ -16,10 +17,8 @@ exports.index = async (req, res) => {
     if (!_name) {
       _name = "";
     }
-
     let _page = req.query.page ? req.query.page : 1;
     let listOrder = [];
-
     let _limit = Number(req.query.limit ? req.query.limit : 10);
     let totalRow = await Orders.count();
     let totalPage = Math.ceil(totalRow / _limit);
@@ -40,98 +39,32 @@ exports.index = async (req, res) => {
       });
     } else {
       listOrder = await Orders.findAll({
-        include: {
-          model: Account,
-        },
+        include: [
+          {
+            model: OrdersProduct,
+            include: [
+              { model: Product },
+              { model: productcolor, include: [{ model: Color }] },
+              { model: ProductColorConfig, include: { model: Config } },
+            ],
+          },
+          { model: Address },
+          { model: Account },
+        ],
         offset: _start,
         limit: _limit,
         order: [["id", "DESC"]],
       });
     }
-    let newlist = [];
-    for (let i = 0; i < listOrder.length; i++) {
-      console.log(listOrder[i].id);
-      const listprodut = await OrdersProduct.findAll({
-        where: {
-          OrderId: listOrder[i].id,
-        },
-      });
-      const address = await Address.findOne({
-        where: {
-          id: listOrder[i].AddressId,
-        },
-      });
-
-      let newlistproduct = [];
-      for (let i = 0; i < listprodut.length; i++) {
-        let namecolor = "";
-        let nameconfig = "";
-
-        console.log(listprodut[i].id);
-        const product = await Product.findOne({
-          where: {
-            id: listprodut[i].productId,
-          },
-        });
-        if (listprodut[i].ProductColorId === null) {
-          namecolor = "Mặc định";
-        } else {
-          const color = await productcolor.findOne({
-            where: {
-              id: listprodut[i].ProductColorId,
-            },
-            include: [
-              {
-                model: Color,
-              },
-            ],
-          });
-          namecolor = color.Color.nameColor;
-        }
-        if (listprodut[i].ProductColorConfigId === null) {
-          nameconfig = "Mặc định";
-        } else {
-          const config = await ProductColorConfig.findOne({
-            where: {
-              id: listprodut[i].ProductColorConfigId,
-            },
-            include: [
-              {
-                model: Config,
-              },
-            ],
-          });
-          nameconfig = config.Config.nameConfig;
-        }
-        let newitem = {
-          id: product.id,
-          name: product.name,
-          image: product.image,
-          quantity: listprodut[i].quantity,
-          price: product.price,
-          color: namecolor,
-          config: nameconfig,
-        };
-        newlistproduct.push(newitem);
-      }
-
-      let neworder = {
-        address: address,
-        order: listOrder[i],
-        listproduct: newlistproduct,
-      };
-      newlist.push(neworder);
-    }
-
     return res.render("Order", {
-      data: newlist,
+      data: listOrder,
       search: _name,
       totalPage: totalPage,
       name: _name,
       page: _page,
       status: -1,
 
-      //return res.status(200).json({ status: 200, data: newlist });
+      //return res.status(200).json({ status: 200, data: listOrder });
     });
   } catch (error) {
     console.log(error);
@@ -179,109 +112,63 @@ exports.getstatus = async (req, res) => {
         where: {
           status: status,
         },
+        include: [
+          {
+            model: OrdersProduct,
+            include: [
+              { model: Product },
+              { model: productcolor, include: [{ model: Color }] },
+              { model: ProductColorConfig, include: { model: Config } },
+            ],
+          },
+          { model: Address },
+          { model: Account },
+        ],
         offset: _start,
         limit: _limit,
-        include: {
-          model: Account,
-        },
+        order: [["id", "DESC"]],
       });
     } else {
       listOrder = await Orders.findAll({
         where: {
           status: status,
         },
-        include: {
-          model: Account,
-        },
+        include: [
+          {
+            model: OrdersProduct,
+            include: [
+              { model: Product },
+              { model: productcolor, include: [{ model: Color }] },
+              { model: ProductColorConfig, include: { model: Config } },
+            ],
+          },
+          { model: Address },
+          { model: Account },
+        ],
         offset: _start,
         limit: _limit,
         order: [["id", "DESC"]],
       });
     }
-    let newlist = [];
     for (let i = 0; i < listOrder.length; i++) {
-      console.log(listOrder[i].id);
-      const listprodut = await OrdersProduct.findAll({
-        where: {
-          OrderId: listOrder[i].id,
-        },
-      });
-      const address = await Address.findOne({
-        where: {
-          id: listOrder[i].AddressId,
-        },
-      });
-
-      let newlistproduct = [];
-      for (let i = 0; i < listprodut.length; i++) {
-        let namecolor = "";
-        let nameconfig = "";
-
-        console.log(listprodut[i].id);
-        const product = await Product.findOne({
-          where: {
-            id: listprodut[i].productId,
+      if (listOrder[i].OrdersProducts.ProductColorConfig === null) {
+        listOrder[i].OrdersProducts.ProductColorConfig = {
+          Config: {
+            nameConfig: "Tiêu chuẩn",
           },
-        });
-        if (listprodut[i].ProductColorId === null) {
-          namecolor = "Mặc định";
-        } else {
-          const color = await productcolor.findOne({
-            where: {
-              id: listprodut[i].ProductColorId,
-            },
-            include: [
-              {
-                model: Color,
-              },
-            ],
-          });
-          namecolor = color.Color.nameColor;
-        }
-        if (listprodut[i].ProductColorConfigId === null) {
-          nameconfig = "Mặc định";
-        } else {
-          const config = await ProductColorConfig.findOne({
-            where: {
-              id: listprodut[i].ProductColorConfigId,
-            },
-            include: [
-              {
-                model: Config,
-              },
-            ],
-          });
-          nameconfig = config.Config.nameConfig;
-        }
-        let newitem = {
-          id: product.id,
-          name: product.name,
-          image: product.image,
-          quantity: listprodut[i].quantity,
-          price: product.price,
-          color: namecolor,
-          config: nameconfig,
         };
-        newlistproduct.push(newitem);
       }
-
-      let neworder = {
-        address: address,
-        order: listOrder[i],
-        listproduct: newlistproduct,
-      };
-      newlist.push(neworder);
     }
 
     return res.render("Order", {
-      data: newlist,
+      data: listOrder,
       search: _name,
       totalPage: totalPage,
       name: _name,
       page: _page,
       status: status,
 
-      //return res.status(200).json({ status: 200, data: newlist });
+      //return res.status(200).json({ status: 200, data: listOrder });
     });
   } catch (error) {
     console.log(error);
@@ -291,7 +178,13 @@ exports.updateStatus = async (req, res) => {
   const id = req.params.id;
   const status = req.body.status;
   try {
-    const whereId = await Orders.findByPk(id);
+    const whereId = await Orders.findByPk(id, {
+      include: [
+        {
+          model: Account,
+        },
+      ],
+    });
 
     if (!whereId) {
       return res.status(404).json({ status: 404, message: "Order not found" });
