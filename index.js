@@ -5,7 +5,7 @@ require("./untils/passport");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
-const admin = require("firebase-admin");
+
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -22,6 +22,8 @@ const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
 const salary = require("./routers/salary.router");
 const internal = require("./routers/Internal.router");
+const notify = require("./routers/notify.router");
+const home = require("./routers/home.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
@@ -62,7 +64,6 @@ const options = {
   apis: ["./routers/*.js"],
 };
 const spacs = swaggerjsdoc(options);
-const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
@@ -83,16 +84,14 @@ app.use("/api", vnPay);
 app.use("/", staff);
 app.use("/", salary);
 app.use("/api", internal);
+app.use("/api", notify);
+app.use("/home", home);
 app.get("/", function (req, res) {
   res.render("login");
 });
-app.get("/homeTest", function (req, res) {
-  res.render("home");
-});
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+
+
 
 app.get("/updateStaffTest", function(req, res){
   res.render('updateStaff');

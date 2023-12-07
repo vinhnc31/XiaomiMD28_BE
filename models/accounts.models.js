@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    fcmToken: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   });
 
   Account.associate = (models) => {
@@ -54,6 +58,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE", // Cascade xóa các Favorites liên quan khi một Product bị xóa
       foreignKey: "AccountId", // Tên trường khóa ngoại trong bảng "Favorites"
       as: "carts", // Tên thay thế cho quan hệ
+    });
+    Account.hasMany(models.notifyAccount, {
+      onDelete: "CASCADE", // Cascade xóa các Favorites liên quan khi một Product bị xóa
+      foreignKey: "AccountId", // Tên trường khóa ngoại trong bảng "Favorites"
+      as: "notifyAccount", // Tên thay thế cho quan hệ
     });
   };
 

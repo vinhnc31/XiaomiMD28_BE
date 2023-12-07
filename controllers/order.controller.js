@@ -62,6 +62,7 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
         { model: Address },
         { model: Promotion },
       ],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!listOrder) {
@@ -174,6 +175,10 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += productColorConfig.price * quantity;
         }
+        await ProductColorConfig.update(
+          { quantity: sequelize.literal(`quantity - ${quantity}`) },
+          { where: { id: ProductColorConfigId }, transaction }
+        );
       } else {
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
@@ -196,10 +201,6 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += product.price * quantity;
         }
-        await ProductColorConfig.update(
-          { quantity: sequelize.literal(`quantity - ${quantity}`) },
-          { where: { id: ProductColorConfigId }, transaction }
-        );
       }
 
       // Create record in the ordersProduct table for each product

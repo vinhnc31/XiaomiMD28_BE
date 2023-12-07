@@ -144,7 +144,7 @@
     <ul class="app-menu">
       <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
           <span class="app-menu__label">MD VN</span></a></li>
-      <li><a class="app-menu__item " href="http://localhost:3000/homeTest"><i
+      <li><a class="app-menu__item " href="http://localhost:3000/home"><i
             class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều khiển</span></a></li>
       <li><a class="app-menu__item active" href="http://localhost:3000/staff"><i
             class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân viên</span></a></li>
@@ -196,7 +196,7 @@
                   </div>
                   <div class="form-group col-md-4">
                     <label class="control-label">Địa chỉ email</label>
-                    <input name="email" id="email" class="form-control" type="text" required>
+                    <input name="email" id="email" class="form-control" type="email" required>
                   </div>
                   <div class="form-group col-md-4">
                     <label class="control-label">Địa chỉ thường trú</label>
@@ -208,22 +208,22 @@
                   </div>
                   <div class="form-group col-md-4">
                     <label class="control-label">Ngày sinh</label>
-                    <input name="dateOfBirth" id="dateOfBirth" class="form-control" type="date">
+                    <input name="dateOfBirth" id="dateOfBirth" class="form-control" type="date" required>
                   </div>
                   <input style="display: none" class="form-control" type="password" id="password" name="password" value="xioamimd28">
 
                   <div class="form-group col-md-3">
                     <label class="control-label">Giới tính</label>
                     <select class="form-control" name="gender" id="gender" required>
-                      <option>-- Chọn giới tính --</option>
+                      <option value="">-- Chọn giới tính --</option>
                       <option value="Nam">Nam</option>
                       <option value="Nữ">Nữ</option>
                     </select>
                   </div>
                   <div class="form-group  col-md-3">
                     <label for="exampleSelect1" class="control-label">Chức vụ</label>
-                    <select class="form-control" id="position" name="position">
-                      <option>-- Chọn chức vụ --</option>
+                    <select class="form-control" id="position" name="position" required>
+                      <option value="">-- Chọn chức vụ --</option>
                       <option value="Bán hàng">Bán hàng</option>
                       <option value="Tư vấn">Tư vấn</option>
                       <option value="Dịch vụ">Dịch vụ</option>
@@ -237,8 +237,8 @@
                   </div>
                   <div class="form-group col-md-3">
                     <label class="control-label">Bằng cấp</label>
-                    <select class="form-control" id="degree" name="degree">
-                      <option>-- Chọn bằng cấp --</option>
+                    <select class="form-control" id="degree" name="degree" required>
+                      <option value="">-- Chọn bằng cấp --</option>
                       <option value="Tốt nghiệp đại học">Tốt nghiệp Đại Học</option>
                       <option value="Tốt nghiệp cao đẳng">Tốt nghiệp Cao Đẳng</option>
                       <option value="Tốt nghiệp phổ thông">Tốt nghiệp Phổ Thông</option>
@@ -249,7 +249,7 @@
                   <div class="form-group col-md-12">
                     <label class="control-label">Ảnh 3x4 nhân viên</label>
                     <div id="avatar">
-                      <input type="file" id="uploadfile" name="avatar" onchange="readURL(this);" />
+                      <input type="file" id="uploadfile" name="avatar" onchange="readURL(this);" required/>
                     </div>
                     <div id="thumbbox">
                       <img height="300" width="300" alt="Thumb image" id="thumbimage" style="display: none" />

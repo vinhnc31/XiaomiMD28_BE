@@ -13,4 +13,7 @@ router.post(
 router.post("/staff/:id", staffController.deleteStaff);
 router.get("/updateStaff/:id", staffController.viewUpdateStaff);
 router.post("/search", staffController.searchStaff);
+router.post("/loginWeb", staffController.loginWeb);
+router.delete("/staff/:id", staffController.deleteStaff);
+
 module.exports = router;

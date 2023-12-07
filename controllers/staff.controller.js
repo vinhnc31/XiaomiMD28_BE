@@ -1,4 +1,4 @@
-const { Staff, sequelize } = require("../models");
+const { Staff } = require("../models");
 
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
@@ -227,5 +227,43 @@ exports.searchStaff = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ status: 500, message: "Internal server error" });
+  }
+};
+exports.loginWeb = async (req, res) => {
+  try {
+    console.log(req.body);
+    if (!req.body.email || !req.body.password) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Fields cannot be left blank" });
+    }
+    console.log(req.body.email);
+    const result = await Staff.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (!result) {
+      return res
+        .status(401)
+        .json({ status: 401, message: "Invalid email or password" });
+    }
+    console.log("chạy");
+    const isPasswordMatch = await bcrypt.compare(
+      req.body.password,
+      result.password
+    );
+
+    if (!isPasswordMatch) {
+      return res
+        .status(401)
+        .json({ status: 401, message: "Invalid email or password" });
+    }
+    return res.status(200).json({ status: 200, data: result });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };

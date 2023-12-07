@@ -13,7 +13,7 @@
     <ul class="app-menu">
       <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
           <span class="app-menu__label">MD VN</span></a></li>
-      <li><a class="app-menu__item " href="http://localhost:3000/homeTest"><i class='app-menu__icon bx bx-tachometer'></i><span
+      <li><a class="app-menu__item " href="http://localhost:3000/home"><i class='app-menu__icon bx bx-tachometer'></i><span
             class="app-menu__label">Bảng điều khiển</span></a></li>
       <li><a class="app-menu__item " href="http://localhost:3000/staff" ><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Quản lý nhân viên</span></a></li>
@@ -325,17 +325,17 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="tile">
-                    <h3 class="tile-title">DỮ LIỆU HÀNG THÁNG</h3>
+                    <h3 class="tile-title">Doanh số hàng tháng</h3>
                     <div class="embed-responsive embed-responsive-16by9">
-                        <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
-                    </div>
+                        <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>
+                      </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="tile">
                     <h3 class="tile-title">THỐNG KÊ DOANH SỐ</h3>
                     <div class="embed-responsive embed-responsive-16by9">
-                        <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                        <canvas class="embed-responsive-item" id="pieChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -350,38 +350,61 @@
     <script src="js/plugins/pace.min.js"></script>
     <!-- Page specific javascripts-->
     <script type="text/javascript" src="js/plugins/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
     <script type="text/javascript">
-    var data = {
-      labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
-      datasets: [{
-          label: "Dữ liệu đầu tiên",
-          fillColor: "rgba(255, 255, 255, 0.158)",
-          strokeColor: "black",
-          pointColor: "rgb(220, 64, 59)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "green",
-          data: [20, 59, 90, 51, 56, 100, 40, 60, 78, 53, 33, 81]
+         new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6","Tháng 7", "Tháng 8", "Tháng 9","Tháng 10", "Tháng 11", "Tháng 12"],
+          datasets: [{
+            label: "Doanh thu thực tế",
+            data: [300, 700, 2000, 5000, 6000, 4000, 2000, 1000, 200, 100, 500, 1000, 1026, 320, 5234],
+            borderColor: "green",
+            fill: false
+          }]
         },
-        {
-          label: "Dữ liệu kế tiếp",
-          fillColor: "rgba(255, 255, 255, 0.158)",
-          strokeColor: "rgb(220, 64, 59)",
-          pointColor: "black",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "green",
-          data: [48, 48, 49, 39, 86, 10, 50, 70, 60, 70, 75, 90]
+        options: {
+          legend: { display: true }
         }
-      ]
-    };
-
-
-        var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-        var lineChart = new Chart(ctxl).Line(data);
-
-        var ctxb = $("#barChartDemo").get(0).getContext("2d");
-        var barChart = new Chart(ctxb).Bar(data);
+      });
+    
+      new Chart("pieChart", {
+        type: "pie",
+        data: {
+            labels: ["Robot & máy hút bụi", "Điện thoại", "Xe điện & xe cân bằng", "Tivi", "Củ sạc", "Cáp sạc", "Loa & tai nghe", "Sạc dự phòng"],
+            datasets: [{
+                data: [ 5000, 6000, 4000, 2000, 1000, 200, 500, 1000],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 25, 2)'
+                ]
+            }]
+        },
+        options: {
+            legend: { display: true },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        var currentValue = dataset.data[tooltipItem.index];
+                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                        return percentage + "%";
+                    }
+                }
+            }
+        }
+    });
+  
     </script>
     <!-- Google analytics script-->
     <script type="text/javascript">
