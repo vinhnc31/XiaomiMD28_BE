@@ -18,41 +18,52 @@
           <div class="row">
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small primary coloured-icon" ><i class='icon bx bxs-user-account fa-3x' style="height: 100px;"></i>
+              <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng khách hàng</h4>
-                  <p><b>56 khách hàng</b></p>
+                  <p><b>
+                      <%= totalAccount %> khách hàng
+                    </b></p>
                   <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
                 </div>
               </div>
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small info coloured-icon" ><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
+              <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng sản phẩm</h4>
-                  <p><b>1850 sản phẩm</b></p>
-                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                  <p><b>
+                      <%= totalProduct %> sản phẩm
+                    </b></p>
+                  <p class="info-tong">Tổng số sản phẩm quản được quản lý.</p>
                 </div>
               </div>
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small warning coloured-icon" ><i class='icon bx bxs-shopping-bags fa-3x' style="height: 100px;"></i>
+              <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
                   <h4>Tổng đơn hàng</h4>
-                  <p><b>247 đơn hàng</b></p>
-                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                  <p><b>
+                      <%= totalOrder %> đơn hàng
+                    </b></p>
+                  <p class="info-tong">Tổng số đơn hàng quản được quản lý.</p>
                 </div>
               </div>
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small danger coloured-icon" ><i class='icon bx bxs-error-alt fa-3x' style="height: 100px;"></i>
+              <div class="widget-small danger coloured-icon"><i class='icon bx bxs-group fa-3x'
+                  style="height: 100px;"></i>
                 <div class="info">
-                  <h4>Sắp hết hàng</h4>
-                  <p><b>4 sản phẩm</b></p>
-                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                  <h4>Số lượng nhân viên</h4>
+                  <p><b>
+                      <%= totalStaff %> nhân viên
+                    </b></p>
+                  <p class="info-tong">Tổng số nhân viên.</p>
                 </div>
               </div>
             </div>
@@ -71,38 +82,29 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>AL3947</td>
-                        <td>Phạm Thị Ngọc</td>
-                        <td>
-                          19.770.000 đ
-                        </td>
-                        <td><span class="badge bg-info">Chờ xử lý</span></td>
-                      </tr>
-                      <tr>
-                        <td>ER3835</td>
-                        <td>Nguyễn Thị Mỹ Yến</td>
-                        <td>
-                          16.770.000 đ
-                        </td>
-                        <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                      </tr>
-                      <tr>
-                        <td>MD0837</td>
-                        <td>Triệu Thanh Phú</td>
-                        <td>
-                          9.400.000 đ
-                        </td>
-                        <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                      </tr>
-                      <tr>
-                        <td>MT9835</td>
-                        <td>Đặng Hoàng Phúc </td>
-                        <td>
-                          40.650.000 đ
-                        </td>
-                        <td><span class="badge bg-danger">Đã hủy </span></td>
-                      </tr>
+                      <% listOrder.forEach((order)=> { %>
+                        <tr>
+                          <td>
+                            <%= order.id %>
+                          </td>
+                          <td>
+                            <%= order.account.name %>
+                          </td> <!-- Replace with the actual property you want to display -->
+                          <td>
+                            <%= new Intl.NumberFormat('en-US').format(order.total) %> VNĐ
+                          </td>
+                          <td>
+                            <span
+                              class="badge <%= order.status === '0' ? 'bg-info' : order.status === '1' ? 'bg-warning' : order.status === '2' ? 'bg-success' : 'bg-danger' %>">
+                              <%= order.status==='0' ? 'Chờ xác nhận' : order.status==='1' ? 'Đang vận chuyển' :
+                                order.statusOrder==='2' ? 'Đã nhận' : 'Đã hủy' %>
+                            </span>
+
+                          </td>
+                        </tr>
+                        <% }) %>
+
+
                     </tbody>
                   </table>
                 </div>
@@ -125,30 +127,28 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>#183</td>
-                        <td>Hột vịt muối</td>
-                        <td>21/7/1992</td>
-                        <td><span class="tag tag-success">0921387221</span></td>
-                      </tr>
-                      <tr>
-                        <td>#219</td>
-                        <td>Bánh tráng trộn</td>
-                        <td>30/4/1975</td>
-                        <td><span class="tag tag-warning">0912376352</span></td>
-                      </tr>
-                      <tr>
-                        <td>#627</td>
-                        <td>Cút rang bơ</td>
-                        <td>12/3/1999</td>
-                        <td><span class="tag tag-primary">01287326654</span></td>
-                      </tr>
-                      <tr>
-                        <td>#175</td>
-                        <td>Hủ tiếu nam vang</td>
-                        <td>4/12/20000</td>
-                        <td><span class="tag tag-danger">0912376763</span></td>
-                      </tr>
+                      <% listAccount.forEach(customer=> { %>
+                        <tr>
+                          <td>
+                            <%= customer.id %>
+                          </td>
+                          <td>
+                            <%= customer.name %>
+                          </td>
+                          <td>
+                            <% if (customer.dateOfBirth) { %>
+                              <% const date=new Date(customer.dateOfBirth); %>
+                                <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
+                                      <% } else { %>
+                                        Ngày sinh không khả dụng
+                                        <% } %>
+                          </td>
+
+                          <td><span class="tag tag-success">
+                              <%= customer.phone %>
+                            </span></td>
+                        </tr>
+                        <% }); %>
                     </tbody>
                   </table>
                 </div>
@@ -164,16 +164,18 @@
           <div class="row">
             <div class="col-md-12">
               <div class="tile">
-                <h3 class="tile-title">Thống kê doanh thu tháng 6</h3>
+                <h3 class="tile-title">Thống kê doanh thu</h3>
                 <div class="embed-responsive embed-responsive-16by9">
-                  <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>                </div>
+                  <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>
+                </div>
               </div>
             </div>
             <div class="col-md-12">
               <div class="tile">
                 <h3 class="tile-title">Thống kê đơn theo hàng tháng</h3>
                 <div class="embed-responsive embed-responsive-16by9">
-                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>                </div>
+                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>
+                </div>
               </div>
             </div>
           </div>
@@ -197,74 +199,136 @@
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
+    <script>
+      // Đặt hàm formatDate dưới dạng biến global
+      window.formatDate = function (dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      };
+    </script>
     <script type="text/javascript">
 
-new Chart("myChart", {
-  type: "line",
-  data: {
-    labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
-    datasets: [{ 
-      label: "Doanh thu dự kiến",
-      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-      borderColor: "red",
-      fill: false
-    }, { 
-      label: "Doanh thu",
-      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-      borderColor: "green",
-      fill: false
-    }, { 
-      label: "Doanh thu thực tế",
-      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-      borderColor: "blue",
-      fill: false
-    }]
-  },
-  options: {
-    legend: {display: true}
-  }
-});
+
+      async function fetchDataAndRenderChart() {
+        try {
+          // Gọi API để lấy dữ liệu từ server
+          const response = await fetch('http://localhost:3000/home/RevenueInMonth');
+          const data = await response.json();
+          const labels = [];
+          const revenueData =[];
+          data.data.forEach(item => {
+            labels.push(item.month);
+            revenueData.push(item.revenue);
+          });
+
+          const intLabels = labels.map(month => parseInt(month));
+          updateChart(intLabels, revenueData);
+        } catch (error) {
+          console.error('Error fetching data from API:', error);
+        }
+      }
+
+      // Hàm để cập nhật biểu đồ với dữ liệu mới
+      function updateChart(labels, data) {
+        const myChart = new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Doanh thu thực tế",
+              data: data,
+              borderColor: "green",
+              fill: false
+            }]
+          },
+          options: {
+            legend: { display: true }
+          }
+        });
+      }
+
+      // Gọi hàm để bắt đầu quá trình
+      fetchDataAndRenderChart();
 
 
 
-var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
-var yValues = [55, 49, 44, 24, 15,50];
-var zValues = [30, 40, 60, 35, 70,39];
-var aValues = [15, 20, 25, 30, 80,19];
 
 
-new Chart("myChartb", {
-  type: "bar",
-  data: {
-    labels: xValues,
-    datasets: [
-      {
-        label: "Chờ xác nhận",
-        backgroundColor: "purple",
-        data: yValues,
-      },
-      {
-        label: "Đang vận chuyển",
-        backgroundColor: "yellow",
-        data: zValues,
-      },
-      {
-        label: "Đã nhận",
-        backgroundColor: "green",
-        data: aValues,
-      },{
-        label: "Huỷ",
-        backgroundColor: "red",
-        data: aValues,
-      },
-    ],
-  },
-  options: {
-     legend: {display: true}
-  },
-});
+
+
+
+      async function fetchDataAndRenderBarChart() {
+        try {
+          // Gọi API để lấy dữ liệu từ server
+          const response = await fetch('http://localhost:3000/home/OrderInMonth');
+          const data = await response.json();
+
+          // Trích xuất dữ liệu từ API response (phụ thuộc vào cấu trúc của API)
+          const xValues = [];
+          const yValues = [];
+          const zValues = [];
+          const aValues = [];
+          const cancelValues = [];
+
+          data.data.forEach(item => {
+            xValues.push(item.month);
+            yValues.push(item.totalOrder.orderCountByStatus);
+            zValues.push(item.totalOrder.orderCountByStatus1);
+            aValues.push(item.totalOrder.orderCountByStatus2);
+            cancelValues.push(item.totalOrder.orderCountByStatus3);
+
+          });
+
+          // Cập nhật biểu đồ với dữ liệu mới
+          updateBarChart(xValues, yValues, zValues, aValues, cancelValues);
+        } catch (error) {
+          console.error('Lỗi khi lấy dữ liệu từ API:', error);
+        }
+      }
+      // Hàm để cập nhật biểu đồ cột với dữ liệu mới
+      function updateBarChart(xValues, yValues, zValues, aValues, cancelValues) {
+        new Chart("myChartb", {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                label: "Chờ xác nhận",
+                backgroundColor: "purple",
+                data: yValues,
+              },
+              {
+                label: "Đang vận chuyển",
+                backgroundColor: "yellow",
+                data: zValues,
+              },
+              {
+                label: "Đã nhận",
+                backgroundColor: "green",
+                data: aValues,
+              },
+              {
+                label: "Huỷ",
+                backgroundColor: "red",
+                data: cancelValues,
+              },
+            ],
+          },
+          options: {
+            legend: { display: true }
+          },
+        });
+      }
+
+      // Gọi hàm để bắt đầu quá trình
+      fetchDataAndRenderBarChart();
+
 
     </script>
     <script type="text/javascript">

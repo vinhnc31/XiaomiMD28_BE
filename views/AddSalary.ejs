@@ -1,0 +1,209 @@
+<%- include('head') %>
+<aside class="app-sidebar">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
+          alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+      <div>
+          <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
+          <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+      </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+      <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
+              <span class="app-menu__label">MD VN</span></a></li>
+      <li><a class="app-menu__item " href="http://localhost:3000/home"><i
+                  class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+                  khiển</span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/staff"><i
+                  class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+                  viên</span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i
+                  class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
+                  hàng</span></a></li>
+      <li><a class="app-menu__item " href="http://localhost:3000/products"><i
+                  class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+                  sản phẩm</span></a>
+      </li>
+      <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
+                  class="app-menu__label">Quản lý đơn hàng</span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/InternalManagement"><i
+                  class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
+              </span></a></li>
+      <li><a class="app-menu__item active" href="http://localhost:3000/salary"><i
+                  class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
+                  lương</span></a></li>
+      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+                  class="app-menu__label">Quản lí Voucher</span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
+                  class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
+                  doanh thu</span></a>
+      </li>
+  </ul>
+</aside>
+  <main class="app-content">
+    <div class="app-title">
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item">Bản kê lương</li>
+        <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <h3 class="tile-title">Tạo mới bảng kê lương</h3>
+          <div class="tile-body">
+            <div class="row element-button">
+              <div class="col-sm-2">
+                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><b><i
+                      class="fas fa-folder-plus"></i> Tạo trạng thái mới</b></a>
+              </div>
+
+            </div>
+            <form class="row" method="post" action="http://localhost:3000/salary">
+              <div class="form-group col-md-3">
+                <label class="control-label">Tên nhân viên</label>
+                <select class="form-control" name="StaffId" id="employeeSelect" onchange="updateInfo()" required>
+                  <option value="" data-gender="" data-position="">-- Chọn nhân viên --</option>
+                  <% staffs.forEach(function(staff) { %>
+                    <option value="<%= staff.id %>" data-gender="<%= staff.gender %>"
+                      data-position="<%= staff.position %>">
+                      <%= staff.name %>
+                    </option>
+                    <% }); %>
+                </select>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="control-label">Giới tính</label>
+                <input class="form-control" type="text" id="genderInput" readonly>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label for="exampleSelect1" class="control-label">Chức vụ</label>
+                <input class="form-control" type="text" id="positionInput" readonly>
+              </div>
+              <div class="form-group col-md-3">
+                <label class="control-label">Tiền lương</label>
+                <div class="input-group">
+                  <input class="form-control" type="number" id="salaryInput" name="salary" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">VND</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="control-label">Trừ lương</label>
+                <div class="input-group">
+                  <input class="form-control" type="number" id="deductionInput" name="salaryDeduction" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">VND</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group col-md-3">
+                <label class="control-label">Tổng nhận</label>
+                <div class="input-group">
+                  <input class="form-control" type="number" id="totalReceivedInput" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text">VND</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="exampleSelect1" class="control-label">Trạng thái</label>
+                <select class="form-control" id="exampleSelect1" name="status" required>
+                  <option value="">-- Chọn trạng thái --</option>
+                  <option value="1">Đã nhận tiền</option>
+                  <option value="0">Chưa nhận tiền</option>
+                </select>
+              </div>
+
+
+          </div>
+          <button class="btn btn-save" type="submit">Lưu lại</button>
+          <a class="btn btn-cancel" href="/salary">Hủy bỏ</a>
+          </form>
+        </div>
+  </main>
+
+
+  <!--
+  MODAL
+-->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="form-group  col-md-12">
+              <span class="thong-tin-thanh-toan">
+                <h5>Tạo trạng thái mới</h5>
+              </span>
+            </div>
+            <div class="form-group col-md-12">
+              <label class="control-label">Nhập tên trạng thái mới</label>
+              <input class="form-control" type="text" required>
+            </div>
+          </div>
+          <BR>
+          <button class="btn btn-save" type="button">Lưu lại</button>
+          <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+          <BR>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+MODAL
+-->
+
+  <script>
+    function updateInfo() {
+      var select = document.getElementById("employeeSelect");
+      var genderInput = document.getElementById("genderInput");
+      var positionInput = document.getElementById("positionInput");
+
+      var selectedOption = select.options[select.selectedIndex];
+
+      var gender = selectedOption.getAttribute("data-gender");
+      var position = selectedOption.getAttribute("data-position");
+
+      genderInput.value = gender;
+      positionInput.value = position;
+    }
+
+    function updateTotalReceived() {
+      var salary = parseFloat(document.getElementById("salaryInput").value) || 0;
+      var deduction = parseFloat(document.getElementById("deductionInput").value) || 0;
+
+      // Tính toán và gắn kết quả vào ô "Tổng nhận"
+      var totalReceived = salary - deduction;
+      document.getElementById("totalReceivedInput").value = totalReceived;
+    }
+
+    // Gắn sự kiện thay đổi cho ô tiền lương và trừ lương
+    document.getElementById("salaryInput").addEventListener("input", updateTotalReceived);
+    document.getElementById("deductionInput").addEventListener("input", updateTotalReceived);
+
+
+
+
+  </script>
+
+  <!-- Essential javascripts for application to work-->
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <!-- The javascript plugin to display page loading on top-->
+  <script src="js/plugins/pace.min.js"></script>
+
+  </body>
+
+  </html>

@@ -1,0 +1,132 @@
+<%- include('head') %>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg"
+                width="50px" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name"><b>Admin</b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
+                    <span class="app-menu__label">MD VN</span></a></li>
+            <li><a class="app-menu__item " href="http://localhost:3000/home"><i
+                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+                        khiển</span></a></li>
+            <li><a class="app-menu__item " href="http://localhost:3000/staff"><i
+                        class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+                        viên</span></a></li>
+            <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i
+                        class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
+                        hàng</span></a></li>
+            <li><a class="app-menu__item " href="http://localhost:3000/products"><i
+                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+                        sản phẩm</span></a>
+            </li>
+            <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
+                        class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            <li><a class="app-menu__item" href="http://localhost:3000/InternalManagement"><i
+                        class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
+                    </span></a></li>
+            <li><a class="app-menu__item" href="http://localhost:3000/salary"><i
+                        class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
+                        lương</span></a></li>
+            <li><a class="app-menu__item active" href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Quản lí Voucher</span></a></li>
+            <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
+                        doanh thu</span></a>
+            </li>
+        </ul>
+    </aside>
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="/voucher">Danh sách voucher</a></li>
+                <li class="breadcrumb-item "><a href="/voucher/add">
+                        Thêm voucher
+                    </a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/voucher/add" method="post" enctype="multipart/form-data">
+                    <div class="tile">
+                        <h3 class="tile-title">Tạo mới sản phẩm</h3>
+                        <div class="tile-body">
+                            <div class="row element-button">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Tên voucher</label>
+                                    <input class="form-control" type="text" name="name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label">Số lượng: </label>
+                                    <input class="form-control" type="number" name="quantity" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label">Giảm giá(%): </label>
+                                    <input class="form-control" type="number" name="discount" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ngày bắt đầu</label>
+                                    <input class="form-control" type="date" name="startDate" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ngày kết thúc</label>
+                                    <input class="form-control" type="date" name="endDate" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ảnh sản phẩm</label>
+                                    <input class="form-control" type="text" name="image" id="editimg">
+                                    <div id="myfileupload">
+                                        <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                    </div>
+                                    <div id="thumbbox">
+                                        <img height="450" width="400" alt="Thumb image" id="thumbimage"
+                                            style="display: none" />
+                                        <a class="removeimg" href="javascript:"></a>
+                                    </div>
+                                    <div id="boxchoice">
+                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
+                                            Chọn ảnh</a>
+                                        <p style="clear:both"></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <button class="btn btn-save" type="submit">Lưu lại</button>
+        <a class="btn btn-cancel" href="/voucher">Hủy bỏ</a>
+        </div>
+        </form>
+    </main>
+
+    <!-- model danh mục -->
+    <script>
+        const inpFile = document.getElementById("inpFile");
+        const loadFile = document.getElementById("loadFile");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".image-preview__image");
+        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+        inpFile.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                previewDefaultText.style.display = "none";
+                previewImage.style.display = "block";
+                reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
+
+    <%- include('footer') %>

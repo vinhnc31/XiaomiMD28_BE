@@ -14,8 +14,9 @@ exports.getAccounts = async (req, res) => {
     if (!listUser || listUser.length === 0) {
       return res.status(400).json({ status: 400, message: "No users found" });
     }
+    res.render("customerManager", { accounts: listUser });
 
-    return res.status(200).json({ status: 200, data: listUser });
+    // return res.status(200).json({ status: 200, data: listUser });
   } catch (error) {
     console.error(error);
     return res
@@ -52,7 +53,7 @@ exports.getUserId = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
 
@@ -145,10 +146,10 @@ exports.register = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
   try {
-    const user = await Account.findOne({ id: req.params.id });
+    const user = await User.findOne({ where: { id: req.params.id } });
 
     if (!user) return res.status(400).json({ message: "Invalid link" });
-    const account = await Account.findOne({ id: req.params.id });
+    const account = await Account.findOne({ where: { id: req.params.id } });
 
     const token = await Token.findOne({
       where: {
