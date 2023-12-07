@@ -10,6 +10,7 @@ router.put(
   cloudinary.single("image"),
   staffController.updateStaff
 );
+router.post("/loginWeb", staffController.loginWeb);
 router.delete("/staff/:id", staffController.deleteStaff);
 
 module.exports = router;

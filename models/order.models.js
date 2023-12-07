@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     message: { type: DataTypes.STRING, allowNull: false },
     total: { type: DataTypes.FLOAT, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false },
+    statusOrder: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   Orders.associate = (models) => {

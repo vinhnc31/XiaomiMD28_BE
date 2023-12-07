@@ -5,6 +5,7 @@ require("./untils/passport");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
+
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -19,6 +20,10 @@ const cart = require("./routers/cart.router");
 const config = require("./routers/config.router");
 const order = require("./routers/order.router");
 const vnPay = require("./routers/vnpay.router");
+const salary = require("./routers/salary.router");
+const internal = require("./routers/Internal.router");
+const notify = require("./routers/notify.router");
+const home = require("./routers/home.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const productView = require("./routers/productView.router");
@@ -76,6 +81,10 @@ app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
 app.use("/api", staff);
+app.use("/api", salary);
+app.use("/api", internal);
+app.use("/api", notify);
+app.use("/home", home);
 app.get("/", function (req, res) {
   res.render("home");
 });
