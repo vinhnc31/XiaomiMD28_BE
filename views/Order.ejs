@@ -177,7 +177,9 @@
                                                     style="padding: 0;margin: 0;"
                                                     data-target="#huy<%=product.order.id%>">Hủy</h6>
                                                 <br>
-                                                <h6 class="btn" style="padding: 0;margin: 0;">In hóa đơn</h6>
+                                                <h6 class="btn" style="padding: 0;margin: 0;"
+                                                    onclick="printJS('printJS-form<%=product.order.id%>', 'html')">In
+                                                    hóa đơn</h6>
                                                 <!-- model xác nhận -->
                                                 <div class="modal fade" id="xacnhan<%=product.order.id%>" tabindex="-1"
                                                     role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -212,6 +214,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <!-- model xác nhận hủy -->
                                                 <div class="modal fade" id="huy<%=product.order.id%>" tabindex="-1"
                                                     role="dialog" aria-labelledby="exampleModalCenterTitle"
                                                     data-backdrop="static" data-keyboard="false">
@@ -303,11 +306,57 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="modal fade row" id="printJS-form<%=product.order.id%>"
+                                                    tabindex="-1" role="dialog"
+                                                    aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
+                                                    data-keyboard="false">
+                                                    <p>Mã đơn hàng:<%=product.order.id%>
+                                                    </p>
+                                                    <p>Tên người nhận:<%=product.address.nameReceiver%>
+                                                    </p>
+                                                    <p>SĐT:<%=product.address.phoneReceiver%>
+                                                    </p>
+                                                    <p>Địa chỉ:<%=product.address.address%>
+                                                    </p>
+                                                    <p>Ghi chú:<%=product.address.note%>
+                                                    </p>
+                                                    <p>Nội dung đơn hàng:</p>
+                                                    <table class="table table-bordered" id="sampleTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="col-sm-5">Tên sản phẩm</th>
+                                                                <th class="col-sm-2">Số lượng</th>
+                                                                <th class="col-sm-2">Màu</th>
+                                                                <th class="col-sm-3">Phiên bản</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% product.listproduct.map(function(product){%>
+                                                                <tr>
+                                                                    <td class="col-sm-5">
+                                                                        <%=product.name%>
+                                                                    </td>
+                                                                    <td class="col-sm-2">
+                                                                        <%=product.quantity%>
+                                                                    </td>
+                                                                    <td class="col-sm-2">
+                                                                        <%=product.color%>
+                                                                    </td>
+                                                                    <td class="col-sm-3">
+                                                                        <%=product.config%>
+                                                                    </td>
+                                                                </tr>
+
+                                                                <%})%>
+                                                        </tbody>
+                                                    </table>
+                                                    <p style="font-size: 20px">Tổng tiền:<%=product.order.total%>đ
+                                                    </p>
+
+
+                                                </div>
                                             </td>
                                             <%}%>
-
-
-                                                <!-- model xem chi tiết -->
                                     </tr>
                                     <%})}%>
 

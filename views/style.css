@@ -10,7 +10,14 @@
     top: 0;
     left: 0;
 }
-
+.err{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 290px;
+    left: 40px;
+    color: red;
+}
 .box .overlap-group {
     position: relative;
     width: 100vw;

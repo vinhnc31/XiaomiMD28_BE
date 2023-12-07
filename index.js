@@ -5,7 +5,7 @@ require("./untils/passport");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
-
+const admin = require("firebase-admin");
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -28,6 +28,7 @@ const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const productView = require("./routers/productView.router");
 const orderView = require("./routers/orderView.router");
+const loginView = require("./routers/login.router");
 
 const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
@@ -65,6 +66,7 @@ const options = {
   apis: ["./routers/*.js"],
 };
 const spacs = swaggerjsdoc(options);
+const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spacs));
 app.use("/api", category);
@@ -87,8 +89,9 @@ app.use("/api", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
+app.use("/", loginView);
 app.get("/", function (req, res) {
-  res.render("login");
+  res.render("login", { message: "", email: "", password: "" });
 });
 app.get("/homeTest", function (req, res) {
   res.render("home");
