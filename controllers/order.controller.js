@@ -62,6 +62,7 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
         { model: Address },
         { model: Promotion },
       ],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!listOrder) {
@@ -88,6 +89,7 @@ exports.createOrder = async (req, res) => {
     PayId,
     PromotionId,
     products,
+    statusOrder,
   } = req.body;
   const date = new Date();
 
@@ -122,6 +124,7 @@ exports.createOrder = async (req, res) => {
         PayId,
         PromotionId,
         total: totalPrice,
+        statusOrder: 0,
       },
       { transaction }
     );
@@ -172,6 +175,10 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += productColorConfig.price * quantity;
         }
+        await ProductColorConfig.update(
+          { quantity: sequelize.literal(`quantity - ${quantity}`) },
+          { where: { id: ProductColorConfigId }, transaction }
+        );
       } else {
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
@@ -213,6 +220,7 @@ exports.createOrder = async (req, res) => {
     await createdOrder.update({ total: totalPrice }, { transaction });
 
     await transaction.commit();
+    // Update the quantity in the product table
 
     // Return success response
     return res.status(201).json({

@@ -1,13 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const SalaryStatement = sequelize.define("Salary", {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    gender: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+  const Salaries = sequelize.define("Salaries", {
     salary: {
       type: DataTypes.FLOAT,
       allowNull: true,
@@ -16,10 +8,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: true,
     },
+    totalPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
     status: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
   });
-  return SalaryStatement;
+  Salaries.associate = (models) => {
+    Salaries.belongsTo(models.Staff, {
+      foreignKey: "StaffId",
+      as: "staff",
+    });
+  };
+
+  return Salaries;
 };

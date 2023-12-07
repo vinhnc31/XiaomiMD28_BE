@@ -25,7 +25,7 @@ async function verifyGoogleIdToken(token) {
   }
 }
 exports.generateToken = async (req, res) => {
-  const { id_token } = req.body;
+  const { id_token, fcmToken } = req.body;
   console.log(req.body);
   console.log(id_token);
 
@@ -49,14 +49,12 @@ exports.generateToken = async (req, res) => {
       });
 
       if (!existingToken) {
-        return res
-          .status(500)
-          .json({
-            status: 500,
-            message: "Token not found for existing account",
-          });
+        return res.status(500).json({
+          status: 500,
+          message: "Token not found for existing account",
+        });
       }
-
+      await existingAccount.update({ fcmToken: fcmToken });
       return res.status(200).json({
         status: 200,
         data: {
@@ -94,6 +92,7 @@ exports.generateToken = async (req, res) => {
       dayOfBirth: "",
       gender: "",
       phone: "",
+      fcmToken: fcmToken,
     });
 
     if (!createAccountGoogle) {
