@@ -1,0 +1,319 @@
+<%- include('head') %>
+  <%- include('aside') %>
+
+    <main class="app-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb">
+              <li class="breadcrumb-item"><a href="#"><b>Bảng điều khiển</b></a></li>
+            </ul>
+            <div id="clock"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!--Left-->
+        <div class="col-md-12 col-lg-6">
+          <div class="row">
+            <!-- col-6 -->
+            <div class="col-md-6">
+              <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'
+                  style="height: 100px;"></i>
+                <div class="info">
+                  <h4>Tổng khách hàng</h4>
+                  <p><b>56 khách hàng</b></p>
+                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                </div>
+              </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+              <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
+                <div class="info">
+                  <h4>Tổng sản phẩm</h4>
+                  <p><b>1850 sản phẩm</b></p>
+                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                </div>
+              </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+              <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'
+                  style="height: 100px;"></i>
+                <div class="info">
+                  <h4>Tổng đơn hàng</h4>
+                  <p><b>247 đơn hàng</b></p>
+                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                </div>
+              </div>
+            </div>
+            <!-- col-6 -->
+            <div class="col-md-6">
+              <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'
+                  style="height: 100px;"></i>
+                <div class="info">
+                  <h4>Sắp hết hàng</h4>
+                  <p><b>4 sản phẩm</b></p>
+                  <p class="info-tong">Tổng số khách hàng quản được quản lý.</p>
+                </div>
+              </div>
+            </div>
+            <!-- col-12 -->
+            <div class="col-md-12">
+              <div class="tile">
+                <h3 class="tile-title">Tình trạng đơn hàng</h3>
+                <div>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>ID đơn hàng</th>
+                        <th>Tên khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>AL3947</td>
+                        <td>Phạm Thị Ngọc</td>
+                        <td>
+                          19.770.000 đ
+                        </td>
+                        <td><span class="badge bg-info">Chờ xử lý</span></td>
+                      </tr>
+                      <tr>
+                        <td>ER3835</td>
+                        <td>Nguyễn Thị Mỹ Yến</td>
+                        <td>
+                          16.770.000 đ
+                        </td>
+                        <td><span class="badge bg-warning">Đang vận chuyển</span></td>
+                      </tr>
+                      <tr>
+                        <td>MD0837</td>
+                        <td>Triệu Thanh Phú</td>
+                        <td>
+                          9.400.000 đ
+                        </td>
+                        <td><span class="badge bg-success">Đã hoàn thành</span></td>
+                      </tr>
+                      <tr>
+                        <td>MT9835</td>
+                        <td>Đặng Hoàng Phúc </td>
+                        <td>
+                          40.650.000 đ
+                        </td>
+                        <td><span class="badge bg-danger">Đã hủy </span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- / div trống-->
+              </div>
+            </div>
+            <!-- / col-12 -->
+            <!-- col-12 -->
+            <div class="col-md-12">
+              <div class="tile">
+                <h3 class="tile-title">Khách hàng mới</h3>
+                <div>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Tên khách hàng</th>
+                        <th>Ngày sinh</th>
+                        <th>Số điện thoại</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>#183</td>
+                        <td>Hột vịt muối</td>
+                        <td>21/7/1992</td>
+                        <td><span class="tag tag-success">0921387221</span></td>
+                      </tr>
+                      <tr>
+                        <td>#219</td>
+                        <td>Bánh tráng trộn</td>
+                        <td>30/4/1975</td>
+                        <td><span class="tag tag-warning">0912376352</span></td>
+                      </tr>
+                      <tr>
+                        <td>#627</td>
+                        <td>Cút rang bơ</td>
+                        <td>12/3/1999</td>
+                        <td><span class="tag tag-primary">01287326654</span></td>
+                      </tr>
+                      <tr>
+                        <td>#175</td>
+                        <td>Hủ tiếu nam vang</td>
+                        <td>4/12/20000</td>
+                        <td><span class="tag tag-danger">0912376763</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+            <!-- / col-12 -->
+          </div>
+        </div>
+        <!--END left-->
+        <!--Right-->
+        <div class="col-md-12 col-lg-6">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tile">
+                <h3 class="tile-title">Thống kê doanh thu tháng 6</h3>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <canvas class="embed-responsive-item" id="myChart" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="tile">
+                <h3 class="tile-title">Thống kê đơn theo hàng tháng</h3>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <canvas class="embed-responsive-item" id="myChartb" style="width:100%;max-width:600px"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!--END right-->
+      </div>
+
+
+
+    </main>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/popper.min.js"></script>
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/plugins/pace.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+    <script type="text/javascript">
+
+      new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+          datasets: [{
+            label: "Doanh thu dự kiến",
+            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+            borderColor: "red",
+            fill: false
+          }, {
+            label: "Doanh thu",
+            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 7000],
+            borderColor: "green",
+            fill: false
+          }, {
+            label: "Doanh thu thực tế",
+            data: [300, 700, 2000, 5000, 6000, 4000, 2000, 1000, 200, 100],
+            borderColor: "blue",
+            fill: false
+          }]
+        },
+        options: {
+          legend: { display: true }
+        }
+      });
+
+
+
+      var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
+      var yValues = [55, 49, 44, 24, 15, 50];
+      var zValues = [30, 40, 60, 35, 70, 39];
+      var aValues = [15, 20, 25, 30, 80, 19];
+
+
+      new Chart("myChartb", {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              label: "Chờ xác nhận",
+              backgroundColor: "purple",
+              data: yValues,
+            },
+            {
+              label: "Đang vận chuyển",
+              backgroundColor: "yellow",
+              data: zValues,
+            },
+            {
+              label: "Đã nhận",
+              backgroundColor: "green",
+              data: aValues,
+            }, {
+              label: "Huỷ",
+              backgroundColor: "red",
+              data: aValues,
+            },
+          ],
+        },
+        options: {
+          legend: { display: true }
+        },
+      });
+
+    </script>
+    <script type="text/javascript">
+      //Thời Gian
+      function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Chủ Nhật";
+        weekday[1] = "Thứ Hai";
+        weekday[2] = "Thứ Ba";
+        weekday[3] = "Thứ Tư";
+        weekday[4] = "Thứ Năm";
+        weekday[5] = "Thứ Sáu";
+        weekday[6] = "Thứ Bảy";
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        nowTime = h + " giờ " + m + " phút " + s + " giây";
+        if (dd < 10) {
+          dd = '0' + dd
+        }
+        if (mm < 10) {
+          mm = '0' + mm
+        }
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+          '</span>';
+        document.getElementById("clock").innerHTML = tmp;
+        clocktime = setTimeout("time()", "1000", "Javascript");
+
+        function checkTime(i) {
+          if (i < 10) {
+            i = "0" + i;
+          }
+          return i;
+        }
+      }
+    </script>
+    </body>
+
+    </html>

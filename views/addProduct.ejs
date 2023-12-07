@@ -1,0 +1,201 @@
+<%- include('head') %>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar rounded-circle" src="/images/hay.jpg"
+                width="50px" alt="User Image">
+            <div>
+                <p class="app-sidebar__user-name"><b>Admin</b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i
+                        class='app-menu__icon fa fa-shopping-cart'></i>
+                    <span class="app-menu__label">Xioami VN</span></a></li>
+            <li><a class="app-menu__item " href="index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        class="app-menu__label">Bảng điều khiển</span></a></li>
+            <li><a class="app-menu__item " href="table-data-table.html"><i class='app-menu__icon bx bx-id-card'></i>
+                    <span class="app-menu__label">Quản lý nhân viên</span></a></li>
+            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
+                        class="app-menu__label">Quản lý khách hàng</span></a></li>
+            <li><a class="app-menu__item active" href="/products"><i
+                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản
+                        phẩm</span></a>
+            </li>
+            <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
+                        class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            <li><a class="app-menu__item  " href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
+                        class="app-menu__label">Quản lý nội bộ
+                    </span></a></li>
+            <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Bảng kê lương</span></a></li>
+            <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh
+                        thu</span></a>
+            </li>
+
+        </ul>
+    </aside>
+
+
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb">
+                <li class="breadcrumb-item"><a href="/products">Danh sách sản phẩm</a></li>
+                <li class="breadcrumb-item "><a href="/products/add">
+                        Thêm sản phẩm
+                    </a></li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/products/add" method="post" enctype="multipart/form-data">
+                    <div class="tile">
+                        <h3 class="tile-title">Tạo mới sản phẩm</h3>
+                        <div class="tile-body">
+                            <div class="row element-button">
+                                <div class="col-sm-2">
+                                    <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#adddanhmuc"><i
+                                            class="fas fa-folder-plus"></i> Thêm danh mục</a>
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Tên sản phẩm</label>
+                                    <input class="form-control" type="text" name="name" value="<%=product.name%>"
+                                        required>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="exampleSelect1" class="control-label">Danh mục</label>
+                                    <select class="form-control" name="CategoryId" value="<%=product.CategoryId%>"
+                                        required>
+                                        <option>-- Chọn danh mục --</option>
+                                        <% category.map(function(category){%>
+                                            <option value="<%=category.id %>">
+                                                <%=category.name %>
+                                            </option>
+                                            <%})%>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Giá bán</label>
+                                    <input class="form-control" type="text" name="price" value="<%=product.price%>"
+                                        required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="control-label">Ảnh sản phẩm</label>
+                                    <input class="form-control" type="text" name="images" id="editimg">
+                                    <div id="myfileupload">
+                                        <input type="file" id="uploadfile" name="images" onchange="readURL(this);" />
+                                    </div>
+                                    <div id="thumbbox">
+                                        <img height="450" width="400" alt="Thumb image" id="thumbimage"
+                                            style="display: none" />
+                                        <a class="removeimg" href="javascript:"></a>
+                                    </div>
+                                    <div id="boxchoice">
+                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
+                                            Chọn ảnh</a>
+                                        <p style="clear:both"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <h3 class="box-title">Mô tả sản phẩm
+                                            </h3>
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body pad">
+                                            <form>
+                                                <textarea rows="10" cols="80" name="description" id="description"
+                                                    value="<%=product.description%>">
+
+                                                        </textarea>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- <label class="control-label">Mô tả sản phẩm</label>
+                                    <textarea class="form-control" name="description" id="description"
+                                        value="<%=product.description%>" required></textarea> -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" href="/products">Hủy bỏ</a>
+                    </div>
+                </form>
+    </main>
+
+    <!-- model danh mục -->
+    <div class="modal fade" id="adddanhmuc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form action="/products/addCategory" method="post">
+                        <div class="row">
+                            <div class="form-group  col-md-12">
+                                <span class="thong-tin-thanh-toan">
+                                    <h5>Thêm mới danh mục </h5>
+                                </span>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Nhập tên danh mục mới</label>
+                                <input class="form-control" type="text" name="newCategory" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Danh mục sản phẩm hiện đang có</label>
+                                <ul style="padding-left: 20px;">
+                                    <% category.map(function(category){%>
+                                        <li value="<%=category.id %>">
+                                            <%=category.name %>
+                                        </li>
+                                        <%})%>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <BR>
+                        <button class="btn btn-save" type="submit">Lưu lại</button>
+                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <BR>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        CKEDITOR.replace('description');
+    </script>
+    <script>
+        const inpFile = document.getElementById("inpFile");
+        const loadFile = document.getElementById("loadFile");
+        const previewContainer = document.getElementById("imagePreview");
+        const previewImage = previewContainer.querySelector(".image-preview__image");
+        const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+        inpFile.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                previewDefaultText.style.display = "none";
+                previewImage.style.display = "block";
+                reader.addEventListener("load", function () {
+                    previewImage.setAttribute("src", this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+    </script>
+
+    <%- include('footer') %>

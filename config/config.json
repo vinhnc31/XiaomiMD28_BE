@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "freedb_xioami_be_md28",
+    "password": "VC@?cV&79kPPg&V",
+    "database": "freedb_xioami_be_md28",
+    "host": "sql.freedb.tech",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "freedb_xioami_be_md28",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null, 
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }  
+}
