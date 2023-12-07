@@ -7,4 +7,6 @@ router.get("/totalOrder", homeController.getOrder);
 router.get("/totalStaff", homeController.getStaff);
 router.get("/Order", homeController.getOrderNew);
 router.get("/AccountNew", homeController.getAccountNew);
+router.get("/OrderInMonth", homeController.getOrderInMonth);
+router.get("/RevenueInMonth", homeController.getRevenueInMonth);
 module.exports = router;

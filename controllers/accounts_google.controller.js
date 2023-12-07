@@ -81,8 +81,6 @@ exports.generateToken = async (req, res) => {
     const newToken = jwt.sign(newTokenPayload, process.env.SIGN_PRIVATE, {
       expiresIn: "1y",
     });
-    await Token.create({ token: newToken, email: newTokenPayload.email });
-
     const createAccountGoogle = await Account.create({
       avatar: googleTokenInfo.picture,
       email: googleTokenInfo.email,

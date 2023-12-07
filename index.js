@@ -27,6 +27,7 @@ const home = require("./routers/home.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
 const staff = require("./routers/staff.router");
+const statistical = require("./routers/statistical.router");
 const PORT = process.env.POST || 3000;
 
 app.set("view engine", "ejs");
@@ -74,6 +75,7 @@ app.use("/api", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
+app.use("/statistical", statistical);
 app.get("/", function (req, res) {
   res.render("home");
 });

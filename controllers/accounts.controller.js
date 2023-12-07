@@ -226,7 +226,6 @@ exports.login = async (req, res, next) => {
       process.env.SIGN_PRIVATE,
       { expiresIn: "1y" }
     );
-    await Token.create({ token: token, email: result.email });
     await result.update({ fcmToken: fcmToken });
     return res.status(200).json({
       status: 200,

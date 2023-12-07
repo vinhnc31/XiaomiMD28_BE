@@ -175,10 +175,11 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += productColorConfig.price * quantity;
         }
-        await ProductColorConfig.update(
+        const update = await ProductColorConfig.update(
           { quantity: sequelize.literal(`quantity - ${quantity}`) },
           { where: { id: ProductColorConfigId }, transaction }
         );
+        console.log(update);
       } else {
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
