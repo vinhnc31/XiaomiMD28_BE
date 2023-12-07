@@ -1,13 +1,4 @@
 <%- include('head') %>
-    <script>
-        function onclickoption() {
-            var selectElement = document.getElementById("sampleTable_length");
-            var selectedValue = selectElement.value;
-            window.location.href = selectedValue; // Chuyển hướng đến liên kết tương ứng với giá trị đã chọn
-        }
-    </script>
-
-    <!-- Aside -->
     <aside class="app-sidebar">
         <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
                 alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
@@ -29,7 +20,7 @@
             <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i
                         class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
                         hàng</span></a></li>
-            <li><a class="app-menu__item active" href="http://localhost:3000/products"><i
+            <li><a class="app-menu__item " href="http://localhost:3000/products"><i
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
                         sản phẩm</span></a>
             </li>
@@ -41,21 +32,20 @@
             <li><a class="app-menu__item" href="http://localhost:3000/salary"><i
                         class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
                         lương</span></a></li>
-            <li><a class="app-menu__item" href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+            <li><a class="app-menu__item active" href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Quản lí Voucher</span></a></li>
             <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
                         doanh thu</span></a>
             </li>
         </ul>
-
-
     </aside>
-    <!-- Main -->
+
+
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Danh sách sản phẩm</b></a></li>
+                <li class="breadcrumb-item active"><a href="#"><b>Danh sách Voucher</b></a></li>
             </ul>
 
         </div>
@@ -65,10 +55,9 @@
                     <div class="tile-body">
                         <div class="row element-button">
                             <div class="col-sm-2">
-
-                                <a class="btn btn-add btn-sm" href="/products/add" title="Thêm"><i
+                                <a class="btn btn-add btn-sm" href="/voucher/add" title="Thêm"><i
                                         class="fas fa-plus"></i>
-                                    Thêm sản phẩm</a>
+                                    Thêm Voucher</a>
                             </div>
                             <div class="col-sm-2">
                                 <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
@@ -78,51 +67,17 @@
                         <div id="sampleTable_wrapper"
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                             <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="dataTables_length"><label>Hiện <select name="sampleTable_length"
-                                                onchange="onclickoption()" aria-controls="sampleTable"
-                                                id="sampleTable_length" class="form-control form-control-sm">
-                                                <% if(limit===10){%>
-                                                    <option value="/products?limit=10" selected="true">10</option>
-                                                    <%}else{%>
-                                                        <option value="/products?limit=10">10</option>
-                                                        <%}%>
-
-                                                            <% if(limit===25){%>
-                                                                <option value="/products?limit=25" selected="true">25
-                                                                </option>
-                                                                <%}else{%>
-                                                                    <option value="/products?limit=25">25</option>
-                                                                    <%}%>
-                                                                        <% if(limit===50){%>
-                                                                            <option value="/products?limit=50"
-                                                                                selected="true">50</option>
-                                                                            <%}else{%>
-                                                                                <option value="/products?limit=50">50
-                                                                                </option>
-                                                                                <%}%>
-                                                                                    <% if(limit===100){%>
-                                                                                        <option
-                                                                                            value="/products?limit=100"
-                                                                                            selected="true">100</option>
-                                                                                        <%}else{%>
-                                                                                            <option
-                                                                                                value="/products?limit=100">
-                                                                                                100</option>
-                                                                                            <%}%>
-                                            </select> sản phẩm</label></div>
-                                </div>
+                                <div class="col-sm-12 col-md-6"></div>
                                 <div class="col-sm-12 col-md-6">
                                     <form action="" method="get" role="form">
                                         <div id="sampleTable_filter" class="dataTables_filter">
                                             <label>Tìm kiếm:
                                                 <input type="search" class="form-control form-control-sm"
-                                                    placeholder="Nhập tên sản phẩm" name="name"
-                                                    aria-controls="sampleTable" value="">
+                                                    placeholder="Nhập tên voucher" name="name"
+                                                    aria-controls="sampleTable" value="<%=name%>">
                                                 <button class="btn btn-primary btn-sm" type="submit"><i
                                                         class="fas fa-search"></i></button>
                                             </label>
-
                                         </div>
                                     </form>
                                 </div>
@@ -143,20 +98,26 @@
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Mã sản phẩm: activate to sort column ascending"
-                                                    style="width: 118.662px;">Mã sản phẩm</th>
+                                                    style="width: 118.662px;">Mã voucher</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Tên sản phẩm: activate to sort column ascending"
-                                                    style="width: 256.65px;">Tên sản phẩm</th>
+                                                    style="width: 256.65px;">Tên mã giảm giá</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1" aria-label="Ảnh: activate to sort column ascending"
                                                     style="width: 40.6125px;">Ảnh</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1" aria-label="Giá tiền: activate to sort column ascending"
-                                                    style="width: 115.325px;">Giá tiền</th>
+                                                    style="width: 115.325px;">Số lượng</th>
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1" aria-label="Giá tiền: activate to sort column ascending"
+                                                    style="width: 115.325px;">Giảm gía(%)</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1" aria-label="Danh mục: activate to sort column ascending"
-                                                    style="width: 147.8px;">Danh mục</th>
+                                                    style="width: 147.8px;">Ngày bắt đầu</th>
+                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
+                                                    colspan="1" aria-label="Danh mục: activate to sort column ascending"
+                                                    style="width: 147.8px;">Ngày kết thúc</th>
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Chức năng: activate to sort column ascending"
@@ -169,28 +130,35 @@
                                                     <td width="10" class="sorting_1"><input type="checkbox"
                                                             name="check1" value="1"></td>
                                                     <td>
-                                                        <%=product.id%>
+                                                        <%=product.promotion.id%>
                                                     </td>
                                                     <td>
-                                                        <%=product.name%>
+                                                        <%=product.promotion.name%>
                                                     </td>
                                                     <td>
-                                                        <img src="<%=product.images%>" alt="" width="100px;">
+                                                        <img src="<%=product.promotion.image%>" alt="" width="100px;">
                                                     </td>
                                                     <td>
-                                                        <%=product.price%>
+                                                        <%=product.promotion.quantity%>
                                                     </td>
                                                     <td>
-                                                        <%=product.Category.name%>
+                                                        <%=product.promotion.discount%>
+                                                    </td>
+                                                    <td>
+                                                        <%=product.startDate%>
+                                                    </td>
+                                                    <td>
+                                                        <%=product.endDate%>
                                                     </td>
                                                     <td><button class="btn btn-primary btn-sm trash" type="button"
                                                             title="Xóa" data-toggle="modal"
-                                                            data-target="#<%=product.id%>"><i
+                                                            data-target="#<%=product.promotion.id%>"><i
                                                                 class="fas fa-trash-alt"></i>
                                                         </button>
                                                         <!-- model xóa -->
-                                                        <div class="modal fade" id="<%=product.id%>" tabindex="-1"
-                                                            role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                        <div class="modal fade" id="<%=product.promotion.id%>"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="exampleModalCenterTitle"
                                                             data-backdrop="static" data-keyboard="false">
                                                             <div class="modal-dialog modal-dialog-centered"
                                                                 role="document">
@@ -205,15 +173,16 @@
                                                                         </h5>
                                                                         <BR>
                                                                         <form class="text-right"
-                                                                            action="/products/delete/<%=product.id%>"
+                                                                            action="/voucher/delete/<%=product.promotion.id%>"
                                                                             method="post">
                                                                             <a class="btn btn-cancel"
                                                                                 data-dismiss="modal" href="#">Hủy
                                                                                 bỏ</a>
                                                                             <input type="hidden" value="<%=product.id%>"
-                                                                                name="<%=product.id%>">
+                                                                                name="<%=product.promotion.id%>">
                                                                             <button class="btn btn-save"
-                                                                                type="submit">Đồng ý</button>
+                                                                                type="submit">Đồng
+                                                                                ý</button>
                                                                         </form>
                                                                         <BR>
                                                                     </div>
@@ -222,9 +191,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                            href="/products/update/<%=product.id%>"><i
-                                                                class="fas fa-edit"></i></a>
+
                                                     </td>
                                                 </tr>
                                                 <%})}%>
@@ -242,19 +209,19 @@
                                         <ul class="pagination">
                                             <li class="paginate_button page-item previous " id="sampleTable_previous">
                                                 <%if(name){%>
-                                                    <a href="/products/?page=<%=page>1?page-1:1%>&name=<%=search%>"
+                                                    <a href="/voucher/?page=<%=page>1?page-1:1%>&name=<%=search%>"
                                                         aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
                                                         class="page-link">Lùi</a>
                                                     <%}else{%>
-                                                        <a href="/products/?page=<%=page>1?page-1:1%>"
+                                                        <a href="/voucher/?page=<%=page>1?page-1:1%>"
                                                             aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
                                                             class="page-link">Lùi</a>
                                             </li>
                                             <%}%>
-                                                <%if(totalPage>5){%>
+                                                <%if(totalPage>=5){%>
                                                     <%if(page>3&&page<=(totalPage-2)){ %>
                                                             <li class="paginate_button page-item ">
-                                                                <a href="/products/?page=1" aria-controls="sampleTable"
+                                                                <a href="/voucher/?page=1" aria-controls="sampleTable"
                                                                     data-dt-idx="1" tabindex="0" class="page-link">
                                                                     <i class="fas fa-angle-double-left"></i>
                                                                 </a>
@@ -267,35 +234,35 @@
                                                             </li>
 
                                                             <li class="paginate_button page-item   ">
-                                                                <a href="/products/?page=<%=page-2%>"
+                                                                <a href="/voucher/?page=<%=page-2%>"
                                                                     aria-controls="sampleTable" data-dt-idx="1"
                                                                     tabindex="0" class="page-link">
                                                                     <%=page-2%>
                                                                 </a>
                                                             </li>
                                                             <li class="paginate_button page-item   ">
-                                                                <a href="/products/?page=<%=page-1%>"
+                                                                <a href="/voucher/?page=<%=page-1%>"
                                                                     aria-controls="sampleTable" data-dt-idx="1"
                                                                     tabindex="0" class="page-link">
                                                                     <%=page-1%>
                                                                 </a>
                                                             </li>
                                                             <li class="paginate_button page-item  active">
-                                                                <a href="/products/?page=<%=page%>"
+                                                                <a href="/voucher/?page=<%=page%>"
                                                                     aria-controls="sampleTable" data-dt-idx="1"
                                                                     tabindex="0" class="page-link">
                                                                     <%=page%>
                                                                 </a>
                                                             </li>
                                                             <li class="paginate_button page-item   ">
-                                                                <a href="/products/?page=<%=page+1%>"
+                                                                <a href="/voucher/?page=<%=page+1%>"
                                                                     aria-controls="sampleTable" data-dt-idx="1"
                                                                     tabindex="0" class="page-link">
                                                                     <%=page+1%>%>
                                                                 </a>
                                                             </li>
                                                             <li class="paginate_button page-item   ">
-                                                                <a href="/products/?page=<%=page+2%>"
+                                                                <a href="/voucher/?page=<%=page+2%>"
                                                                     aria-controls="sampleTable" data-dt-idx="1"
                                                                     tabindex="0" class="page-link">
                                                                     <%=page+2%>%>
@@ -305,7 +272,7 @@
                                                                 <% for(i=1;i<=5;i++){ if(name){ %>
                                                                     <li
                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                        <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                        <a href="/voucher/?page=<%=i%>&name=<%=search%>"
                                                                             aria-controls="sampleTable" data-dt-idx="1"
                                                                             tabindex="0" class="page-link">
                                                                             <%=i%>
@@ -314,7 +281,7 @@
                                                                     <%}else{ %>
                                                                         <li
                                                                             class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                            <a href="/products/?page=<%=i%>"
+                                                                            <a href="/voucher/?page=<%=i%>"
                                                                                 aria-controls="sampleTable"
                                                                                 data-dt-idx="1" tabindex="0"
                                                                                 class="page-link">
@@ -323,7 +290,7 @@
                                                                         </li>
                                                                         <%} }}else if(page>(totalPage-2)){%>
                                                                             <li class="paginate_button page-item ">
-                                                                                <a href="/products/?page=1"
+                                                                                <a href="/voucher/?page=1"
                                                                                     aria-controls="sampleTable"
                                                                                     data-dt-idx="1" tabindex="0"
                                                                                     class="page-link">
@@ -342,7 +309,7 @@
                                                                                 if(name){%>
                                                                                 <li
                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                    <a href="/voucher/?page=<%=i%>&name=<%=search%>"
                                                                                         aria-controls="sampleTable"
                                                                                         data-dt-idx="1" tabindex="0"
                                                                                         class="page-link">
@@ -352,7 +319,7 @@
                                                                                 <%}else{ %>
                                                                                     <li
                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                        <a href="/products/?page=<%=i%>"
+                                                                                        <a href="/voucher/?page=<%=i%>"
                                                                                             aria-controls="sampleTable"
                                                                                             data-dt-idx="1" tabindex="0"
                                                                                             class="page-link">
@@ -376,7 +343,7 @@
                                                                                             </li>
                                                                                             <li
                                                                                                 class="paginate_button page-item ">
-                                                                                                <a href="/products/?page=<%=totalPage%>"
+                                                                                                <a href="/voucher/?page=<%=totalPage%>"
                                                                                                     aria-controls="sampleTable"
                                                                                                     data-dt-idx="1"
                                                                                                     tabindex="0"
@@ -390,7 +357,7 @@
                                                                                                     if(name){ %>
                                                                                                     <li
                                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                        <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                                        <a href="/voucher/?page=<%=i%>&name=<%=search%>"
                                                                                                             aria-controls="sampleTable"
                                                                                                             data-dt-idx="1"
                                                                                                             tabindex="0"
@@ -401,7 +368,7 @@
                                                                                                     <%}else{ %>
                                                                                                         <li
                                                                                                             class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                            <a href="/products/?page=<%=i%>"
+                                                                                                            <a href="/voucher/?page=<%=i%>"
                                                                                                                 aria-controls="sampleTable"
                                                                                                                 data-dt-idx="1"
                                                                                                                 tabindex="0"
@@ -414,14 +381,14 @@
                                                                                                                 <li class="paginate_button page-item next"
                                                                                                                     id="sampleTable_next">
                                                                                                                     <%if(name){%>
-                                                                                                                        <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
+                                                                                                                        <a href="/voucher/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
                                                                                                                             aria-controls="sampleTable"
                                                                                                                             data-dt-idx="3"
                                                                                                                             tabindex="0"
                                                                                                                             class="page-link">Tiếp</a>
                                                                                                                         <%
                                                                                                                             }else{%>
-                                                                                                                            <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                                            <a href="/voucher/?page=<%=page<totalPage?page+1:totalPage%>"
                                                                                                                                 aria-controls="sampleTable"
                                                                                                                                 data-dt-idx="3"
                                                                                                                                 tabindex="0"
@@ -439,11 +406,7 @@
             </div>
         </div>
     </main>
+    <!-- model them voucher -->
 
-
-
-    <!--
-          MODAL CHỨC VỤ 
-        -->
 
     <%- include('footer') %>

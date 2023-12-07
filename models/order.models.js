@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Orders.associate = (models) => {
-    Orders.belongsTo(models.Account, { foreignKey: "AccountId",as: "account", });
+    Orders.belongsTo(models.Account, { foreignKey: "AccountId", as: "account" });
+    Orders.belongsTo(models.Account, { foreignKey: "AccountId" });
     Orders.belongsTo(models.Address, { foreignKey: "AddressId" });
     Orders.belongsTo(models.Pay, { foreignKey: "PayId" });
     Orders.belongsTo(models.Promotion, { foreignKey: "PromotionId" });

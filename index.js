@@ -2,10 +2,11 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 require("./untils/passport");
+const moment = require("moment");
 
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
-
+const admin = require("firebase-admin");
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -26,12 +27,15 @@ const notify = require("./routers/notify.router");
 const home = require("./routers/home.router");
 const db = require("./models");
 const product_color_config = require("./routers/productcolor_config.router");
-const staff = require("./routers/staff.router");
 const productView = require("./routers/productView.router");
+const orderView = require("./routers/orderView.router");
+const loginView = require("./routers/login.router");
+const voucherView = require("./routers/voucher.router");
 
 const statistical = require("./routers/statistical.router");
+const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
-const path = require('path');
+const path = require("path");
 
 app.set("view engine", "ejs");
 app.use(
@@ -46,7 +50,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(express.static("views"));
 const options = {
@@ -88,33 +92,31 @@ app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.use("/statistical", statistical);
+app.use("/", loginView);
+app.use("/", voucherView);
 app.get("/", function (req, res) {
-  res.render("login");
+  res.render("login", { message: "", email: "", password: "" });
 });
-
-
-
-
-app.get("/updateStaffTest", function(req, res){
-  res.render('updateStaff');
-});
-app.get("/passTest", function(req, res){
-  res.render('reset-password');
-});
-app.get("/salesTest", function(req, res){
-  res.render('salesReport');
-});
-
-app.get("/form-addStaff", function(req, res){
-  res.render('addStaff');
-});
-app.get("/InternalManagement", function(req, res){
-  res.render('InternalManagement');
-});
-
-
 
 app.use("/products", productView);
+app.use("/order", orderView);
+
+app.get("/updateStaffTest", function (req, res) {
+  res.render("updateStaff");
+});
+app.get("/passTest", function (req, res) {
+  res.render("reset-password");
+});
+app.get("/salesTest", function (req, res) {
+  res.render("salesReport");
+});
+
+app.get("/form-addStaff", function (req, res) {
+  res.render("addStaff");
+});
+app.get("/InternalManagement", function (req, res) {
+  res.render("InternalManagement");
+});
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

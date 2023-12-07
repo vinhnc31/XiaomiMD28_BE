@@ -96,11 +96,6 @@ router.post("/login", account.login);
 router.post("/login-google", accountGoogle.generateToken);
 router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
-
-router.post("/account/register", account.register);
-router.post("/account/login", account.login);
-router.get("/account/verify/:id/:token", account.verifyEmail);
-router.get("/account/logout", authMidleWare.apiAuth, account.logout);
 router.post(
   "/account/changePassword",
   authMidleWare.apiAuth,

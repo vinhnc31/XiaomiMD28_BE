@@ -13,6 +13,7 @@ exports.index = async (req, res) => {
   try {
     let _name = req.query.name;
     console.log(_name);
+
     if (!_name) {
       _name = "";
     }
@@ -20,7 +21,7 @@ exports.index = async (req, res) => {
     let _page = req.query.page ? req.query.page : 1;
     let listProduct = [];
 
-    let _limit = 20;
+    let _limit = Number(req.query.limit ? req.query.limit : 10);
     let totalRow = await Product.count();
     let totalPage = Math.ceil(totalRow / _limit);
     _page = _page > 0 ? Math.floor(_page) : 1;
@@ -58,6 +59,7 @@ exports.index = async (req, res) => {
       totalPage: totalPage,
       name: _name,
       page: _page,
+      limit: _limit,
 
       //return res.status(200).json({ status: 200, data: listProduct });
     });
@@ -173,7 +175,9 @@ exports.indexUpdateProduct = async (req, res, next) => {
   const listCategory = await Category.findAll();
   if (listCategory) {
   } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+    return res
+      .status(400)
+      .json({ status: 400, message: "false connexting db" });
   }
 
   res.render("updateProduct", {
@@ -181,6 +185,7 @@ exports.indexUpdateProduct = async (req, res, next) => {
     product: product,
     title: "Sửa sản phẩm",
   });
+  //res.status(200).json(product);
 };
 
 exports.updateProduct = async (req, res, next) => {

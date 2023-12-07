@@ -11,7 +11,7 @@ router.post("/add", cloudinary.single("images"), productController.addProduct);
 router.get("/update/:id", productController.indexUpdateProduct);
 router.post(
   "/update/:id",
-  cloudinary.single("image"),
+  cloudinary.single("images"),
   productController.updateProduct
 );
 router.post("/addCategory", productController.addCategory);

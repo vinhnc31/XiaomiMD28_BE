@@ -7,8 +7,6 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 require("dotenv").config;
 
-
-
 exports.getAccounts = async (req, res) => {
   try {
     const listUser = await Account.findAll();
@@ -16,10 +14,9 @@ exports.getAccounts = async (req, res) => {
     if (!listUser || listUser.length === 0) {
       return res.status(400).json({ status: 400, message: "No users found" });
     }
-    res.render('customerManager', {"accounts": listUser });
+    res.render("customerManager", { accounts: listUser });
 
     // return res.status(200).json({ status: 200, data: listUser });
-
   } catch (error) {
     console.error(error);
     return res
@@ -98,10 +95,6 @@ exports.register = async (req, res, next) => {
           "Reverify Email",
           verificationLink
         );
-        const emailMessage = `http://localhost:3000/api/account/verify/${checkEmail.id}/${newVerificationToken.token}
-        `;
-        console.log("email", checkEmail.email);
-        await sendEmail(checkEmail.email, "Reverify Email", emailMessage);
 
         return res.status(200).json({
           status: 200,
@@ -112,7 +105,6 @@ exports.register = async (req, res, next) => {
     }
 
     // If the email does not exist, create a new account
-    // Tạo salt và mã hóa mật khẩu
     const salt = await bcrypt.genSalt(15);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -137,10 +129,6 @@ exports.register = async (req, res, next) => {
     // Create a verification email message and send the email
     const verificationLink = `http://localhost:3000/api/verify/${newAccount.id}/${newToken.token}`;
     await sendEmail(newAccount.email, "Verify Email", verificationLink);
-    console.log("new token", new_token);
-    // Tạo thông điệp xác minh email và gửi email xác minh
-    const message = `http://localhost:3000/api/account/verify/${new_user.id}/${new_token.token}`;
-    await sendEmail(new_account.email, "Verify Email", message);
 
     return res.status(201).json({
       status: 201,

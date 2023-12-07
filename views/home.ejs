@@ -95,9 +95,9 @@
                           </td>
                           <td>
                             <span
-                              class="badge <%= order.statusOrder === 0 ? 'bg-info' : order.statusOrder === 1 ? 'bg-warning' : order.statusOrder === 2 ? 'bg-success' : 'bg-danger' %>">
-                              <%= order.statusOrder===0 ? 'Chờ xử lý' : order.statusOrder===1 ? 'Đang vận chuyển' :
-                                order.statusOrder===2 ? 'Đã nhận' : 'Đã hủy' %>
+                              class="badge <%= order.status === '0' ? 'bg-info' : order.status === '1' ? 'bg-warning' : order.status === '2' ? 'bg-success' : 'bg-danger' %>">
+                              <%= order.status==='0' ? 'Chờ xác nhận' : order.status==='1' ? 'Đang vận chuyển' :
+                                order.statusOrder==='2' ? 'Đã nhận' : 'Đã hủy' %>
                             </span>
 
                           </td>
@@ -136,7 +136,6 @@
                             <%= customer.name %>
                           </td>
                           <td>
-                          <td>
                             <% if (customer.dateOfBirth) { %>
                               <% const date=new Date(customer.dateOfBirth); %>
                                 <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
@@ -145,7 +144,6 @@
                                         <% } %>
                           </td>
 
-                          </td>
                           <td><span class="tag tag-success">
                               <%= customer.phone %>
                             </span></td>

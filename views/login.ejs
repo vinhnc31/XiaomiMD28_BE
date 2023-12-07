@@ -12,38 +12,50 @@
         <div class="group">
             <div class="overlap-group">
                 <div class="overlap">
-                    <div class="text-wrapper">Đăng nhập</div>
-                    <div class="div">
-                        <input class="text-wrapper-2" placeholder="Nhập Email"></input>
-                        <img class="mail" src="img/mail-1.png" />
-                    </div>
-                    <div class="overlap-2">
-                        <div class="rectangle"></div>
-                        <div class="text-wrapper-3">Password</div>
-                        <div class="flex justify-between" style="align-items: baseline;">
-                            <img class="hide" src="img/hide-1.png" />
-                            <input type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu"></input>
-                            <img class="key" src="img/key-1.png" />
+                    <form action="/" method="post">
+                        <div class="text-wrapper">Đăng nhập</div>
+                        <span class="err">
+                            <%=message%>
+                        </span>
+                        <div class="div">
+                            <input class="text-wrapper-2" placeholder="Nhập Email" name="email"
+                                value="<%=email%>"></input>
+                            <img class="mail" src="img/mail-1.png" />
                         </div>
-                    </div>
-                    <div class="text-wrapper-5">Email</div>
-                    <div class="text-wrapper-6">Quên mật khẩu ?</div>
-                    <div class="div-wrapper">
-                        <a href="http://localhost:3000/home" class="text-wrapper-7">Đăng nhập</a>
-                    </div>
+
+                        <div class="overlap-2">
+                            <div class="rectangle"></div>
+                            <div class="text-wrapper-3">Password</div>
+                            <div class="flex justify-between" style="align-items: baseline;">
+                                <img class="hide" src="img/hide-1.png" />
+                                <input type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu"
+                                    name="password" value="<%=password%>"></input>
+                                <img class="key" src="img/key-1.png" />
+                            </div>
+
+                        </div>
+
+                        <div class="text-wrapper-5">Email</div>
+                        <div class="text-wrapper-6">Quên mật khẩu ?</div>
+                        <div class="div-wrapper">
+                            <button type="submit" class="text-wrapper-7">Đăng nhập</button>
+                    </form>
+
                 </div>
-                <div class="overlap-3">
-                    <div class="overlap-4">
-                        <img class="element-px" src="img/52616b-770-720-px-2-1-1.png" />
-                        <img class="element" src="img/logoapp.jpg" />
-                    </div>
-                    <div class="text-wrapper-8">MD VN</div>
+
+            </div>
+            <div class="overlap-3">
+                <div class="overlap-4">
+                    <img class="element-px" src="img/52616b-770-720-px-2-1-1.png" />
+                    <img class="element" src="img/logoapp.jpg" />
                 </div>
+                <div class="text-wrapper-8">MD VN</div>
             </div>
         </div>
     </div>
+    </div>
     <script>
-       
+
     </script>
 </body>
 

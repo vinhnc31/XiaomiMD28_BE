@@ -129,7 +129,7 @@ exports.getAllData = async (req, res) => {
     if (!totalAccount || !totalProduct || !totalOrder || !totalStaff || !listAccount || !listOrder) {
       return res.status(400).json({ status: 400, message: "Connect fail database or data not found" });
     }
-    console.log(listAccount)
+    console.log(listOrder)
     res.render("home", {
       totalAccount: totalAccount,
       totalProduct: totalProduct,
