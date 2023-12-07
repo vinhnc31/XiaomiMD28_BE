@@ -53,157 +53,261 @@
                     <div class="tile-body">
                         <div class="row element-button">
                             <div class="col-sm-2">
-                                <a class="btn btn-secondary btn-sm" href="form-add-don-hang.html" type="button"
-                                    title="Thêm">
-                                    Tất cả</a>
+                                <% if(status===-1){%>
+                                    <a class="btn btn-delete btn-sm active" href="/order" type="button"
+                                        style="color:white; text-decoration: underline;" title="Thêm">
+                                        Tất cả</a>
+                                    <%}else{%>
+                                        <a class="btn btn-delete btn-sm active" href="/order" type="button"
+                                            style="color:white;" title="Thêm">
+                                            Tất cả</a>
+                                        <% }%>
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-info btn-sm" type="button" title="Nhập"> Chờ xác nhận</a>
+                                <% if(status===0){%>
+                                    <a class="btn btn-info btn-sm active" type="button" href="/order/choxacnhan"
+                                        title="Nhập" style="color:white;text-decoration: underline ;"> Chờ
+                                        xác nhận</a>
+                                    <%}else{%>
+                                        <a class="btn btn-info btn-sm active" type="button" href="/order/choxacnhan"
+                                            title="Nhập" style="color:white;"> Chờ
+                                            xác nhận</a>
+                                        <% }%>
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-warning btn-sm " type="button" title="Đang giao hàng"> Đang giao
-                                    hàng</a>
+                                <% if(status===1){%>
+                                    <a class="btn btn-warning btn-sm " type="button" href="/order/danggiaohang"
+                                        title="Đang giao hàng" style="color:white;text-decoration: underline ;"> Đang
+                                        giao
+                                        hàng</a>
+                                    <%}else{%>
+                                        <a class="btn btn-warning btn-sm " type="button" href="/order/danggiaohang"
+                                            title="Đang giao hàng" style="color:white;">
+                                            Đang giao
+                                            hàng</a>
+                                        <% }%>
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-success btn-sm " type="button" title="Đã oàn thành"> Đã hoàn thành</a>
+                                <% if(status===2){%>
+                                    <a class="btn btn-success btn-sm " type="button" href="/order/dahoanthanh"
+                                        style="color:white;text-decoration: underline ;" title="Đã oàn thành"> Đã hoàn
+                                        thành</a>
+                                    <%}else{%>
+                                        <a class="btn btn-success btn-sm " type="button" href="/order/dahoanthanh"
+                                            title="Đã oàn thành"> Đã hoàn thành</a>
+                                        <% }%>
                             </div>
                             <div class="col-sm-2">
-                                <a class="badge bg-danger btn-sm " type="button" title="Đã hủy"> Đã hủy</a>
+                                <% if(status===3){%>
+                                    <a class="btn btn-danger btn-sm " type="button" href="/order/dahuy" title="Đã hủy"
+                                        style="color:white;text-decoration: underline ;">
+                                        Đã hủy</a>
+                                    <%}else{%>
+                                        <a class="btn btn-danger btn-sm " type="button" href="/order/dahuy"
+                                            title="Đã hủy">
+                                            Đã hủy</a>
+                                        <% }%>
                             </div>
 
                         </div>
                         <table class="table table-hover table-bordered" id="sampleTable">
                             <thead>
                                 <tr>
-
                                     <th>ID đơn hàng</th>
                                     <th>Khách hàng</th>
                                     <th>Đơn hàng</th>
-
                                     <th>Tổng tiền</th>
                                     <th>Tình trạng</th>
-                                    <th>Tính năng</th>
+                                    <%if(status===0){%>
+                                        <th>Tính năng</th>
+                                        <%}%>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 <% if(data){ data.map(function(product){%>
-                                    <td>
-                                        <%=product.order.id%>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <% product.listproduct.map(function(product){%>
-                                            <label>
-                                                <%=product.name%> X <%=product.quantity%>
-                                            </label>
-
-                                            <%})%>
-                                    </td>
-
-                                    <td>
-                                        <%if (product.order.status=="0" ){ %>
-                                            <span class="badge bg-info">
-                                                Chờ xác nhận
-                                            </span>
-                                            <% } if(product.order.status=="1" ){%>
-                                                <span class="badge bg-warning ">
-                                                    Đang giao hàng
+                                    <tr>
+                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
+                                            <%=product.order.id%>
+                                        </td>
+                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
+                                            <%=product.order.Account.name%>
+                                        </td>
+                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
+                                            <% product.listproduct.map(function(product){%>
+                                                <span>
+                                                    <%=product.name%>
                                                 </span>
-                                                <%}if(product.order.status=="2"){%>
-                                                    <span class="badge bg-success ">
-                                                        Đã hoàn thành
+
+                                                <%})%>
+                                        </td>
+                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
+                                            <%=product.order.total%>
+                                        </td>
+
+                                        <td data-toggle="modal" data-target="#chitietorder<%=product.order.id%>">
+                                            <%if (product.order.status=="0" ){ %>
+                                                <span class="badge bg-info">
+                                                    Chờ xác nhận
+                                                </span>
+                                                <% } if(product.order.status=="1" ){%>
+                                                    <span class="badge bg-warning ">
+                                                        Đang giao hàng
                                                     </span>
-                                                    <%}if(product.order.status=="3"){%>
-                                                        <span class="badge bg-danger ">
-                                                            Đã hủy
+                                                    <%}if(product.order.status=="2"){%>
+                                                        <span class="badge bg-success ">
+                                                            Đã hoàn thành
                                                         </span>
-                                                        <%}%>
-                                    </td>
-                                    <td>
-                                        <%=product.order.price%>
-                                    </td>
+                                                        <%}if(product.order.status=="3"){%>
+                                                            <span class="badge bg-danger ">
+                                                                Đã hủy
+                                                            </span>
+                                                            <%}%>
+                                        </td>
 
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Hủy"
-                                            data-toggle="modal" data-target="#<%=product.order.id%>"><i
-                                                class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <!-- model xóa -->
-                                        <div class="modal fade" id="<%=product.order.id%>" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
-                                            data-keyboard="false">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content text-center">
-                                                    <div class="modal-header text-center  ">
-                                                        <h2 class="modal-title w-100">
-                                                            fa</h2>
+                                        <%if(status===0){%>
+                                            <td>
+                                                <h6 class="btn" type="button" title="Xác nhận đơn hàng"
+                                                    style="padding: 0;margin: 0;" data-toggle="modal"
+                                                    data-target="#xacnhan<%=product.order.id%>">
+                                                    Xác nhận
+                                                </h6>
+                                                <br>
+                                                <h6 class="btn" type="button" title="Hủy đơn hàng" data-toggle="modal"
+                                                    style="padding: 0;margin: 0;"
+                                                    data-target="#huy<%=product.order.id%>">Hủy</h6>
+                                                <br>
+                                                <h6 class="btn" style="padding: 0;margin: 0;">In hóa đơn</h6>
+                                                <!-- model xác nhận -->
+                                                <div class="modal fade" id="xacnhan<%=product.order.id%>" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                    data-backdrop="static" data-keyboard="false">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content text-center">
+                                                            <div class="modal-header text-center  ">
+                                                                <h2 class="modal-title w-100">
+                                                                    fa</h2>
+                                                            </div>
+                                                            <div class="modal-body text-center text-dark ">
+                                                                <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                <h5>Bạn có chắc muốn xác nhận đơn hàng này không?
+                                                                </h5>
 
-                                                    </div>
+                                                                <BR>
+                                                                <form class="text-right"
+                                                                    action="/order/changeStatus/<%=product.order.id%>"
+                                                                    method="post">
 
-                                                    <div class="modal-body text-center text-dark ">
-                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                        <h5>Bạn có chắc muốn hủy đơn hàng này không?
-                                                        </h5>
-
-                                                        <BR>
-                                                        <form class="text-right"
-                                                            action="/order/update/<%=product.order.id%>/canceled"
-                                                            method="post">
-
-                                                            <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
-                                                                bỏ</a>
-                                                            <input type="hidden" value="huy" name="huy">
-                                                            <button class="btn btn-save" type="submit">Đồng
-                                                                ý</button>
-                                                        </form>
-                                                        <BR>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Xác nhận"
-                                            data-toggle="modal" data-target="#xacnhan"><i
-                                                class="fas fa-arrow-right"></i></button>
-                                        <!-- model xác nhận -->
-                                        <div class="modal fade" id="xacnhan" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
-                                            data-keyboard="false">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content text-center">
-                                                    <div class="modal-header text-center  ">
-                                                        <h2 class="modal-title w-100">
-                                                            fa</h2>
-
-                                                    </div>
-
-                                                    <div class="modal-body text-center text-dark ">
-                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                        <h5>Bạn có chắc đã chuyển đơn hàng này không?
-                                                        </h5>
-
-                                                        <BR>
-                                                        <form class="text-right"
-                                                            action="/order/update/<%=product.order.id%>/intransit"
-                                                            method="post">
-
-                                                            <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
-                                                                bỏ</a>
-                                                            <input type="hidden" value="xacnhan" name="xacnhan">
-                                                            <button class="btn btn-save" type="submit">Đồng
-                                                                ý</button>
-                                                        </form>
-                                                        <BR>
-                                                    </div>
-                                                    <div class="modal-footer">
+                                                                    <a class="btn btn-cancel" data-dismiss="modal"
+                                                                        href="#">Hủy
+                                                                        bỏ</a>
+                                                                    <input type="hidden" value="1" name="status">
+                                                                    <button class="btn btn-save" type="submit">Đồng
+                                                                        ý</button>
+                                                                </form>
+                                                                <BR>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                                <div class="modal fade" id="huy<%=product.order.id%>" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                    data-backdrop="static" data-keyboard="false">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content text-center">
+                                                            <div class="modal-header text-center  ">
+                                                                <h2 class="modal-title w-100">
+                                                                    fa</h2>
+
+                                                            </div>
+
+                                                            <div class="modal-body text-center text-dark ">
+                                                                <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                <h5>Bạn có chắc muốn hủy đơn hàng này không?
+                                                                </h5>
+
+                                                                <BR>
+                                                                <form class="text-right"
+                                                                    action="/order/changeStatus/<%=product.order.id%>"
+                                                                    method="post">
+
+                                                                    <a class="btn btn-cancel" data-dismiss="modal"
+                                                                        href="#">Hủy
+                                                                        bỏ</a>
+                                                                    <input type="hidden" value="3" name="status">
+                                                                    <button class="btn btn-save" type="submit">Đồng
+                                                                        ý</button>
+                                                                </form>
+                                                                <BR>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- model chi tiết -->
+                                                <div class="modal fade" id="chitietorder<%=product.order.id%>"
+                                                    tabindex="-1" role="dialog"
+                                                    aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
+                                                    data-keyboard="false">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content ">
+                                                            <div class="modal-header text-center  ">
+                                                                <h2 class="modal-title w-100 text-dark">
+                                                                    Chi tiết đơn hàng</h2>
+                                                            </div>
+                                                            <div class="modal-body  text-dark ">
+                                                                <h4 class="modal-title w-100">Mã đơn hàng:
+                                                                    <%=product.order.id%>
+                                                                </h4>
+                                                                <table class="table table-hover table-bordered"
+                                                                    id="sampleTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Tên sản phẩm</th>
+                                                                            <th>Số lượng</th>
+                                                                            <th>Màu</th>
+                                                                            <th>Phiên bản</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <% product.listproduct.map(function(product){%>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <%=product.name%>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%=product.quantity%>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%=product.color%>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%=product.config%>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <%})%>
+                                                                    </tbody>
+                                                                </table>
+                                                                <BR>
+                                                                <a class="btn btn-cancel" data-dismiss="modal"
+                                                                    href="#">Hủy
+                                                                    bỏ</a>
+                                                                <BR>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <%}%>
+
+
+                                                <!-- model xem chi tiết -->
                                     </tr>
                                     <%})}%>
 

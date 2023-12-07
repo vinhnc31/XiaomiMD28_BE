@@ -175,7 +175,9 @@ exports.indexUpdateProduct = async (req, res, next) => {
   const listCategory = await Category.findAll();
   if (listCategory) {
   } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+    return res
+      .status(400)
+      .json({ status: 400, message: "false connexting db" });
   }
 
   res.render("updateProduct", {
@@ -183,6 +185,7 @@ exports.indexUpdateProduct = async (req, res, next) => {
     product: product,
     title: "Sửa sản phẩm",
   });
+  //res.status(200).json(product);
 };
 
 exports.updateProduct = async (req, res, next) => {
