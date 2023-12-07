@@ -7,4 +7,6 @@ router.get("/totalOrder", homeController.getOrder);
 router.get("/totalStaff", homeController.getStaff);
 router.get("/Order", homeController.getOrderNew);
 router.get("/AccountNew", homeController.getAccountNew);
+router.get("/", homeController.getAllData);
 module.exports = router;
+  

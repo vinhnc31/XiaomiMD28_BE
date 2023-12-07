@@ -109,3 +109,37 @@ exports.getOrderNew = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
+exports.getAllData = async (req, res) => {
+  try {
+    const totalAccount = await Account.count("id");
+    const totalProduct = await Product.count("id");
+    const totalOrder = await Orders.count("id");
+    const totalStaff = await Staff.count("id");
+
+    const listAccount = await Account.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+
+    const listOrder = await Orders.findAll({
+      include: [{ model: Account, as: "account" }],
+      order: [['createdAt', 'DESC']]
+    });
+
+    if (!totalAccount || !totalProduct || !totalOrder || !totalStaff || !listAccount || !listOrder) {
+      return res.status(400).json({ status: 400, message: "Connect fail database or data not found" });
+    }
+    console.log(listAccount)
+    res.render("home", {
+      totalAccount: totalAccount,
+      totalProduct: totalProduct,
+      totalOrder: totalOrder,
+      totalStaff: totalStaff,
+      listAccount: listAccount,
+      listOrder: listOrder,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
+  }
+}; 

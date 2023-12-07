@@ -85,8 +85,8 @@ app.use("/api", config);
 app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
-app.use("/api", staff);
-app.use("/api", salary);
+app.use("/", staff);
+app.use("/", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
@@ -94,9 +94,6 @@ app.use("/", loginView);
 app.use("/", voucherView);
 app.get("/", function (req, res) {
   res.render("login", { message: "", email: "", password: "" });
-});
-app.get("/homeTest", function (req, res) {
-  res.render("home");
 });
 
 app.use("/products", productView);

@@ -11,9 +11,9 @@
   <ul class="app-menu">
     <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
         <span class="app-menu__label">MD VN</span></a></li>
-    <li><a class="app-menu__item " href="http://localhost:3000/homeTest"><i class='app-menu__icon bx bx-tachometer'></i><span
+    <li><a class="app-menu__item " href="http://localhost:3000/home"><i class='app-menu__icon bx bx-tachometer'></i><span
           class="app-menu__label">Bảng điều khiển</span></a></li>
-    <li><a class="app-menu__item " href="http://localhost:3000/api/staff" ><i class='app-menu__icon bx bx-id-card'></i> <span
+    <li><a class="app-menu__item " href="http://localhost:3000/staff" ><i class='app-menu__icon bx bx-id-card'></i> <span
           class="app-menu__label">Quản lý nhân viên</span></a></li>
     <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
           class="app-menu__label">Quản lý khách hàng</span></a></li>
@@ -25,7 +25,7 @@
     <li><a class="app-menu__item" href="http://localhost:3000/InternalManagement"><i class='app-menu__icon bx bx-run'></i><span
           class="app-menu__label">Quản lý nội bộ
         </span></a></li>
-    <li><a class="app-menu__item active" href="http://localhost:3000/api/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+    <li><a class="app-menu__item active" href="http://localhost:3000/salary"><i class='app-menu__icon bx bx-dollar'></i><span
           class="app-menu__label">Bảng kê lương</span></a></li>
     <li><a class="app-menu__item" href="http://localhost:3000/salesTest"><i
           class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
@@ -48,7 +48,7 @@
               <div class="row element-button">
                 <div class="col-sm-2">
   
-                  <a class="btn btn-add btn-sm" href="form-add-tien-luong.html" title="Thêm"><i class="fas fa-plus"></i>
+                  <a class="btn btn-add btn-sm" href="/addSalary" title="Thêm"><i class="fas fa-plus"></i>
                     Tạo mới</a>
                 </div>
                 
@@ -57,7 +57,9 @@
                       class="fas fa-trash-alt"></i> Xóa tất cả </a>
                 </div>
               </div>
+
                         <table class="table table-hover table-bordered" id="sampleTable">
+                          
                             <thead>
                                 <tr>
                                     <th width="10"><input type="checkbox" id="all"></th>
@@ -66,7 +68,6 @@
                                     <th>Chức vụ</th>
                                     <th>Tiền lương</th>
                                     <th>Trừ lương</th>
-                                    <th>Tiền thưởng</th>
                                     <th>Tổng nhận</th>
                                     <th>Trạng thái</th>
                                     <th>Chức năng</th>
@@ -81,13 +82,47 @@
                                     <td><%= salary.staff.position %></td>
                                     <td><%= salary.salary %> đ</td>
                                     <td><%= salary.salaryDeduction %> đ</td>
-                                    <td><%= salary.bonus %> đ</td>
                                     <td><%= salary.totalPrice %> đ</td>
-                                    <td><span class="badge bg-success"><%= salary.status %></span></td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
+                                      <% if (salary.status === 1) { %>
+                                        <span class="badge bg-success">Đã nhận tiền </span>
+                                      <% } else { %>
+                                        <span class="badge bg-warning">Chưa nhận tiền</span>
+                                      <% } %>
+                                      <td>
+                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa" data-toggle="modal"
+                                          data-target="#<%=salary.id%>"><i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <!-- model xóa -->
+                                        <div class="modal fade" id="<%=salary.id%>" tabindex="-1" role="dialog"
+                                          aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false">
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content text-center">
+                                              <div class="modal-header text-center  ">
+                                                <h2 class="modal-title w-100">
+                                                  fa</h2>
+                                              </div>
+                                              <div class="modal-body text-center text-dark ">
+                                                <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                <h5>Bạn có chắc muốn xóa không?
+                                                </h5>
+                                                <BR>
+                                                <form class="text-right" action="/salary/<%=salary.id%>" method="post">
+                                                  <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
+                                                    bỏ</a>
+                                                  <input type="hidden" value="<%=salary.id%>" name="<%=salary.id%>">
+                                                  <button class="btn btn-save" type="submit">Đồng ý</button>
+                                                </form>
+                                                <BR>
+                                              </div>
+                                              <div class="modal-footer">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                          href="/updateSalary/<%=salary.id%>"><i class="fas fa-edit"></i></a>
+                                      </td>
                                 </tr>
                             <% }); %>
                              
@@ -114,44 +149,7 @@
   <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">$('#sampleTable').DataTable();</script>
   <script>
-    function deleteRow(r) {
-      var i = r.parentNode.parentNode.rowIndex;
-      document.getElementById("myTable").deleteRow(i);
-    }
-    jQuery(function () {
-      jQuery(".trash").click(function () {
-        swal({
-          title: "Cảnh báo",
-         
-          text: "Bạn có chắc chắn là muốn xóa?",
-          buttons: ["Hủy bỏ", "Đồng ý"],
-        })
-          .then((willDelete) => {
-            if (willDelete) {
-              swal("Đã xóa thành công.!", {
-                
-              });
-            }
-          });
-      });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-      $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-      e.stopImmediatePropagation();
-    });
-
-    //EXCEL
-    // $(document).ready(function () {
-    //   $('#').DataTable({
-
-    //     dom: 'Bfrtip',
-    //     "buttons": [
-    //       'excel'
-    //     ]
-    //   });
-    // });
-
+    
 
     //Thời Gian
     function time() {
