@@ -32,6 +32,7 @@ const orderView = require("./routers/orderView.router");
 const loginView = require("./routers/login.router");
 const voucherView = require("./routers/voucher.router");
 
+const statistical = require("./routers/statistical.router");
 const staff = require("./routers/staff.router");
 const PORT = process.env.POST || 3000;
 const path = require("path");
@@ -90,6 +91,7 @@ app.use("/", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
+app.use("/statistical", statistical);
 app.use("/", loginView);
 app.use("/", voucherView);
 app.get("/", function (req, res) {

@@ -94,10 +94,12 @@
                             <%= new Intl.NumberFormat('en-US').format(order.total) %> VNĐ
                           </td>
                           <td>
-                            <span class="badge <%= order.statusOrder === 0 ? 'bg-info' : order.statusOrder === 1 ? 'bg-warning' : order.statusOrder === 2 ? 'bg-success' : 'bg-danger' %>">
-                              <%= order.statusOrder === 0 ? 'Chờ xử lý' : order.statusOrder === 1 ? 'Đang vận chuyển' : order.statusOrder === 2 ? 'Đã nhận' : 'Đã hủy' %>
+                            <span
+                              class="badge <%= order.status === '0' ? 'bg-info' : order.status === '1' ? 'bg-warning' : order.status === '2' ? 'bg-success' : 'bg-danger' %>">
+                              <%= order.status==='0' ? 'Chờ xác nhận' : order.status==='1' ? 'Đang vận chuyển' :
+                                order.statusOrder==='2' ? 'Đã nhận' : 'Đã hủy' %>
                             </span>
-                            
+
                           </td>
                         </tr>
                         <% }) %>
@@ -134,16 +136,14 @@
                             <%= customer.name %>
                           </td>
                           <td>
-                            <td>
-                              <% if (customer.dateOfBirth) { %>
-                                <% const date = new Date(customer.dateOfBirth); %>
+                            <% if (customer.dateOfBirth) { %>
+                              <% const date=new Date(customer.dateOfBirth); %>
                                 <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
-                              <% } else { %>
-                                Ngày sinh không khả dụng
-                              <% } %>
-                            </td>
-                            
+                                      <% } else { %>
+                                        Ngày sinh không khả dụng
+                                        <% } %>
                           </td>
+
                           <td><span class="tag tag-success">
                               <%= customer.phone %>
                             </span></td>
@@ -199,6 +199,8 @@
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <script>
       // Đặt hàm formatDate dưới dạng biến global
@@ -213,61 +215,120 @@
     <script type="text/javascript">
 
 
+      async function fetchDataAndRenderChart() {
+        try {
+          // Gọi API để lấy dữ liệu từ server
+          const response = await fetch('http://localhost:3000/home/RevenueInMonth');
+          const data = await response.json();
+          const labels = [];
+          const revenueData =[];
+          data.data.forEach(item => {
+            labels.push(item.month);
+            revenueData.push(item.revenue);
+          });
 
-      new Chart("myChart", {
-        type: "line",
-        data: {
-          labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6","Tháng 7", "Tháng 8", "Tháng 9","Tháng 10", "Tháng 11", "Tháng 12"],
-          datasets: [{
-            label: "Doanh thu thực tế",
-            data: [300, 700, 2000, 5000, 6000, 4000, 2000, 1000, 200, 100, 500, 1000, 1026, 320, 5234],
-            borderColor: "green",
-            fill: false
-          }]
-        },
-        options: {
-          legend: { display: true }
+          const intLabels = labels.map(month => parseInt(month));
+          updateChart(intLabels, revenueData);
+        } catch (error) {
+          console.error('Error fetching data from API:', error);
         }
-      });
+      }
+
+      // Hàm để cập nhật biểu đồ với dữ liệu mới
+      function updateChart(labels, data) {
+        const myChart = new Chart("myChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Doanh thu thực tế",
+              data: data,
+              borderColor: "green",
+              fill: false
+            }]
+          },
+          options: {
+            legend: { display: true }
+          }
+        });
+      }
+
+      // Gọi hàm để bắt đầu quá trình
+      fetchDataAndRenderChart();
 
 
 
-      var xValues = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"];
-      var yValues = [55, 49, 44, 24, 15, 50];
-      var zValues = [30, 40, 60, 35, 70, 39];
-      var aValues = [15, 20, 25, 30, 80, 19];
 
 
-      new Chart("myChartb", {
-        type: "bar",
-        data: {
-          labels: xValues,
-          datasets: [
-            {
-              label: "Chờ xác nhận",
-              backgroundColor: "purple",
-              data: yValues,
-            },
-            {
-              label: "Đang vận chuyển",
-              backgroundColor: "yellow",
-              data: zValues,
-            },
-            {
-              label: "Đã nhận",
-              backgroundColor: "green",
-              data: aValues,
-            }, {
-              label: "Huỷ",
-              backgroundColor: "red",
-              data: aValues,
-            },
-          ],
-        },
-        options: {
-          legend: { display: true }
-        },
-      });
+
+
+
+      async function fetchDataAndRenderBarChart() {
+        try {
+          // Gọi API để lấy dữ liệu từ server
+          const response = await fetch('http://localhost:3000/home/OrderInMonth');
+          const data = await response.json();
+
+          // Trích xuất dữ liệu từ API response (phụ thuộc vào cấu trúc của API)
+          const xValues = [];
+          const yValues = [];
+          const zValues = [];
+          const aValues = [];
+          const cancelValues = [];
+
+          data.data.forEach(item => {
+            xValues.push(item.month);
+            yValues.push(item.totalOrder.orderCountByStatus);
+            zValues.push(item.totalOrder.orderCountByStatus1);
+            aValues.push(item.totalOrder.orderCountByStatus2);
+            cancelValues.push(item.totalOrder.orderCountByStatus3);
+
+          });
+
+          // Cập nhật biểu đồ với dữ liệu mới
+          updateBarChart(xValues, yValues, zValues, aValues, cancelValues);
+        } catch (error) {
+          console.error('Lỗi khi lấy dữ liệu từ API:', error);
+        }
+      }
+      // Hàm để cập nhật biểu đồ cột với dữ liệu mới
+      function updateBarChart(xValues, yValues, zValues, aValues, cancelValues) {
+        new Chart("myChartb", {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                label: "Chờ xác nhận",
+                backgroundColor: "purple",
+                data: yValues,
+              },
+              {
+                label: "Đang vận chuyển",
+                backgroundColor: "yellow",
+                data: zValues,
+              },
+              {
+                label: "Đã nhận",
+                backgroundColor: "green",
+                data: aValues,
+              },
+              {
+                label: "Huỷ",
+                backgroundColor: "red",
+                data: cancelValues,
+              },
+            ],
+          },
+          options: {
+            legend: { display: true }
+          },
+        });
+      }
+
+      // Gọi hàm để bắt đầu quá trình
+      fetchDataAndRenderBarChart();
+
 
     </script>
     <script type="text/javascript">
