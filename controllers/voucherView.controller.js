@@ -38,10 +38,10 @@ exports.getData = async (req, res) => {
     let promotion = [];
     for (let i = 0; i < listPromotion.length; i++) {
       let formattedStartDate = moment(listPromotion[i].startDate).format(
-        "HH:mm, DD-MM-YYYY"
+        "DD-MM-YYYY"
       );
       let formattedEndDate = moment(listPromotion[i].endDate).format(
-        "HH:mm, DD-MM-YYYY"
+        "DD-MM-YYYY"
       );
 
       let newitem = {

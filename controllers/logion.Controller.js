@@ -39,7 +39,7 @@ exports.login = async (req, res, next) => {
         password: req.body.password,
       });
     }
-    return res.redirect("/products");
+    return res.redirect("/home");
   } catch (error) {
     console.log(error);
     return res
