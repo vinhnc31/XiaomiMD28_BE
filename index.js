@@ -107,7 +107,7 @@ app.use("/home", home);
 app.use("/statistical", statistical);
 app.use("/", loginView);
 app.use("/", voucherView);
-app.get("/", middleware.isAuth, function (req, res) {
+app.get("/",  function (req, res) {
   res.render("login", {
     message: "",
     email: "",
