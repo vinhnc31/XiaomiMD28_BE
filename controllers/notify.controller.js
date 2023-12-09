@@ -1,10 +1,5 @@
-const admin = require("firebase-admin");
 const FCM = require("fcm-node");
 const { Account, notifyAccount } = require("../models");
-const serviceAccount = require("../config/xioami-md28-firebase-adminsdk-xzypw-b20593eec4.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 //const fcm = new FCM(process.env.FCM);
 const fcm = new FCM(
@@ -66,7 +61,6 @@ exports.sendMessage = async (req, res) => {
 exports.sendMessageAll = async (req, res) => {
   const { title, content } = req.body;
   const AccountIds = req.body.AccountIds; // Assuming AccountIds is an array of user IDs
-
   try {
     // Fetch FCM tokens for all users
     const users = await Account.findAll({

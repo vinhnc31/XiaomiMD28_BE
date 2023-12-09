@@ -39,6 +39,8 @@ exports.login = async (req, res, next) => {
         password: req.body.password,
       });
     }
+    req.session.loggedin = true;
+    req.session.user = result;
     return res.redirect("/home");
   } catch (error) {
     console.log(error);
@@ -46,4 +48,11 @@ exports.login = async (req, res, next) => {
       .status(500)
       .json({ status: 500, message: "Internal server error" });
   }
+};
+exports.logout = (req, res) => {
+  console.log("ok");
+  req.session.destroy((err) => {
+    if (err) res.redirect("/home");
+    res.redirect("/");
+  });
 };

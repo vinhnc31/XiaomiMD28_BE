@@ -178,7 +178,7 @@
                                                         <img src="<%=product.images%>" alt="" width="100px;">
                                                     </td>
                                                     <td>
-                                                        <%=product.price%>
+                                                        <%=new Intl.NumberFormat('en-US').format(product.price)%>
                                                     </td>
                                                     <td>
                                                         <%=product.Category.name%>

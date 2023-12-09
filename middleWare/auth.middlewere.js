@@ -39,7 +39,25 @@ const apiAuth = async (req, res, next) => {
     return res.status(401).json({ status: 401, message: error.message });
   }
 };
+const loggedin = (req, res, next) => {
+  if (req.session.loggedin) {
+    res.locals.user = req.session.user;
+    next();
+  } else {
+    res.redirect("/");
+  }
+};
+const isAuth = (req, res, next) => {
+  if (req.session.loggedin) {
+    res.locals.user = req.session.user;
+    res.redirect("/home");
+  } else {
+    next();
+  }
+};
 
 module.exports = {
   apiAuth,
+  loggedin,
+  isAuth,
 };
