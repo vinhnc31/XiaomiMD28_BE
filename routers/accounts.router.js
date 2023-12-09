@@ -97,7 +97,7 @@ router.post("/login-google", accountGoogle.generateToken);
 router.get("/verify/:id/:token", account.verifyEmail);
 router.get("/logout", authMidleWare.apiAuth, account.logout);
 router.post(
-  "/account/changePassword",
+  "/account/changePassword/:id",
   authMidleWare.apiAuth,
   account.changePassword
 );
