@@ -49,13 +49,13 @@
                     <a href="#">
                         <b>Danh sách sản phẩm</b></a>
                 </li>
-                <li class="breadcrumb-item"><a href="#">
+                <li class="breadcrumb-item"><a href="/products/add">
                         Thêm sản phẩm
                     </a></li>
-                <li class="breadcrumb-item"><a href="#">
+                <li class="breadcrumb-item"><a href="/products/add/colorProduct/<%=productId%>">
                         Màu sản phẩm
                     </a></li>
-                <li class="breadcrumb-item"><a href="#">
+                <li class="breadcrumb-item active"><a href="#">
                         Phiên bản
                     </a></li>
             </ul>
@@ -118,7 +118,7 @@
                                                         <%=product.Config.nameConfig%>
                                                     </td>
                                                     <td>
-                                                        <%=product.price%>
+                                                        <%=new Intl.NumberFormat('en-US').format(product.price)%>
                                                     </td>
                                                     <td>
                                                         <%=product.quantity%>
@@ -141,7 +141,8 @@
                                                                     </div>
                                                                     <div class="modal-body text-center text-dark ">
                                                                         <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                                        <h5>Bạn có chắc muốn xóa sản phẩm này không?
+                                                                        <h5>Bạn có chắc muốn xóa phiên bản sản phẩm này
+                                                                            không?
                                                                         </h5>
                                                                         <BR>
                                                                         <form class="text-right"
@@ -171,6 +172,8 @@
                                         </tbody>
                                     </table>
                                     <a class="btn btn-save" href="/products">Lưu lại</a>
+                                    <a class="btn btn-cancel" href="/products/add/colorProduct/<%=productId%>">Quay
+                                        lại</a>
                                 </div>
                             </div>
                             <div class="row">
@@ -244,7 +247,7 @@
                                     <option>-- Chọn phiên bản --</option>
                                     <% config.map(function(config){%>
                                         <option value="<%=config.id %>">
-                                            <%=config.name %>
+                                            <%=config.nameConfig %>
                                         </option>
                                         <%})%>
                                 </select>

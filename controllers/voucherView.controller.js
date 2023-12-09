@@ -1,7 +1,11 @@
 const cloudinary = require("cloudinary").v2;
-const { async } = require("@firebase/util");
-const { Promotion } = require("../models");
+const { Promotion, Account, notifyAccount } = require("../models");
 const moment = require("moment");
+const FCM = require("fcm-node");
+//const fcm = new FCM(process.env.FCM);
+const fcm = new FCM(
+  "AAAAjF46CC4:APA91bGm5n9UYevBNVrCWA_MWgGw8SJRN3_L28XU1pJ8pwsTHWdoSZMqPibQoB3az5akJtcNMVWtIPDA9jQb9dy2zTOrh5w3Eui5wAh9WeaUux6wpX9bPgaxFVIJNDClWac2HzlZ6Kq9"
+);
 exports.getData = async (req, res) => {
   try {
     let _name = req.query.name;
@@ -109,6 +113,42 @@ exports.createPromotion = async (req, res) => {
     console.log(newpromotion);
     const createPromotion = await Promotion.create(newpromotion);
 
+    let title = "Thông báo!";
+    let content = "Đang có voucher mới cùng vào mua sắm nào!!!!!";
+    // Assuming AccountIds is an array of user IDs
+    // Fetch FCM tokens for all users
+    const users = await Account.findAll();
+    const registrationTokens = users.map((user) => user.fcmToken);
+    const message = {
+      notification: {
+        title: title,
+        body: content,
+      },
+      android: {
+        notification: {
+          imageUrl:
+            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
+        },
+      },
+      registration_ids: registrationTokens,
+    };
+    // Send the notification to all users
+    fcm.send(message, async (err, response) => {
+      if (err) {
+        console.error("Error sending multicast message:", err);
+        return res
+          .status(500)
+          .json({ status: 500, message: "Internal server error" });
+      }
+      // Save the notification in the Notify model for each user
+      const notifications = registrationTokens.map((token, index) => ({
+        title: title,
+        content: content,
+        AccountId: users[index].id,
+      }));
+      await notifyAccount.bulkCreate(notifications);
+      console.log("Successfully sent multicast message:", response);
+    });
     return res.redirect("/voucher");
   } catch (error) {
     console.log(error);

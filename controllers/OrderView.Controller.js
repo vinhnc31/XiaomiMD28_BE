@@ -8,7 +8,13 @@ const {
   Color,
   ProductColorConfig,
   Config,
+  notifyAccount,
 } = require("../models/index");
+const FCM = require("fcm-node");
+//const fcm = new FCM(process.env.FCM);
+const fcm = new FCM(
+  "AAAAjF46CC4:APA91bGm5n9UYevBNVrCWA_MWgGw8SJRN3_L28XU1pJ8pwsTHWdoSZMqPibQoB3az5akJtcNMVWtIPDA9jQb9dy2zTOrh5w3Eui5wAh9WeaUux6wpX9bPgaxFVIJNDClWac2HzlZ6Kq9"
+);
 
 exports.index = async (req, res) => {
   try {
@@ -195,11 +201,68 @@ exports.updateStatus = async (req, res) => {
       { status: status },
       { where: { id: id } }
     );
+
     if (!updateOrder) {
       return res
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
+    const AccountId = whereId.AccountId;
+    let title = "";
+    let content = "";
+    if (status === "1") {
+      title = "Thông báo!";
+      content =
+        "Đơn hàng với mã " +
+        id +
+        " đã được xác nhận thành công. Đơn hàng đang được đưa tới đơn vị vận chuyển. Quý khách vui lòng kiểm tra thường xuyên để cập nhật trạng thái mới nhất.Xin cảm ơn Quý khách.";
+    }
+    if (status === "3") {
+      title = "Thông báo!";
+      content =
+        "Đơn hàng với mã " +
+        id +
+        " đã bị hủy. Mọi thắc mắc vui lòng liên hệ tới hotline : 1900 1006 . Xin cảm ơn Quý khách";
+    }
+
+    // Retrieve the user's fcmToken from the Account model
+    //const user = await Account.findByPk(AccountId);
+    const user = await Account.findByPk(AccountId);
+    const registrationToken = user.fcmToken;
+    console.log(registrationToken);
+    const message = {
+      notification: {
+        title: title,
+        body: content,
+      },
+      android: {
+        notification: {
+          imageUrl:
+            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
+        },
+      },
+      to: registrationToken,
+    };
+    console.log(message);
+    // Send the notification with a callback function
+    console.log(fcm);
+    fcm.send(message, async (err, response) => {
+      if (err) {
+        console.error("Error sending message:", err);
+        return res
+          .status(500)
+          .json({ status: 500, message: "Internal server error" });
+      }
+
+      // Save the notification in the Notify model
+      await notifyAccount.create({
+        title: title,
+        content: content,
+        AccountId: AccountId,
+      });
+
+      console.log("Successfully sent message:", response);
+    });
 
     return res.redirect("/order/choxacnhan");
     //return res.status(200).json({ status: 200, message: "update thành công" });

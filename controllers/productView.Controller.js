@@ -99,6 +99,7 @@ exports.indexAddProduct = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
+  const filedata = req.file;
   try {
     const { name, images, price, description, CategoryId } = req.body;
     console.log(req.body);
@@ -111,7 +112,7 @@ exports.addProduct = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    const filedata = req.file;
+
     console.log(filedata);
     let imageUrl = "";
     if (filedata) {
@@ -312,7 +313,7 @@ exports.addColor = async (req, res, next) => {
   const { newColor } = req.body;
   const productId = req.params.id;
   try {
-    const addColor = await Color.create({ name: newColor });
+    const addColor = await Color.create({ nameColor: newColor });
 
     return res.redirect("/products/add/colorProduct/" + productId);
   } catch (error) {
@@ -395,7 +396,7 @@ exports.addConfig = async (req, res) => {
   const { newConfig } = req.body;
   const ProductColorId = req.params.id;
   try {
-    const addConfig = await Config.create({ name: newConfig });
+    const addConfig = await Config.create({ nameConfig: newConfig });
 
     return res.redirect("/products/add/colorProduct_config/" + ProductColorId);
   } catch (error) {
@@ -420,11 +421,20 @@ exports.indexConfigProductColor = async (req, res) => {
         },
       ],
     });
+    const product = await productcolor.findOne({
+      where: {
+        id: productColorId,
+      },
+      include: {
+        model: Product,
+      },
+    });
 
     res.render("configProduct", {
       config: listConfig,
       productColorId: productColorId,
       data: productColorConfig,
+      productId: product.Product.id,
     });
   } catch (error) {
     console.log(error);
@@ -435,14 +445,20 @@ exports.indexConfigProductColor = async (req, res) => {
 };
 exports.addConfigProductColor = async (req, res) => {
   const { quantity, configId, price } = req.body;
-  const ProductColorId = req.params.id;
+  const productColorId = req.params.id;
+  console.log(productColorId);
   try {
-    if (!quantity || !price || !configId || !ProductColorId) {
+    if (!quantity || !price || !configId || !productColorId) {
       return res
         .status(400)
         .json({ status: 400, message: "Fields cannot be left blank" });
     }
-    const createConfig = { quantity, configId, ProductColorId, price };
+    const createConfig = {
+      quantity,
+      configId,
+      ProductColorId: productColorId,
+      price,
+    };
     const createProductColorConfig = await ProductColorConfig.create(
       createConfig
     );
@@ -451,7 +467,7 @@ exports.addConfigProductColor = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Error connecting to the database" });
     }
-    return res.redirect("/products/add/colorProduct_config/" + ProductColorId);
+    return res.redirect("/products/add/colorProduct_config/" + productColorId);
   } catch (error) {
     console.log(error);
     return res
