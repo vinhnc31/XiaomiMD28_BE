@@ -2,12 +2,15 @@ const {
   Product,
   Staff,
   Orders,
+  OrdersProduct,
   Internals,
   productcolor,
   Color,
   ProductColorConfig,
   Config,
+  sequelize,
 } = require("../models");
+const { Op, fn, col, literal } = require("sequelize");
 exports.getStaff = async (req, res) => {
   try {
     const totalStaff = await Staff.count("id");
@@ -134,21 +137,30 @@ exports.getProductSelling = async (req, res) => {
                   model: Config,
                 },
               ],
-              order: [["quantity", "DESC"]],
             },
           ],
         },
+        {
+          model: OrdersProduct,
+          as: "orders",
+        },
       ],
-      group: ["Product.id"],
+      attributes: [[fn("COUNT", col("orders.id")), "ordersCount"]],
+      order: [[literal("orderCount"), "DESC"]],
+      group: [
+        "Product.id",
+        "colorProducts.id",
+        "colorProducts.colorConfigs.id",
+      ],
       limit: 10,
     });
 
     console.log(listFilter);
 
-    if (!listFilter || listFilter.length === 0) {
+    if (!listFilter) {
       return res
-        .status(404)
-        .json({ status: 404, message: "No products found" });
+        .status(400)
+        .json({ status: 400, message: "connect fail database" });
     }
 
     return res.status(200).json({ status: 200, data: listFilter });
@@ -219,6 +231,70 @@ exports.getStaffNew = async (req, res) => {
     return res.status(200).json({ status: 200, data: listStaff });
   } catch (error) {
     console.error(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getRevenueInMonth = async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const startOfLast6Months = new Date();
+    startOfLast6Months.setMonth(currentDate.getMonth() - 11);
+    const revenueByMonth = [];
+    // Generate the list of months starting from 5 months ago until the current month
+    for (
+      let month = startOfLast6Months.getMonth();
+      month <= currentDate.getMonth();
+      month++
+    ) {
+      // Tạo ngày bắt đầu và ngày kết thúc của tháng hiện tại
+      const startOfMonth = new Date(currentDate.getFullYear(), month, 1);
+      const endOfMonth = new Date(currentDate.getFullYear(), month + 1, 0);
+
+      const importProductCountByStatus = await Product.sum("importPrice", {
+        where: {
+          createdAt: {
+            [Op.gte]: startOfMonth,
+            [Op.lte]: endOfMonth,
+          },
+        },
+      });
+
+      const orderCountByStatus = await Orders.sum("total", {
+        where: {
+          createdAt: {
+            [Op.gte]: startOfMonth,
+            [Op.lte]: endOfMonth,
+          },
+        },
+      });
+
+      const revenue = orderCountByStatus - importProductCountByStatus;
+
+      // Tạo đối tượng chứa thông tin tháng và số lượng đơn hàng
+      const monthOrderData = {
+        month: startOfMonth.getMonth() + 1,
+        expense: importProductCountByStatus || 0,
+        revenue: revenue || 0,
+      };
+
+      // Lưu đối tượng vào mảng orderData
+      revenueByMonth.push(monthOrderData);
+    }
+
+    if (revenueByMonth.length === 0) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "No revenue data found" });
+    }
+    return res.status(200).json({
+      status: 200,
+      data: revenueByMonth,
+    });
+  } catch (error) {
+    console.error("Error fetching revenue statistics:", error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });

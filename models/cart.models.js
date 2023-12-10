@@ -24,14 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     Cart.belongsTo(models.productcolor, {
       foreignKey: {
         name: "ProductColorId",
-        allowNull: false,
       },
     });
 
     Cart.belongsTo(models.ProductColorConfig, {
       foreignKey: {
         name: "ProductColorConfigId",
-        allowNull: false,
       },
     });
   };

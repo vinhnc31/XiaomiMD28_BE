@@ -14,6 +14,10 @@ const {
 } = require("../models");
 const jwt = require("jsonwebtoken");
 require("dotenv").config;
+
+const FCM = require("fcm-node");
+const fcm = new FCM(process.env.FCM);
+
 exports.getListOrder = async (req, res) => {
   try {
     const listOrder = await Orders.findAll({
@@ -281,7 +285,59 @@ exports.updateOrder = async (req, res) => {
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
+    const AccountId = whereId.AccountId;
+    let title = "";
+    let content = "";
+    if (status === "2") {
+      title = "Thông báo!";
+      content =
+        "Đơn hàng với mã " +
+        id +
+        " đã hoàn thành .Xin cảm ơn Quý khách đã tin tưởng dịch vụ của chúng tôi.";
+    }
+    if (status === "3") {
+      title = "Thông báo!";
+      content =
+        "Đơn hàng với mã " +
+        id +
+        " đã bị hủy. Mọi thắc mắc vui lòng liên hệ tới hotline : 1900 1006 . Xin cảm ơn Quý khách";
+    }
+    const user = await Account.findByPk(AccountId);
+    const registrationToken = user.fcmToken;
+    console.log(registrationToken);
+    const message = {
+      notification: {
+        title: title,
+        body: content,
+      },
+      android: {
+        notification: {
+          imageUrl:
+            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
+        },
+      },
+      to: registrationToken,
+    };
+    console.log(message);
+    // Send the notification with a callback function
+    console.log(fcm);
+    fcm.send(message, async (err, response) => {
+      if (err) {
+        console.error("Error sending message:", err);
+        return res
+          .status(500)
+          .json({ status: 500, message: "Internal server error" });
+      }
 
+      // Save the notification in the Notify model
+      await notifyAccount.create({
+        title: title,
+        content: content,
+        AccountId: AccountId,
+      });
+
+      console.log("Successfully sent message:", response);
+    });
     return res
       .status(200)
       .json({ status: 200, message: "Update successfully" });

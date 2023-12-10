@@ -88,7 +88,6 @@ app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
-app.use("/", account);
 app.use("/api", account);
 app.use("/api", address);
 app.use("/api", favorites);
@@ -99,15 +98,16 @@ app.use("/api", config);
 app.use("/api", product_color_config);
 app.use("/api", order);
 app.use("/api", vnPay);
-app.use("/", staff);
-app.use("/", salary);
 app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.use("/statistical", statistical);
+app.use("/", account);
 app.use("/", loginView);
 app.use("/", voucherView);
-app.get("/",  function (req, res) {
+app.use("/", staff);
+app.use("/", salary);
+app.get("/", function (req, res) {
   res.render("login", {
     message: "",
     email: "",

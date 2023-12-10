@@ -13,7 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     images: {
-      type: DataTypes.TEXT, // Chỉnh sửa kiểu dữ liệu thành TEXT nếu cần
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    importPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   });

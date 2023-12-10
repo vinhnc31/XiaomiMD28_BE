@@ -253,10 +253,24 @@ exports.getCategoryID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const { name, price, description, CategoryId, images } = req.body;
+    const {
+      name,
+      price,
+      description,
+      CategoryId,
+      images,
+      importPrice,
+      quantity,
+    } = req.body;
     const fileData = req.files; // Use req.files for multiple files
 
-    if (!name || !price || (!images && !fileData)) {
+    if (
+      !name ||
+      !price ||
+      (!images && !fileData) ||
+      !importPrice ||
+      !quantity
+    ) {
       // Handle other required fields
 
       return res
@@ -287,6 +301,8 @@ exports.addCategory = async (req, res) => {
       price,
       description,
       CategoryId,
+      importPrice,
+      quantity,
     };
 
     const addProduct = await Product.create(product);

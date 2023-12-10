@@ -1,5 +1,5 @@
 const { Account, Product, Staff, Orders } = require("../models");
-const { Op, literal } = require("sequelize");
+const { Op } = require("sequelize");
 exports.getAccount = async (req, res) => {
   try {
     const totalAccount = await Account.count("id");
@@ -123,13 +123,23 @@ exports.getAllData = async (req, res) => {
 
     const listOrder = await Orders.findAll({
       include: [{ model: Account, as: "account" }],
-      order: [['createdAt', 'DESC']]
+      order: [["createdAt", "DESC"]],
     });
 
-    if (!totalAccount || !totalProduct || !totalOrder || !totalStaff || !listAccount || !listOrder) {
-      return res.status(400).json({ status: 400, message: "Connect fail database or data not found" });
+    if (
+      !totalAccount ||
+      !totalProduct ||
+      !totalOrder ||
+      !totalStaff ||
+      !listAccount ||
+      !listOrder
+    ) {
+      return res.status(400).json({
+        status: 400,
+        message: "Connect fail database or data not found",
+      });
     }
-    console.log(listOrder)
+    console.log(listOrder);
     res.render("home", {
       totalAccount: totalAccount,
       totalProduct: totalProduct,
@@ -140,9 +150,11 @@ exports.getAllData = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ status: 500, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
-}; 
+};
 exports.getOrderInMonth = async (req, res) => {
   try {
     const currentDate = new Date();
@@ -242,7 +254,15 @@ exports.getRevenueInMonth = async (req, res) => {
       const startOfMonth = new Date(currentDate.getFullYear(), month, 1);
       const endOfMonth = new Date(currentDate.getFullYear(), month + 1, 0);
 
-      // Đếm số lượng đơn hàng theo từng trạng thái trong tháng hiện tại
+      const importProductCountByStatus = await Product.sum("importPrice", {
+        where: {
+          createdAt: {
+            [Op.gte]: startOfMonth,
+            [Op.lte]: endOfMonth,
+          },
+        },
+      });
+
       const orderCountByStatus = await Orders.sum("total", {
         where: {
           createdAt: {
@@ -252,10 +272,13 @@ exports.getRevenueInMonth = async (req, res) => {
         },
       });
 
+      const revenue = orderCountByStatus - importProductCountByStatus;
+
       // Tạo đối tượng chứa thông tin tháng và số lượng đơn hàng
       const monthOrderData = {
         month: startOfMonth.getMonth() + 1,
-        revenue: orderCountByStatus || 0,
+        expense: importProductCountByStatus || 0,
+        revenue: revenue || 0,
       };
 
       // Lưu đối tượng vào mảng orderData
