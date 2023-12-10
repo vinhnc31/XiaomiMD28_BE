@@ -51,8 +51,9 @@ exports.createVnPay = async (req, res) => {
   let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-  res.redirect(vnpUrl);
+  // res.redirect(vnpUrl);
   console.log(vnpUrl);
+  return res.status(200).json({ status: 200, data: vnpUrl });
 };
 
 exports.getVnPayReturn = (req, res) => {

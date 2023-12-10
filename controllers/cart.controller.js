@@ -10,7 +10,19 @@ const {
 const jwt = require("jsonwebtoken");
 exports.getCartByAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
   try {
+    // Giải mã token để lấy thông tin người dùng
+    const decodedToken = jwt.verify(token, process.env.SIGN_PRIVATE);
+
+    // Lấy thông tin người dùng từ decodedToken
+    const userId = decodedToken.id;
+    if (userId !== AccountId) {
+      return res.status(403).json({ status: 403, message: "Forbidden" });
+    }
     const account = Account.findByPk(AccountId);
     console.log("Account.........." + account);
     if (!account) {

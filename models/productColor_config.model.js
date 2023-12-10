@@ -1,14 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProductColorConfig = sequelize.define("ProductColorConfig", {
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+  const ProductColorConfig = sequelize.define(
+    "ProductColorConfig",
+    {
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-  });
+    { paranoid: true, timestamps: true }
+  );
 
   ProductColorConfig.associate = (models) => {
     ProductColorConfig.belongsTo(models.productcolor, {
