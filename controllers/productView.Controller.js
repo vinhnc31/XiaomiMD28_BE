@@ -284,8 +284,18 @@ exports.addCategory = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+exports.deleteCategory = async (req, res, next) => {
+  try {
+    const categoryId = req.params.id;
+    await Category.destroy({ where: { id: categoryId } });
+    res.redirect("");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error });
+  }
+};
 
-exports.color = async (req, res) => {
+exports.deleteColor = async (req, res) => {
   try {
     const productColor = await productcolor.findAll({
       include: [
