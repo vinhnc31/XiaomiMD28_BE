@@ -1,35 +1,6 @@
 const { Favorites, Product } = require("../models");
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
-exports.getFavorites = async (req, res) => {
-  try {
-    const listFavorites = await Favorites.findAll({
-      include: [
-        {
-          model: Product,
-        },
-      ],
-      attributes: [
-        "ProductId",
-        [sequelize.fn("COUNT", sequelize.col("ProductId")), "totalFavorites"],
-      ],
-      group: ["ProductId"],
-      order: [[sequelize.literal("totalFavorites"), "DESC"]],
-      limit: 10,
-    });
-    if (!listFavorites) {
-      return res
-        .status(404)
-        .json({ status: 404, message: "favorites not found" });
-    }
-    return res.status(200).json({ status: 200, data: listFavorites });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
-  }
-};
 exports.getAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
   try {

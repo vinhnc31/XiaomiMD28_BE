@@ -7,6 +7,7 @@ const {
   ProductColorConfig,
   Config,
   Comment,
+  Favorites,
 } = require("../models");
 
 const { Op, fn, col, literal } = require("sequelize");
@@ -14,12 +15,16 @@ const { Op, fn, col, literal } = require("sequelize");
 exports.getProduct = async (req, res) => {
   try {
     const name = req.query.name;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
+
     let listProduct;
+
     if (name) {
       listProduct = await Product.findAll({
         where: {
           name: {
-            [Op.like]: `%${name}%`, // Using 'like' for a partial match
+            [Op.like]: `%${name}%`,
           },
         },
         include: [{ model: Comment, as: "comments" }],
@@ -40,7 +45,7 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
-        group: ["Product.id"],
+        group: ["`Product`.`id`"], // Enclose table and column names in backticks
       });
     } else {
       listProduct = await Product.findAll({
@@ -62,15 +67,18 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
-        group: ["Product.id"],
+        offset: offset,
+        limit: limit,
+        group: ["`Product`.`id`"], // Enclose table and column names in backticks
       });
     }
 
-    if (!listProduct) {
+    if (!listProduct || listProduct.length === 0) {
       return res
-        .status(400)
-        .json({ status: 400, message: "false connecting db" });
+        .status(404)
+        .json({ status: 404, message: "Products not found" });
     }
+
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);
@@ -549,6 +557,40 @@ exports.getFilterInStart = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "false connecting db" });
     }
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getMostFavorites = async (req, res) => {
+  try {
+    const listProduct = await Product.findAll({
+      include: [{ model: Favorites, as: "favorites" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("favorites.id")), "FavoritesCount"],
+      ],
+      group: ["Product.id"],
+      order: [[literal("FavoritesCount"), "DESC"]],
+    });
+
+    if (!listProduct || listProduct.length === 0) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Products not found" });
+    }
+
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);

@@ -228,18 +228,12 @@ exports.updateStatus = async (req, res) => {
     // Retrieve the user's fcmToken from the Account model
     //const user = await Account.findByPk(AccountId);
     const user = await Account.findByPk(AccountId);
-    const registrationToken = user.fcmToken;
+    const registrationToken = await user.fcmToken;
     console.log(registrationToken);
     const message = {
       notification: {
         title: title,
         body: content,
-      },
-      android: {
-        notification: {
-          imageUrl:
-            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
-        },
       },
       to: registrationToken,
     };

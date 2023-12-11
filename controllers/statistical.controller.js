@@ -8,7 +8,7 @@ const {
   Color,
   ProductColorConfig,
   Config,
-  sequelize,
+  Category,
 } = require("../models");
 const { Op, fn, col, literal } = require("sequelize");
 exports.getStaff = async (req, res) => {
@@ -83,6 +83,26 @@ exports.getRevenue = async (req, res) => {
   }
 };
 
+exports.getOrderNew = async (req, res) => {
+  try {
+    const listOrder = await Orders.findAll({
+      include: [{ model: OrdersProduct }],
+      order: [["createdAt", "DESC"]],
+    });
+    if (!listOrder) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "connect fail database" });
+    }
+    return res.status(200).json({ status: 200, data: listOrder });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.getOrderCancellation = async (req, res) => {
   try {
     const totalOrder = await Orders.count({ where: { status: 3 } });
@@ -142,17 +162,18 @@ exports.getProductSelling = async (req, res) => {
         },
         {
           model: OrdersProduct,
-          as: "orders",
+          as: "OrdersProducts",
         },
       ],
-      attributes: [[fn("COUNT", col("orders.id")), "ordersCount"]],
-      order: [[literal("orderCount"), "DESC"]],
-      group: [
-        "Product.id",
-        "colorProducts.id",
-        "colorProducts.colorConfigs.id",
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
       ],
-      limit: 10,
+      order: [[literal("ordersCount"), "DESC"]],
+      group: ["Product.id"],
     });
 
     console.log(listFilter);
@@ -160,7 +181,7 @@ exports.getProductSelling = async (req, res) => {
     if (!listFilter) {
       return res
         .status(400)
-        .json({ status: 400, message: "connect fail database" });
+        .json({ status: 400, message: "Failed to connect to the database" });
     }
 
     return res.status(200).json({ status: 200, data: listFilter });
@@ -264,6 +285,7 @@ exports.getRevenueInMonth = async (req, res) => {
 
       const orderCountByStatus = await Orders.sum("total", {
         where: {
+          status: "2",
           createdAt: {
             [Op.gte]: startOfMonth,
             [Op.lte]: endOfMonth,
@@ -295,6 +317,55 @@ exports.getRevenueInMonth = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching revenue statistics:", error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getChartProductSel = async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const startOfLast6Months = new Date();
+    startOfLast6Months.setMonth(currentDate.getMonth() - 5);
+    const listFilter = await Product.findAll({
+      include: [
+        {
+          model: Category,
+        },
+        {
+          model: OrdersProduct,
+          as: "OrdersProducts",
+        },
+      ],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
+      ],
+      where: {
+        createdAt: {
+          [Op.gte]: startOfLast6Months,
+          [Op.lte]: currentDate,
+        },
+      },
+      order: [[literal("ordersCount"), "DESC"]],
+      group: ["Product.id"],
+    });
+
+    console.log(listFilter);
+
+    if (!listFilter) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Failed to connect to the database" });
+    }
+
+    return res.status(200).json({ status: 200, data: listFilter });
+  } catch (error) {
+    console.error("Error fetching products:", error);
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });

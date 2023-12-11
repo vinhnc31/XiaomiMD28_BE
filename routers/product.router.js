@@ -143,6 +143,7 @@ router.post(
 router.get("/product/filter/Color", productController.getFilterInColor);
 router.get("/product/filter/Config", productController.getFilterInConfig);
 router.get("/product/filter/sortPrice", productController.getFilterInPrice);
+router.get("/product/most/Favorites", productController.getMostFavorites);
 router.get("/product/filter/start", productController.getFilterInStart);
 router.delete("/product/:id", productController.deleteProduct);
 

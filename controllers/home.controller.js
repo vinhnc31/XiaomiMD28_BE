@@ -95,6 +95,7 @@ exports.getOrderNew = async (req, res) => {
   try {
     const listOrder = await Account.findAll({
       order: [["createdAt", "DESC"]],
+      limit: 10,
     });
     if (!listOrder) {
       return res
@@ -119,11 +120,13 @@ exports.getAllData = async (req, res) => {
 
     const listAccount = await Account.findAll({
       order: [["createdAt", "DESC"]],
+      limit: 10,
     });
 
     const listOrder = await Orders.findAll({
       include: [{ model: Account, as: "account" }],
       order: [["createdAt", "DESC"]],
+      limit: 10,
     });
 
     if (
@@ -265,6 +268,7 @@ exports.getRevenueInMonth = async (req, res) => {
 
       const orderCountByStatus = await Orders.sum("total", {
         where: {
+          status: "2",
           createdAt: {
             [Op.gte]: startOfMonth,
             [Op.lte]: endOfMonth,

@@ -85,18 +85,26 @@ exports.createCart = async (req, res) => {
       ProductColorId,
       ProductColorConfigId,
     };
-    if (ProductColorId || ProductColorConfigId) {
+    if (ProductColorId) {
       const productColor = await productcolor.findByPk(ProductColorId);
+
+      if (!productColor) {
+        return res
+          .status(404)
+          .json({ status: 404, message: "Product Config not found" });
+      }
+      cart.ProductColorId = ProductColorId;
+    }
+    if (ProductColorConfigId) {
       const productColorConfig = await ProductColorConfig.findByPk(
         ProductColorConfigId
       );
-      if (!productColor || !productColorConfig) {
+      if (!productColorConfig) {
         return res
           .status(404)
-          .json({ status: 404, message: "Product Color or Config not found" });
+          .json({ status: 404, message: "Product Config not found" });
       }
       cart.ProductColorConfigId = ProductColorConfigId;
-      cart.ProductColorId = ProductColorId;
     }
     const product = await Product.findByPk(productId);
     const account = await Account.findByPk(AccountId);

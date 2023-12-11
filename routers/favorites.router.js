@@ -86,11 +86,6 @@ router.get(
   authMidleWare.apiAuth,
   favoritesController.getAccount
 );
-router.get(
-  "/favorites",
-  authMidleWare.apiAuth,
-  favoritesController.getFavorites
-);
 router.post(
   "/favorites",
   authMidleWare.apiAuth,

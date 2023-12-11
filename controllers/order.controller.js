@@ -11,6 +11,7 @@ const {
   ProductColorConfig,
   sequelize,
   OrdersProduct,
+  notifyAccount,
 } = require("../models");
 const jwt = require("jsonwebtoken");
 require("dotenv").config;
@@ -206,6 +207,11 @@ exports.createOrder = async (req, res) => {
         } else {
           totalPrice += product.price * quantity;
         }
+        const update = await Product.update(
+          { quantity: sequelize.literal(`quantity - ${quantity}`) },
+          { where: { id: productId }, transaction }
+        );
+        console.log(update);
       }
 
       // Create record in the ordersProduct table for each product
