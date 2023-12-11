@@ -286,9 +286,9 @@ exports.addCategory = async (req, res) => {
 };
 exports.deleteCategory = async (req, res, next) => {
   try {
-    const categoryId = req.params.id;
+    const categoryId = req.body.id;
     await Category.destroy({ where: { id: categoryId } });
-    res.redirect("");
+    res.redirect("/products/add");
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error });
@@ -297,14 +297,28 @@ exports.deleteCategory = async (req, res, next) => {
 
 exports.deleteColor = async (req, res) => {
   try {
-    const productColor = await productcolor.findAll({
-      include: [
-        {
-          model: Color,
-        },
-      ],
+    const productId = req.params.id;
+    const colorId = req.body.id;
+    await Color.destroy({
+      where: {
+        id: colorId,
+      },
     });
-    res.json(productColor);
+    return res.redirect("/products/add/colorProduct/" + productId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+exports.deleteConfig = async (req, res) => {
+  try {
+    const productColorId = req.params.id;
+    const configId = req.body.id;
+    await Config.destroy({
+      where: {
+        id: configId,
+      },
+    });
+    return res.redirect("/products/add/colorProduct_config/" + productColorId);
   } catch (error) {
     console.log(error);
   }

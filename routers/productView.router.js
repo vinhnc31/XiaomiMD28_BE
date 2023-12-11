@@ -15,7 +15,9 @@ router.post(
   productController.updateProduct
 );
 router.post("/addCategory", productController.addCategory);
-router.post("/delete/category/:id", productController.deleteCategory);
+router.post("/delete/category", productController.deleteCategory);
+router.post("/delete/color/:id", productController.deleteColor);
+router.post("/delete/config/:id", productController.deleteConfig);
 
 router.get("/add/colorProduct/:id", productController.indexColorProduct);
 router.post("/add/color/:id", productController.addColor);
