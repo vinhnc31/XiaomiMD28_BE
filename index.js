@@ -88,7 +88,7 @@ app.use("/api", order);
 app.use("/api", vnPay);
 app.use("/", staff);
 app.use("/", salary);
-app.use("/api", internal);
+app.use("/", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.use("/statistical", statistical);

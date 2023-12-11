@@ -12,6 +12,8 @@ router.get(
   "/ProductIsOutOfStock",
   statisticalController.getProductIsOutOfStock
 );
-router.get("/staffNew", statisticalController.getStaffNew);
-
+router.get(
+  "/all",
+  statisticalController.getAll
+);
 module.exports = router;

@@ -10,7 +10,9 @@ exports.getInternal = async (req, res) => {
         message: "Failed to retrieve data from the database",
       });
     }
-    return res.status(200).json({ status: 200, data: listInternal });
+    console.log(listInternal)
+    res.render('InternalManagement', {"listInternal": listInternal });
+    // return res.status(200).json({ status: 200, data: listInternal });
   } catch (error) {
     console.error("Error in getInternal:", error);
     return res.status(500).json({
@@ -22,6 +24,7 @@ exports.getInternal = async (req, res) => {
 
 exports.createInternal = async (req, res) => {
   const { StaffId, reason, status } = req.body;
+
   try {
     const checkStaff = await Staff.findByPk(StaffId);
     if (!checkStaff) {
@@ -41,7 +44,7 @@ exports.createInternal = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res.status(200).json({ status: 200, data: createInternal });
+    return res.redirect("/internal");
   } catch (error) {
     return res.status(500).json({
       status: 500,
@@ -66,13 +69,37 @@ exports.deleteInternal = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    return res
-      .status(200)
-      .json({ status: 200, message: "delete successfully" });
+      return res.redirect("/internal");
   } catch (error) {
     return res.status(500).json({
       status: 500,
       message: "Internal server error",
     });
   }
+};
+
+exports.viewAddInternal = async (req, res) => {
+  const staffs = await Staff.findAll();
+console.log(staffs)
+  res.render('addInternal', {"staffs" : staffs});
+};
+
+exports.viewUpdate = async (req, res) => {
+  const id = req.params.id;
+  const internal = await Internals.findOne({
+    where: {
+      id: id,
+    },
+  });
+ console.log(internal)
+ const staff = await Staff.findOne({
+  where: {
+    id: internal.StaffId,
+  },
+});
+  res.render("updateInternal", {
+    staff: staff,
+    internal: internal,
+    title: "Sửa lương",
+  });
 };

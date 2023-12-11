@@ -4,5 +4,7 @@ const internalController = require("../controllers/Internal_management.controlle
 
 router.get("/internal", internalController.getInternal);
 router.post("/internal", internalController.createInternal);
-router.delete("/internal/:id", internalController.deleteInternal);
+router.post("/internal/:id", internalController.deleteInternal);
+router.get("/viewUpdate/:id", internalController.viewUpdate);
+router.get("/addInternal", internalController.viewAddInternal);
 module.exports = router;

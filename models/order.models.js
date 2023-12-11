@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
+ 
   Orders.associate = (models) => {
     Orders.belongsTo(models.Account, { foreignKey: "AccountId", as: "account" });
     Orders.belongsTo(models.Account, { foreignKey: "AccountId" });
