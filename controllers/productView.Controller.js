@@ -101,7 +101,15 @@ exports.indexAddProduct = async (req, res) => {
 exports.addProduct = async (req, res) => {
   const filedata = req.file;
   try {
-    const { name, images, price, description, CategoryId } = req.body;
+    const {
+      name,
+      images,
+      price,
+      description,
+      CategoryId,
+      importPrice,
+      quantity,
+    } = req.body;
     console.log(req.body);
     if (!name || (!images && !filedata) || !price || !CategoryId) {
       if (filedata) {
@@ -129,6 +137,8 @@ exports.addProduct = async (req, res) => {
       price,
       description,
       CategoryId,
+      importPrice,
+      quantity,
     };
 
     const addProduct = await Product.create(product);
@@ -193,7 +203,15 @@ exports.updateProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
     const product = await Product.findOne({ where: { id: id } });
-    const { name, images, price, description, CategoryId } = req.body;
+    const {
+      name,
+      images,
+      price,
+      description,
+      CategoryId,
+      importPrice,
+      quantity,
+    } = req.body;
     console.log(req.body);
     const filedata = req.file;
     if (!name || (!images && !filedata) || !price || !Category) {
@@ -221,6 +239,8 @@ exports.updateProduct = async (req, res, next) => {
       price,
       description,
       CategoryId,
+      importPrice,
+      quantity,
     };
 
     const update = await Product.update(updateProduct, {

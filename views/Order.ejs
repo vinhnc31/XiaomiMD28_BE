@@ -149,7 +149,7 @@
                                                         <%})%>
                                                 </td>
                                                 <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%=new Intl.NumberFormat('en-US').format(product.total)%>
+                                                    <%=product.total%>
                                                 </td>
 
                                                 <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
@@ -213,13 +213,19 @@
                                                                                                             <%=product.quantity%>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <%=product.productcolor.Color.nameColor%>
+                                                                                                            <%
+                                                                                                                if(!product.productcolor.Color){%>
+                                                                                                                <span>Không</span>
+                                                                                                                <%}else{%>
+                                                                                                                    <span>
+                                                                                                                        <%=product.productcolor.Color.nameColor%>
+                                                                                                                    </span>
+                                                                                                                    <%}%>
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <%
                                                                                                                 if(!product.ProductColorConfig){%>
-                                                                                                                <span>Tiêu
-                                                                                                                    chuẩn</span>
+                                                                                                                <span>Không</span>
                                                                                                                 <%}else{%>
                                                                                                                     <span>
                                                                                                                         <%=product.ProductColorConfig.Config.nameConfig%>
@@ -231,6 +237,19 @@
                                                                                                     <%})%>
                                                                                             </tbody>
                                                                                         </table>
+                                                                                        <p>Phương thức thanh toán:
+                                                                                            <%if(product.PayId==1){%>
+                                                                                                <span>Thanh toán khi
+                                                                                                    nhận hàng</span>
+                                                                                                <%}else{%>
+                                                                                                    <span>Thanh toán qua
+                                                                                                        VNPay</span>
+                                                                                                    <% }%>
+                                                                                        </p>
+                                                                                        <p>Tổng tiền: <span>
+                                                                                                <%=new
+                                                                                                    Intl.NumberFormat('en-US').format(product.total)%>
+                                                                                            </span>VNĐ</p>
                                                                                         <BR>
                                                                                         <a class="btn btn-cancel"
                                                                                             data-dismiss="modal"
@@ -353,6 +372,12 @@
                                                             </p>
                                                             <p>Địa chỉ:<%=product.Address.address%>
                                                             </p>
+                                                            <p>Phương thức thanh toán:<%if(product.PayId==1){%>
+                                                                    <span>Thanh toán khi nhận hàng</span>
+                                                                    <%}else{%>
+                                                                        <span>Thanh toán qua VNPay</span>
+                                                                        <% }%>
+                                                            </p>
                                                             <p>Ghi chú:<%=product.Address.note%>
                                                             </p>
                                                             <p>Nội dung đơn hàng:</p>
@@ -385,7 +410,9 @@
                                                                         <%})%>
                                                                 </tbody>
                                                             </table>
-                                                            <p style="font-size: 20px">Tổng tiền:<%=product.total%>đ
+                                                            <p style="font-size: 20px">Tổng tiền:<%=new
+                                                                    Intl.NumberFormat('en-US').format(product.total)%>
+                                                                    VNĐ
                                                             </p>
 
 
