@@ -115,492 +115,496 @@
                             </div>
 
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-hover table-bordered" id="sampleTable">
-                                    <thead>
-                                        <tr>
-                                            <th>ID đơn hàng</th>
-                                            <th>Khách hàng</th>
-                                            <th>Đơn hàng</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Tình trạng</th>
-                                            <%if(status===0){%>
-                                                <th>Tính năng</th>
-                                                <%}%>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% if(data){ data.map(function(product){%>
+                        <div id="sampleTable_wrapper"
+                            class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-hover table-bordered" id="sampleTable">
+                                        <thead>
                                             <tr>
-                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%=product.id%>
-                                                </td>
-                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%=product.Account.name%>
-                                                </td>
-                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <% product.OrdersProducts.map(function(product){%>
-                                                        <span>
-                                                            <%=product.Product.name%>
-                                                        </span>
-
-                                                        <%})%>
-                                                </td>
-                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%=new Intl.NumberFormat('en-US').format(product.total)%>
-                                                </td>
-
-                                                <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%if (product.status=="0" ){ %>
-                                                        <span class="badge bg-info">
-                                                            Chờ xác nhận
-                                                        </span>
-                                                        <% } if(product.status=="1" ){%>
-                                                            <span class="badge bg-warning ">
-                                                                Đang giao hàng
-                                                            </span>
-                                                            <%}if(product.status=="2"){%>
-                                                                <span class="badge bg-success ">
-                                                                    Đã hoàn thành
-                                                                </span>
-                                                                <%}if(product.status=="3"){%>
-                                                                    <span class="badge bg-danger ">
-                                                                        Đã hủy
-                                                                    </span>
-                                                                    <%}%>
-                                                                        <div class="modal fade"
-                                                                            id="chitietorder<%=product.id%>"
-                                                                            tabindex="-1" role="dialog"
-                                                                            aria-labelledby="exampleModalCenterTitle"
-                                                                            data-backdrop="static"
-                                                                            data-keyboard="false">
-                                                                            <div class="modal-dialog modal-dialog-centered"
-                                                                                role="document">
-                                                                                <div class="modal-content ">
-                                                                                    <div
-                                                                                        class="modal-header text-center  ">
-                                                                                        <h2
-                                                                                            class="modal-title w-100 text-dark">
-                                                                                            Chi tiết đơn hàng</h2>
-                                                                                    </div>
-                                                                                    <div class="modal-body  text-dark ">
-                                                                                        <h4 class="modal-title w-100">Mã
-                                                                                            đơn hàng:
-                                                                                            <%=product.id%>
-                                                                                        </h4>
-                                                                                        <table
-                                                                                            class="table table-hover table-bordered"
-                                                                                            id="sampleTable">
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>Tên sản phẩm
-                                                                                                    </th>
-                                                                                                    <th>Số lượng</th>
-                                                                                                    <th>Màu</th>
-                                                                                                    <th>Phiên bản</th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                                <%
-                                                                                                    product.OrdersProducts.map(function(product){%>
-                                                                                                    <tr>
-                                                                                                        <td>
-                                                                                                            <%=product.Product.name%>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <%=product.quantity%>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <%
-                                                                                                                if(!product.productcolor){%>
-                                                                                                                <span>Không</span>
-                                                                                                                <%}else{%>
-                                                                                                                    <span>
-                                                                                                                        <%=product.productcolor.Color.nameColor%>
-                                                                                                                    </span>
-                                                                                                                    <%}%>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <%
-                                                                                                                if(!product.ProductColorConfig){%>
-                                                                                                                <span>Không</span>
-                                                                                                                <%}else{%>
-                                                                                                                    <span>
-                                                                                                                        <%=product.ProductColorConfig.Config.nameConfig%>
-                                                                                                                    </span>
-                                                                                                                    <%}%>
-                                                                                                        </td>
-                                                                                                    </tr>
-
-                                                                                                    <%})%>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                        <p>Phương thức thanh toán:
-                                                                                            <%if(product.PayId==1){%>
-                                                                                                <span>Thanh toán khi
-                                                                                                    nhận hàng</span>
-                                                                                                <%}else{%>
-                                                                                                    <span>Thanh toán qua
-                                                                                                        VNPay</span>
-                                                                                                    <% }%>
-                                                                                        </p>
-                                                                                        <p>Tổng tiền: <span>
-                                                                                                <%=new
-                                                                                                    Intl.NumberFormat('en-US').format(product.total)%>
-                                                                                            </span>VNĐ</p>
-                                                                                        <BR>
-                                                                                        <a class="btn btn-cancel"
-                                                                                            data-dismiss="modal"
-                                                                                            href="#">Hủy
-                                                                                            bỏ</a>
-                                                                                        <BR>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                </td>
-
+                                                <th>ID đơn hàng</th>
+                                                <th>Khách hàng</th>
+                                                <th>Đơn hàng</th>
+                                                <th>Tổng tiền</th>
+                                                <th>Tình trạng</th>
                                                 <%if(status===0){%>
-                                                    <td>
-                                                        <h6 class="btn" type="button" title="Xác nhận đơn hàng"
-                                                            style="padding: 0;margin: 0;" data-toggle="modal"
-                                                            data-target="#xacnhan<%=product.id%>">
-                                                            Xác nhận
-                                                        </h6>
-                                                        <br>
-                                                        <h6 class="btn" type="button" title="Hủy đơn hàng"
-                                                            data-toggle="modal" style="padding: 0;margin: 0;"
-                                                            data-target="#huy<%=product.id%>">Hủy
-                                                        </h6>
-                                                        <br>
-                                                        <h6 class="btn" style="padding: 0;margin: 0;"
-                                                            onclick="printJS('printJS-form<%=product.id%>', 'html')">In
-                                                            hóa đơn</h6>
-                                                        <!-- model xác nhận -->
-                                                        <div class="modal fade" id="xacnhan<%=product.id%>"
-                                                            tabindex="-1" role="dialog"
-                                                            aria-labelledby="exampleModalCenterTitle"
-                                                            data-backdrop="static" data-keyboard="false">
-                                                            <div class="modal-dialog modal-dialog-centered"
-                                                                role="document">
-                                                                <div class="modal-content text-center">
-                                                                    <div class="modal-header text-center  ">
-                                                                        <h2 class="modal-title w-100">
-                                                                            fa</h2>
-                                                                    </div>
-                                                                    <div class="modal-body text-center text-dark ">
-                                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                                        <h5>Bạn có chắc muốn xác nhận đơn hàng này
-                                                                            không?
-                                                                        </h5>
-
-                                                                        <BR>
-                                                                        <form class="text-right"
-                                                                            action="/order/changeStatus/<%=product.id%>"
-                                                                            method="post">
-
-                                                                            <a class="btn btn-cancel"
-                                                                                data-dismiss="modal" href="#">Hủy
-                                                                                bỏ</a>
-                                                                            <input type="hidden" value="1"
-                                                                                name="status">
-                                                                            <button class="btn btn-save"
-                                                                                type="submit">Đồng
-                                                                                ý</button>
-                                                                        </form>
-                                                                        <BR>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- model xác nhận hủy -->
-                                                        <div class="modal fade" id="huy<%=product.id%>" tabindex="-1"
-                                                            role="dialog" aria-labelledby="exampleModalCenterTitle"
-                                                            data-backdrop="static" data-keyboard="false">
-                                                            <div class="modal-dialog modal-dialog-centered"
-                                                                role="document">
-                                                                <div class="modal-content text-center">
-                                                                    <div class="modal-header text-center  ">
-                                                                        <h2 class="modal-title w-100">
-                                                                            fa</h2>
-
-                                                                    </div>
-
-                                                                    <div class="modal-body text-center text-dark ">
-                                                                        <h2 class="modal-title w-100">Cảnh báo</h2>
-                                                                        <h5>Bạn có chắc muốn hủy đơn hàng này không?
-                                                                        </h5>
-
-                                                                        <BR>
-                                                                        <form class="text-right"
-                                                                            action="/order/changeStatus/<%=product.id%>"
-                                                                            method="post">
-
-                                                                            <a class="btn btn-cancel"
-                                                                                data-dismiss="modal" href="#">Hủy
-                                                                                bỏ</a>
-                                                                            <input type="hidden" value="3"
-                                                                                name="status">
-                                                                            <button class="btn btn-save"
-                                                                                type="submit">Đồng
-                                                                                ý</button>
-                                                                        </form>
-                                                                        <BR>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- model chi tiết -->
-
-                                                        <div class="modal fade row" id="printJS-form<%=product.id%>"
-                                                            tabindex="-1" role="dialog"
-                                                            aria-labelledby="exampleModalCenterTitle"
-                                                            data-backdrop="static" data-keyboard="false">
-                                                            <p>Mã đơn hàng:<%=product.id%>
-                                                            </p>
-                                                            <p>Tên người nhận:<%=product.Address.nameReceiver%>
-                                                            </p>
-                                                            <p>SĐT:<%=product.Address.phoneReceiver%>
-                                                            </p>
-                                                            <p>Địa chỉ:<%=product.Address.address%>
-                                                            </p>
-                                                            <p>Phương thức thanh toán:<%if(product.PayId==1){%>
-                                                                    <span>Thanh toán khi nhận hàng</span>
-                                                                    <%}else{%>
-                                                                        <span>Thanh toán qua VNPay</span>
-                                                                        <% }%>
-                                                            </p>
-                                                            <p>Ghi chú:<%=product.Address.note%>
-                                                            </p>
-                                                            <p>Nội dung đơn hàng:</p>
-                                                            <table class="table table-bordered" id="sampleTable">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="col-sm-5">Tên sản phẩm</th>
-                                                                        <th class="col-sm-2">Số lượng</th>
-                                                                        <th class="col-sm-2">Màu</th>
-                                                                        <th class="col-sm-3">Phiên bản</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <% product.OrdersProducts.map(function(product){%>
-                                                                        <tr>
-                                                                            <td class="col-sm-5">
-                                                                                <%=product.Product.name%>
-                                                                            </td>
-                                                                            <td class="col-sm-2">
-                                                                                <%=product.quantity%>
-                                                                            </td>
-                                                                            <td class="col-sm-2">
-                                                                                <% if(!product.productcolor){%>
-                                                                                    <span>Không</span>
-                                                                                    <%}else{%>
-                                                                                        <span>
-                                                                                            <%=product.productcolor.Color.nameColor%>
-                                                                                        </span>
-                                                                                        <%}%>
-                                                                            </td>
-                                                                            <td class="col-sm-3">
-                                                                                <% if(!product.ProductColorConfig){%>
-                                                                                    <span>Không</span>
-                                                                                    <%}else{%>
-                                                                                        <span>
-                                                                                            <%=product.ProductColorConfig.Config.nameConfig%>
-                                                                                        </span>
-                                                                                        <%}%>
-                                                                            </td>
-                                                                        </tr>
-
-                                                                        <%})%>
-                                                                </tbody>
-                                                            </table>
-                                                            <p style="font-size: 20px">Tổng tiền:<%=new
-                                                                    Intl.NumberFormat('en-US').format(product.total)%>
-                                                                    VNĐ
-                                                            </p>
-
-
-                                                        </div>
-                                                    </td>
+                                                    <th>Tính năng</th>
                                                     <%}%>
 
                                             </tr>
-                                            <%})}%>
+                                        </thead>
+                                        <tbody>
+                                            <% if(data){ data.map(function(product){%>
+                                                <tr>
+                                                    <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                        <%=product.id%>
+                                                    </td>
+                                                    <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                        <%=product.Account.name%>
+                                                    </td>
+                                                    <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                        <% product.OrdersProducts.map(function(product){%>
+                                                            <span>
+                                                                <%=product.Product.name%>
+                                                            </span>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-10">
-                                <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
+                                                            <%})%>
+                                                    </td>
+                                                    <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                        <%=new Intl.NumberFormat('en-US').format(product.total)%>
+                                                    </td>
+
+                                                    <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
+                                                        <%if (product.status=="0" ){ %>
+                                                            <span class="badge bg-info">
+                                                                Chờ xác nhận
+                                                            </span>
+                                                            <% } if(product.status=="1" ){%>
+                                                                <span class="badge bg-warning ">
+                                                                    Đang giao hàng
+                                                                </span>
+                                                                <%}if(product.status=="2"){%>
+                                                                    <span class="badge bg-success ">
+                                                                        Đã hoàn thành
+                                                                    </span>
+                                                                    <%}if(product.status=="3"){%>
+                                                                        <span class="badge bg-danger ">
+                                                                            Đã hủy
+                                                                        </span>
+                                                                        <%}%>
+                                                                            <div class="modal fade"
+                                                                                id="chitietorder<%=product.id%>"
+                                                                                tabindex="-1" role="dialog"
+                                                                                aria-labelledby="exampleModalCenterTitle"
+                                                                                data-backdrop="static"
+                                                                                data-keyboard="false">
+                                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                                    role="document">
+                                                                                    <div class="modal-content ">
+                                                                                        <div
+                                                                                            class="modal-header text-center  ">
+                                                                                            <h2
+                                                                                                class="modal-title w-100 text-dark">
+                                                                                                Chi tiết đơn hàng</h2>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="modal-body  text-dark ">
+                                                                                            <h4
+                                                                                                class="modal-title w-100">
+                                                                                                Mã
+                                                                                                đơn hàng:
+                                                                                                <%=product.id%>
+                                                                                            </h4>
+                                                                                            <table
+                                                                                                class="table table-hover table-bordered"
+                                                                                                id="sampleTable">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th>Tên sản phẩm
+                                                                                                        </th>
+                                                                                                        <th>Số lượng
+                                                                                                        </th>
+                                                                                                        <th>Màu</th>
+                                                                                                        <th>Phiên bản
+                                                                                                        </th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    <%
+                                                                                                        product.OrdersProducts.map(function(product){%>
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <%=product.Product.name%>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <%=product.quantity%>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <%
+                                                                                                                    if(!product.productcolor){%>
+                                                                                                                    <span>Không</span>
+                                                                                                                    <%}else{%>
+                                                                                                                        <span>
+                                                                                                                            <%=product.productcolor.Color.nameColor%>
+                                                                                                                        </span>
+                                                                                                                        <%}%>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <%
+                                                                                                                    if(!product.ProductColorConfig){%>
+                                                                                                                    <span>Không</span>
+                                                                                                                    <%}else{%>
+                                                                                                                        <span>
+                                                                                                                            <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                                                                        </span>
+                                                                                                                        <%}%>
+                                                                                                            </td>
+                                                                                                        </tr>
+
+                                                                                                        <%})%>
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                            <p>Phương thức thanh toán:
+                                                                                                <%if(product.PayId==1){%>
+                                                                                                    <span>Thanh toán khi
+                                                                                                        nhận hàng</span>
+                                                                                                    <%}else{%>
+                                                                                                        <span>Thanh toán
+                                                                                                            qua
+                                                                                                            VNPay</span>
+                                                                                                        <% }%>
+                                                                                            </p>
+                                                                                            <p>Tổng tiền: <span>
+                                                                                                    <%=new
+                                                                                                        Intl.NumberFormat('en-US').format(product.total)%>
+                                                                                                </span>VNĐ</p>
+                                                                                            <BR>
+                                                                                            <a class="btn btn-cancel"
+                                                                                                data-dismiss="modal"
+                                                                                                href="#">Hủy
+                                                                                                bỏ</a>
+                                                                                            <BR>
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                    </td>
+
+                                                    <%if(status===0){%>
+                                                        <td>
+                                                            <h6 class="btn" type="button" title="Xác nhận đơn hàng"
+                                                                style="padding: 0;margin: 0;" data-toggle="modal"
+                                                                data-target="#xacnhan<%=product.id%>">
+                                                                Xác nhận
+                                                            </h6>
+                                                            <br>
+                                                            <h6 class="btn" type="button" title="Hủy đơn hàng"
+                                                                data-toggle="modal" style="padding: 0;margin: 0;"
+                                                                data-target="#huy<%=product.id%>">Hủy
+                                                            </h6>
+                                                            <br>
+                                                            <h6 class="btn" style="padding: 0;margin: 0;"
+                                                                onclick="printJS('printJS-form<%=product.id%>', 'html')">
+                                                                In
+                                                                hóa đơn</h6>
+                                                            <!-- model xác nhận -->
+                                                            <div class="modal fade" id="xacnhan<%=product.id%>"
+                                                                tabindex="-1" role="dialog"
+                                                                aria-labelledby="exampleModalCenterTitle"
+                                                                data-backdrop="static" data-keyboard="false">
+                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                    role="document">
+                                                                    <div class="modal-content text-center">
+                                                                        <div class="modal-header text-center  ">
+                                                                            <h2 class="modal-title w-100">
+                                                                                fa</h2>
+                                                                        </div>
+                                                                        <div class="modal-body text-center text-dark ">
+                                                                            <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                            <h5>Bạn có chắc muốn xác nhận đơn hàng này
+                                                                                không?
+                                                                            </h5>
+
+                                                                            <BR>
+                                                                            <form class="text-right"
+                                                                                action="/order/changeStatus/<%=product.id%>"
+                                                                                method="post">
+
+                                                                                <a class="btn btn-cancel"
+                                                                                    data-dismiss="modal" href="#">Hủy
+                                                                                    bỏ</a>
+                                                                                <input type="hidden" value="1"
+                                                                                    name="status">
+                                                                                <button class="btn btn-save"
+                                                                                    type="submit">Đồng
+                                                                                    ý</button>
+                                                                            </form>
+                                                                            <BR>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- model xác nhận hủy -->
+                                                            <div class="modal fade" id="huy<%=product.id%>"
+                                                                tabindex="-1" role="dialog"
+                                                                aria-labelledby="exampleModalCenterTitle"
+                                                                data-backdrop="static" data-keyboard="false">
+                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                    role="document">
+                                                                    <div class="modal-content text-center">
+                                                                        <div class="modal-header text-center  ">
+                                                                            <h2 class="modal-title w-100">
+                                                                                fa</h2>
+
+                                                                        </div>
+
+                                                                        <div class="modal-body text-center text-dark ">
+                                                                            <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                                            <h5>Bạn có chắc muốn hủy đơn hàng này không?
+                                                                            </h5>
+
+                                                                            <BR>
+                                                                            <form class="text-right"
+                                                                                action="/order/changeStatus/<%=product.id%>"
+                                                                                method="post">
+
+                                                                                <a class="btn btn-cancel"
+                                                                                    data-dismiss="modal" href="#">Hủy
+                                                                                    bỏ</a>
+                                                                                <input type="hidden" value="3"
+                                                                                    name="status">
+                                                                                <button class="btn btn-save"
+                                                                                    type="submit">Đồng
+                                                                                    ý</button>
+                                                                            </form>
+                                                                            <BR>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- model chi tiết -->
+
+                                                            <div class="modal fade row" id="printJS-form<%=product.id%>"
+                                                                tabindex="-1" role="dialog"
+                                                                aria-labelledby="exampleModalCenterTitle"
+                                                                data-backdrop="static" data-keyboard="false">
+                                                                <p>Mã đơn hàng:<%=product.id%>
+                                                                </p>
+                                                                <p>Tên người nhận:<%=product.Address.nameReceiver%>
+                                                                </p>
+                                                                <p>SĐT:<%=product.Address.phoneReceiver%>
+                                                                </p>
+                                                                <p>Địa chỉ:<%=product.Address.address%>
+                                                                </p>
+                                                                <p>Phương thức thanh toán:<%if(product.PayId==1){%>
+                                                                        <span>Thanh toán khi nhận hàng</span>
+                                                                        <%}else{%>
+                                                                            <span>Thanh toán qua VNPay</span>
+                                                                            <% }%>
+                                                                </p>
+                                                                <p>Ghi chú:<%=product.Address.note%>
+                                                                </p>
+                                                                <p>Nội dung đơn hàng:</p>
+                                                                <table class="table table-bordered" id="sampleTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="col-sm-5">Tên sản phẩm</th>
+                                                                            <th class="col-sm-2">Số lượng</th>
+                                                                            <th class="col-sm-2">Màu</th>
+                                                                            <th class="col-sm-3">Phiên bản</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <%
+                                                                            product.OrdersProducts.map(function(product){%>
+                                                                            <tr>
+                                                                                <td class="col-sm-5">
+                                                                                    <%=product.Product.name%>
+                                                                                </td>
+                                                                                <td class="col-sm-2">
+                                                                                    <%=product.quantity%>
+                                                                                </td>
+                                                                                <td class="col-sm-2">
+                                                                                    <% if(!product.productcolor){%>
+                                                                                        <span>Không</span>
+                                                                                        <%}else{%>
+                                                                                            <span>
+                                                                                                <%=product.productcolor.Color.nameColor%>
+                                                                                            </span>
+                                                                                            <%}%>
+                                                                                </td>
+                                                                                <td class="col-sm-3">
+                                                                                    <%
+                                                                                        if(!product.ProductColorConfig){%>
+                                                                                        <span>Không</span>
+                                                                                        <%}else{%>
+                                                                                            <span>
+                                                                                                <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                                            </span>
+                                                                                            <%}%>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            <%})%>
+                                                                    </tbody>
+                                                                </table>
+                                                                <p style="font-size: 20px">Tổng tiền:<%=new
+                                                                        Intl.NumberFormat('en-US').format(product.total)%>
+                                                                        VNĐ
+                                                                </p>
+
+
+                                                            </div>
+                                                        </td>
+                                                        <%}%>
+
+                                                </tr>
+                                                <%})}%>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-2">
-                                <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
-                                    <ul class="pagination">
-                                        <li class="paginate_button page-item previous " id="sampleTable_previous">
-                                            <%if(name){%>
-                                                <a href="?page=<%=page>1?page-1:1%>&name=<%=search%>"
-                                                    aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
-                                                    class="page-link">Lùi</a>
-                                                <%}else{%>
-                                                    <a href="?page=<%=page>1?page-1:1%>" aria-controls="sampleTable"
-                                                        data-dt-idx="0" tabindex="0" class="page-link">Lùi</a>
-                                        </li>
-                                        <%}%>
-                                            <%if(totalPage>5){%>
-                                                <%if(page>3&&page<=(totalPage-2)){ %>
-                                                        <li class="paginate_button page-item ">
-                                                            <a href="?page=1" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <i class="fas fa-angle-double-left"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="paginate_button page-item ">
-                                                            <button aria-controls="sampleTable" data-dt-idx="1"
-                                                                tabindex="0" class="page-link">
-                                                                <i class="fas fa-ellipsis-h"></i>
-                                                            </button>
-                                                        </li>
+                            <div class="row">
+                                <div class="col-sm-7 col-md-10">
+                                    <div class="dataTables_info" id="sampleTable_info" role="status" aria-live="polite">
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-md-2">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
+                                        <ul class="pagination">
+                                            <li class="paginate_button page-item previous " id="sampleTable_previous">
+                                                <%if(name){%>
+                                                    <a href="?page=<%=page>1?page-1:1%>&name=<%=search%>"
+                                                        aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
+                                                        class="page-link">Lùi</a>
+                                                    <%}else{%>
+                                                        <a href="?page=<%=page>1?page-1:1%>" aria-controls="sampleTable"
+                                                            data-dt-idx="0" tabindex="0" class="page-link">Lùi</a>
+                                            </li>
+                                            <%}%>
+                                                <%if(totalPage>5){%>
+                                                    <%if(page>3&&page<=(totalPage-2)){ %>
+                                                            <li class="paginate_button page-item ">
+                                                                <a href="?page=1" aria-controls="sampleTable"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">
+                                                                    <i class="fas fa-angle-double-left"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="paginate_button page-item ">
+                                                                <button aria-controls="sampleTable" data-dt-idx="1"
+                                                                    tabindex="0" class="page-link">
+                                                                    <i class="fas fa-ellipsis-h"></i>
+                                                                </button>
+                                                            </li>
 
-                                                        <li class="paginate_button page-item   ">
-                                                            <a href="?page=<%=page-2%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=page-2%>
-                                                            </a>
-                                                        </li>
-                                                        <li class="paginate_button page-item   ">
-                                                            <a href="?page=<%=page-1%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=page-1%>
-                                                            </a>
-                                                        </li>
-                                                        <li class="paginate_button page-item  active">
-                                                            <a href="/order/?page=<%=page%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=page%>
-                                                            </a>
-                                                        </li>
-                                                        <li class="paginate_button page-item   ">
-                                                            <a href="?page=<%=page+1%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=page+1%>%>
-                                                            </a>
-                                                        </li>
-                                                        <li class="paginate_button page-item   ">
-                                                            <a href="?page=<%=page+2%>" aria-controls="sampleTable"
-                                                                data-dt-idx="1" tabindex="0" class="page-link">
-                                                                <%=page+2%>%>
-                                                            </a>
-                                                        </li>
-                                                        <% }else if(page<=3){%>
-                                                            <% for(i=1;i<=5;i++){ if(name){ %>
-                                                                <li
-                                                                    class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                    <a href="?page=<%=i%>&name=<%=search%>"
-                                                                        aria-controls="sampleTable" data-dt-idx="1"
-                                                                        tabindex="0" class="page-link">
-                                                                        <%=i%>
-                                                                    </a>
-                                                                </li>
-                                                                <%}else{ %>
+                                                            <li class="paginate_button page-item   ">
+                                                                <a href="?page=<%=page-2%>" aria-controls="sampleTable"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">
+                                                                    <%=page-2%>
+                                                                </a>
+                                                            </li>
+                                                            <li class="paginate_button page-item   ">
+                                                                <a href="?page=<%=page-1%>" aria-controls="sampleTable"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">
+                                                                    <%=page-1%>
+                                                                </a>
+                                                            </li>
+                                                            <li class="paginate_button page-item  active">
+                                                                <a href="/order/?page=<%=page%>"
+                                                                    aria-controls="sampleTable" data-dt-idx="1"
+                                                                    tabindex="0" class="page-link">
+                                                                    <%=page%>
+                                                                </a>
+                                                            </li>
+                                                            <li class="paginate_button page-item   ">
+                                                                <a href="?page=<%=page+1%>" aria-controls="sampleTable"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">
+                                                                    <%=page+1%>%>
+                                                                </a>
+                                                            </li>
+                                                            <li class="paginate_button page-item   ">
+                                                                <a href="?page=<%=page+2%>" aria-controls="sampleTable"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">
+                                                                    <%=page+2%>%>
+                                                                </a>
+                                                            </li>
+                                                            <% }else if(page<=3){%>
+                                                                <% for(i=1;i<=5;i++){ if(name){ %>
                                                                     <li
                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                        <a href="?page=<%=i%>"
+                                                                        <a href="?page=<%=i%>&name=<%=search%>"
                                                                             aria-controls="sampleTable" data-dt-idx="1"
                                                                             tabindex="0" class="page-link">
                                                                             <%=i%>
                                                                         </a>
                                                                     </li>
-                                                                    <%} }}else if(page>(totalPage-2)){%>
-                                                                        <li class="paginate_button page-item ">
-                                                                            <a href="?page=1"
+                                                                    <%}else{ %>
+                                                                        <li
+                                                                            class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                            <a href="?page=<%=i%>"
                                                                                 aria-controls="sampleTable"
                                                                                 data-dt-idx="1" tabindex="0"
                                                                                 class="page-link">
-                                                                                <i class="fas fa-angle-double-left"></i>
+                                                                                <%=i%>
                                                                             </a>
                                                                         </li>
-                                                                        <li class="paginate_button page-item ">
-                                                                            <button aria-controls="sampleTable"
-                                                                                data-dt-idx="1" tabindex="0"
-                                                                                class="page-link">
-                                                                                <i class="fas fa-ellipsis-h"></i>
-                                                                            </button>
-                                                                        </li>
-                                                                        <% for(i=(totalPage-5);i<=totalPage;i++){
-                                                                            if(name){%>
-                                                                            <li
-                                                                                class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                <a href="?page=<%=i%>&name=<%=search%>"
+                                                                        <%} }}else if(page>(totalPage-2)){%>
+                                                                            <li class="paginate_button page-item ">
+                                                                                <a href="?page=1"
                                                                                     aria-controls="sampleTable"
                                                                                     data-dt-idx="1" tabindex="0"
                                                                                     class="page-link">
-                                                                                    <%=i%>
+                                                                                    <i
+                                                                                        class="fas fa-angle-double-left"></i>
                                                                                 </a>
                                                                             </li>
-                                                                            <%}else{ %>
+                                                                            <li class="paginate_button page-item ">
+                                                                                <button aria-controls="sampleTable"
+                                                                                    data-dt-idx="1" tabindex="0"
+                                                                                    class="page-link">
+                                                                                    <i class="fas fa-ellipsis-h"></i>
+                                                                                </button>
+                                                                            </li>
+                                                                            <% for(i=(totalPage-5);i<=totalPage;i++){
+                                                                                if(name){%>
                                                                                 <li
                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                    <a href="?page=<%=i%>"
+                                                                                    <a href="?page=<%=i%>&name=<%=search%>"
                                                                                         aria-controls="sampleTable"
                                                                                         data-dt-idx="1" tabindex="0"
                                                                                         class="page-link">
                                                                                         <%=i%>
                                                                                     </a>
                                                                                 </li>
+                                                                                <%}else{ %>
+                                                                                    <li
+                                                                                        class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                        <a href="?page=<%=i%>"
+                                                                                            aria-controls="sampleTable"
+                                                                                            data-dt-idx="1" tabindex="0"
+                                                                                            class="page-link">
+                                                                                            <%=i%>
+                                                                                        </a>
+                                                                                    </li>
 
-                                                                                <%}}}%>
+                                                                                    <%}}}%>
 
-                                                                                    <%if(page<(totalPage-2)){%>
-                                                                                        <li
-                                                                                            class="paginate_button page-item ">
-                                                                                            <button
-                                                                                                aria-controls="sampleTable"
-                                                                                                data-dt-idx="1"
-                                                                                                tabindex="0"
-                                                                                                class="page-link">
-                                                                                                <i
-                                                                                                    class="fas fa-ellipsis-h"></i>
-                                                                                            </button>
-                                                                                        </li>
-                                                                                        <li
-                                                                                            class="paginate_button page-item ">
-                                                                                            <a href="?page=<%=totalPage%>"
-                                                                                                aria-controls="sampleTable"
-                                                                                                data-dt-idx="1"
-                                                                                                tabindex="0"
-                                                                                                class="page-link">
-                                                                                                <i
-                                                                                                    class="fas fa-angle-double-right"></i>
-                                                                                            </a>
-                                                                                        </li>
-                                                                                        <%}}else{%>
-                                                                                            <% for(i=1;i<=totalPage;i++){
-                                                                                                if(name){ %>
-                                                                                                <li
-                                                                                                    class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                    <a href="?page=<%=i%>&name=<%=search%>"
-                                                                                                        aria-controls="sampleTable"
-                                                                                                        data-dt-idx="1"
-                                                                                                        tabindex="0"
-                                                                                                        class="page-link">
-                                                                                                        <%=i%>
-                                                                                                    </a>
-                                                                                                </li>
-                                                                                                <%}else{ %>
+                                                                                        <%if(page<(totalPage-2)){%>
+                                                                                            <li
+                                                                                                class="paginate_button page-item ">
+                                                                                                <button
+                                                                                                    aria-controls="sampleTable"
+                                                                                                    data-dt-idx="1"
+                                                                                                    tabindex="0"
+                                                                                                    class="page-link">
+                                                                                                    <i
+                                                                                                        class="fas fa-ellipsis-h"></i>
+                                                                                                </button>
+                                                                                            </li>
+                                                                                            <li
+                                                                                                class="paginate_button page-item ">
+                                                                                                <a href="?page=<%=totalPage%>"
+                                                                                                    aria-controls="sampleTable"
+                                                                                                    data-dt-idx="1"
+                                                                                                    tabindex="0"
+                                                                                                    class="page-link">
+                                                                                                    <i
+                                                                                                        class="fas fa-angle-double-right"></i>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                            <%}}else{%>
+                                                                                                <% for(i=1;i<=totalPage;i++){
+                                                                                                    if(name){ %>
                                                                                                     <li
                                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                        <a href="?page=<%=i%>"
+                                                                                                        <a href="?page=<%=i%>&name=<%=search%>"
                                                                                                             aria-controls="sampleTable"
                                                                                                             data-dt-idx="1"
                                                                                                             tabindex="0"
@@ -608,27 +612,39 @@
                                                                                                             <%=i%>
                                                                                                         </a>
                                                                                                     </li>
-                                                                                                    <%} }%>
-                                                                                                        <%}%>
-                                                                                                            <li class="paginate_button page-item next"
-                                                                                                                id="sampleTable_next">
-                                                                                                                <%if(name){%>
-                                                                                                                    <a href="?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
-                                                                                                                        aria-controls="sampleTable"
-                                                                                                                        data-dt-idx="3"
-                                                                                                                        tabindex="0"
-                                                                                                                        class="page-link">Tiếp</a>
-                                                                                                                    <%
-                                                                                                                        }else{%>
-                                                                                                                        <a href="?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                    <%}else{ %>
+                                                                                                        <li
+                                                                                                            class="paginate_button page-item  <%=page ==i?'active':''%> ">
+                                                                                                            <a href="?page=<%=i%>"
+                                                                                                                aria-controls="sampleTable"
+                                                                                                                data-dt-idx="1"
+                                                                                                                tabindex="0"
+                                                                                                                class="page-link">
+                                                                                                                <%=i%>
+                                                                                                            </a>
+                                                                                                        </li>
+                                                                                                        <%} }%>
+                                                                                                            <%}%>
+                                                                                                                <li class="paginate_button page-item next"
+                                                                                                                    id="sampleTable_next">
+                                                                                                                    <%if(name){%>
+                                                                                                                        <a href="?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
                                                                                                                             aria-controls="sampleTable"
                                                                                                                             data-dt-idx="3"
                                                                                                                             tabindex="0"
                                                                                                                             class="page-link">Tiếp</a>
                                                                                                                         <%
-                                                                                                                            }%>
-                                                                                                            </li>
-                                    </ul>
+                                                                                                                            }else{%>
+                                                                                                                            <a href="?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                                                aria-controls="sampleTable"
+                                                                                                                                data-dt-idx="3"
+                                                                                                                                tabindex="0"
+                                                                                                                                class="page-link">Tiếp</a>
+                                                                                                                            <%
+                                                                                                                                }%>
+                                                                                                                </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
