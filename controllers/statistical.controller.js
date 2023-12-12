@@ -203,6 +203,7 @@ exports.getProductSelling = async (req, res) => {
       ],
       order: [[literal("ordersCount"), "DESC"]],
       group: ["Product.id"],
+      // limit: 10
     });
 
     console.log(listFilter);
@@ -293,15 +294,26 @@ exports.getAll = async (req, res) => {
                   model: Config,
                 },
               ],
-              order: [["quantity", "DESC"]],
             },
           ],
         },
+        {
+          model: OrdersProduct,
+          as: "OrdersProducts",
+        },
       ],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
+      ],
+      order: [[literal("ordersCount"), "DESC"]],
       group: ["Product.id"],
-      limit: 10,
+      // limit: 10,
     });
-
+ 
     const listFilterOutOfStock = await Product.findAll({
       include: [
         {
@@ -323,22 +335,75 @@ exports.getAll = async (req, res) => {
             },
           ],
         },
+        { model: Category },
       ],
       group: ["Product.id"],
       limit: 10,
     });
 
-    return res.status(200).json({
-      status: 200,
+    const listOrder = await Orders.findAll({
+      include: [
+        {
+          model: Account,
+          attributes: {
+            exclude: [
+              "password",
+              "updatedAt",
+              "createdAt",
+              "deletedAt",
+              "fcmToken",
+              "verified",
+            ],
+          },
+        },
+        {
+          model: OrdersProduct,
+          separate: true,
+          include: [
+            {
+              model: Product,
+              attributes: {
+                exclude: ["description", "updatedAt", "createdAt", "deletedAt"],
+              },
+            },
+            { model: productcolor },
+            { model: ProductColorConfig },
+          ],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    const listStaff = await Staff.findAll({
+      order: [['createdAt', 'DESC']], // Order by createdAt in descending order (latest first)
+      limit: 10, // Limit the result to 10 records
+    });
+console.log(listFilterSelling)
+// return listOrder
+    res.render("salesReport", {
       totalStaff,
       totalProduct,
       totalOrder,
       totalRevenue,
-      totalOrderCancellation,
+      totalOrderCancellation, 
       totalProhibitedStaff,
+      dataStaff: listStaff,
       dataSelling: listFilterSelling,
       dataOutOfStock: listFilterOutOfStock,
+      dataOrder: listOrder
     });
+    // return res.status(200).json({ 
+    //   status: 200,
+    //   totalStaff,
+    //   totalProduct,
+    //   totalOrder,
+    //   totalRevenue,
+    //   totalOrderCancellation,
+    //   totalProhibitedStaff,
+    //   dataSelling: listFilterSelling,
+    //   dataOutOfStock: listFilterOutOfStock,
+    //   dataOrder: listOrder
+    // });
   } catch (error) {
     console.error("Error fetching data:", error);
     return res.status(500).json({ status: 500, message: "Internal server error" });
@@ -380,7 +445,7 @@ exports.getRevenueInMonth = async (req, res) => {
         },
       });
 
-      const revenue = orderCountByStatus - importProductCountByStatus;
+      const revenue = orderCountByStatus - importProductCountByStatus; 
 
       // Tạo đối tượng chứa thông tin tháng và số lượng đơn hàng
       const monthOrderData = {
