@@ -37,9 +37,6 @@ exports.createComment = async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Account not found" });
     }
-    const checkOrder = await Orders.findOne({
-      where: { AccountId, statusOrder: 0 },
-    });
     if (!checkOrder) {
       return res.status(400).json({
         status: 400,
@@ -80,8 +77,6 @@ exports.createComment = async (req, res) => {
         .status(500)
         .json({ status: 500, message: "Error connecting to database" });
     }
-    // Cập nhật trạng thái đơn hàng sau khi người dùng đã thêm bình luận
-    await checkOrder.update({ statusOrder: 1 });
     return res.status(201).json({ status: 201, data: addComment });
   } catch (error) {
     console.log(error);

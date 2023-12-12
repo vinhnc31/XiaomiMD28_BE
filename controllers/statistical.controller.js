@@ -5,6 +5,7 @@ const {
   OrdersProduct,
   Internals,
   productcolor,
+  Account,
   Color,
   ProductColorConfig,
   Config,
@@ -86,7 +87,35 @@ exports.getRevenue = async (req, res) => {
 exports.getOrderNew = async (req, res) => {
   try {
     const listOrder = await Orders.findAll({
-      include: [{ model: OrdersProduct }],
+      include: [
+        {
+          model: Account,
+          attributes: {
+            exclude: [
+              "password",
+              "updatedAt",
+              "createdAt",
+              "deletedAt",
+              "fcmToken",
+              "verified",
+            ],
+          },
+        },
+        {
+          model: OrdersProduct,
+          separate: true,
+          include: [
+            {
+              model: Product,
+              attributes: {
+                exclude: ["description", "updatedAt", "createdAt", "deletedAt"],
+              },
+            },
+            { model: productcolor },
+            { model: ProductColorConfig },
+          ],
+        },
+      ],
       order: [["createdAt", "DESC"]],
     });
     if (!listOrder) {
@@ -216,6 +245,7 @@ exports.getProductIsOutOfStock = async (req, res) => {
             },
           ],
         },
+        { model: Category },
       ],
       group: ["Product.id"],
       limit: 10,

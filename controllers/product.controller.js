@@ -15,8 +15,8 @@ const { Op, fn, col, literal } = require("sequelize");
 exports.getProduct = async (req, res) => {
   try {
     const name = req.query.name;
-    const limit = req.query.limit;
-    const offset = req.query.offset;
+    const limit = parseInt(req.query.limit);
+    const offset = parseInt(req.query.offset);
 
     let listProduct;
 
@@ -48,6 +48,7 @@ exports.getProduct = async (req, res) => {
         group: ["`Product`.`id`"], // Enclose table and column names in backticks
       });
     } else {
+      console.log(limit, offset);
       listProduct = await Product.findAll({
         include: [{ model: Comment, as: "comments" }],
         attributes: [
@@ -67,9 +68,9 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
-        offset: offset,
-        limit: limit,
         group: ["`Product`.`id`"], // Enclose table and column names in backticks
+        limit: limit,
+        offset: offset,
       });
     }
 
