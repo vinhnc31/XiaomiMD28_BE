@@ -68,6 +68,7 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
+        subQuery: false,
         group: ["`Product`.`id`"], // Enclose table and column names in backticks
         limit: limit,
         offset: offset,
@@ -584,6 +585,8 @@ exports.getMostFavorites = async (req, res) => {
       ],
       group: ["Product.id"],
       order: [[literal("FavoritesCount"), "DESC"]],
+      subQuery: false,
+      limit: 5,
     });
 
     if (!listProduct || listProduct.length === 0) {

@@ -10,6 +10,7 @@ const {
   ProductColorConfig,
   Config,
   Category,
+  sequelize,
 } = require("../models");
 const { Op, fn, col, literal } = require("sequelize");
 exports.getStaff = async (req, res) => {
@@ -172,6 +173,10 @@ exports.getProductSelling = async (req, res) => {
     const listFilter = await Product.findAll({
       include: [
         {
+          model: Category,
+          attributes: ["name"],
+        },
+        {
           model: productcolor,
           as: "colorProducts",
           include: [
@@ -202,7 +207,9 @@ exports.getProductSelling = async (req, res) => {
         [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
       ],
       order: [[literal("ordersCount"), "DESC"]],
+      subQuery: false,
       group: ["Product.id"],
+      limit: 10,
     });
 
     console.log(listFilter);
@@ -274,7 +281,9 @@ exports.getAll = async (req, res) => {
     const totalOrder = await Orders.count("id");
     const totalRevenue = await Orders.sum("total");
     const totalOrderCancellation = await Orders.count({ where: { status: 3 } });
-    const totalProhibitedStaff = await Internals.count({ where: { status: 1 } });
+    const totalProhibitedStaff = await Internals.count({
+      where: { status: 1 },
+    });
 
     const listFilterSelling = await Product.findAll({
       include: [
@@ -341,7 +350,9 @@ exports.getAll = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching data:", error);
-    return res.status(500).json({ status: 500, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 
@@ -415,14 +426,22 @@ exports.getChartProductSel = async (req, res) => {
     const currentDate = new Date();
     const startOfLast6Months = new Date();
     startOfLast6Months.setMonth(currentDate.getMonth() - 5);
+    console.log(startOfLast6Months);
     const listFilter = await Product.findAll({
       include: [
         {
           model: Category,
+          attributes: ["name"],
         },
         {
           model: OrdersProduct,
           as: "OrdersProducts",
+          where: {
+            createdAt: {
+              [Op.gte]: startOfLast6Months,
+              [Op.lte]: currentDate,
+            },
+          },
         },
       ],
       attributes: [
@@ -430,19 +449,13 @@ exports.getChartProductSel = async (req, res) => {
         "name",
         "price",
         "images",
-        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
+        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"],
       ],
-      where: {
-        createdAt: {
-          [Op.gte]: startOfLast6Months,
-          [Op.lte]: currentDate,
-        },
-      },
+      subQuery: false,
       order: [[literal("ordersCount"), "DESC"]],
       group: ["Product.id"],
+      limit: 5,
     });
-
-    console.log(listFilter);
 
     if (!listFilter) {
       return res
