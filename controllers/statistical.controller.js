@@ -267,24 +267,81 @@ exports.getProductIsOutOfStock = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
-
-exports.getStaffNew = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
-    const listStaff = await Staff.findAll({
-      order: [["createdAt", "DESC"]],
+    const totalStaff = await Staff.count("id");
+    const totalProduct = await Product.count("id");
+    const totalOrder = await Orders.count("id");
+    const totalRevenue = await Orders.sum("total");
+    const totalOrderCancellation = await Orders.count({ where: { status: 3 } });
+    const totalProhibitedStaff = await Internals.count({ where: { status: 1 } });
+
+    const listFilterSelling = await Product.findAll({
+      include: [
+        {
+          model: productcolor,
+          as: "colorProducts",
+          include: [
+            {
+              model: Color,
+            },
+            {
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config,
+                },
+              ],
+              order: [["quantity", "DESC"]],
+            },
+          ],
+        },
+      ],
+      group: ["Product.id"],
       limit: 10,
     });
 
-    if (!listStaff) {
-      return res.status(400).json({ status: 400, message: "No staff found" });
-    }
+    const listFilterOutOfStock = await Product.findAll({
+      include: [
+        {
+          model: productcolor,
+          as: "colorProducts",
+          include: [
+            {
+              model: Color,
+            },
+            {
+              model: ProductColorConfig,
+              as: "colorConfigs",
+              include: [
+                {
+                  model: Config,
+                },
+              ],
+              where: { quantity: 0 },
+            },
+          ],
+        },
+      ],
+      group: ["Product.id"],
+      limit: 10,
+    });
 
-    return res.status(200).json({ status: 200, data: listStaff });
+    return res.status(200).json({
+      status: 200,
+      totalStaff,
+      totalProduct,
+      totalOrder,
+      totalRevenue,
+      totalOrderCancellation,
+      totalProhibitedStaff,
+      dataSelling: listFilterSelling,
+      dataOutOfStock: listFilterOutOfStock,
+    });
   } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
+    console.error("Error fetching data:", error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
   }
 };
 
