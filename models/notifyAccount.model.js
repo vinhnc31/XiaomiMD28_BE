@@ -1,13 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-  const notifyAccount = sequelize.define("notifyAccount", {
-    title: {
-      type: DataTypes.STRING,
-      allowNull: true,
+  const notifyAccount = sequelize.define(
+    "notifyAccount",
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      content: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-    content: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  });
+    { paranoid: true, timestamps: true }
+  );
   return notifyAccount;
 };

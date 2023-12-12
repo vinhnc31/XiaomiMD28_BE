@@ -11,5 +11,9 @@ router.get(
 );
 router.post("/order", authMidleWare.apiAuth, orderController.createOrder);
 router.put("/order/:id", authMidleWare.apiAuth, orderController.updateOrder);
-
+router.put(
+  "/order/statusOrder/:id",
+  authMidleWare.apiAuth,
+  orderController.updateStatusOrders
+);
 module.exports = router;

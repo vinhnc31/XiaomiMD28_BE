@@ -7,6 +7,7 @@ const {
   ProductColorConfig,
   Config,
   Comment,
+  Favorites,
 } = require("../models");
 
 const { Op, fn, col, literal } = require("sequelize");
@@ -14,12 +15,16 @@ const { Op, fn, col, literal } = require("sequelize");
 exports.getProduct = async (req, res) => {
   try {
     const name = req.query.name;
+    const limit = parseInt(req.query.limit);
+    const offset = parseInt(req.query.offset);
+
     let listProduct;
+
     if (name) {
       listProduct = await Product.findAll({
         where: {
           name: {
-            [Op.like]: `%${name}%`, // Using 'like' for a partial match
+            [Op.like]: `%${name}%`,
           },
         },
         include: [{ model: Comment, as: "comments" }],
@@ -40,9 +45,10 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
-        group: ["Product.id"],
+        group: ["`Product`.`id`"], // Enclose table and column names in backticks
       });
     } else {
+      console.log(limit, offset);
       listProduct = await Product.findAll({
         include: [{ model: Comment, as: "comments" }],
         attributes: [
@@ -62,15 +68,18 @@ exports.getProduct = async (req, res) => {
             "averageRating",
           ],
         ],
-        group: ["Product.id"],
+        group: ["`Product`.`id`"], // Enclose table and column names in backticks
+        limit: limit,
+        offset: offset,
       });
     }
 
-    if (!listProduct) {
+    if (!listProduct || listProduct.length === 0) {
       return res
-        .status(400)
-        .json({ status: 400, message: "false connecting db" });
+        .status(404)
+        .json({ status: 404, message: "Products not found" });
     }
+
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);
@@ -253,10 +262,24 @@ exports.getCategoryID = async (req, res) => {
 };
 exports.addCategory = async (req, res) => {
   try {
-    const { name, price, description, CategoryId, images } = req.body;
+    const {
+      name,
+      price,
+      description,
+      CategoryId,
+      images,
+      importPrice,
+      quantity,
+    } = req.body;
     const fileData = req.files; // Use req.files for multiple files
 
-    if (!name || !price || (!images && !fileData)) {
+    if (
+      !name ||
+      !price ||
+      (!images && !fileData) ||
+      !importPrice ||
+      !quantity
+    ) {
       // Handle other required fields
 
       return res
@@ -287,6 +310,8 @@ exports.addCategory = async (req, res) => {
       price,
       description,
       CategoryId,
+      importPrice,
+      quantity,
     };
 
     const addProduct = await Product.create(product);
@@ -533,6 +558,40 @@ exports.getFilterInStart = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "false connecting db" });
     }
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.getMostFavorites = async (req, res) => {
+  try {
+    const listProduct = await Product.findAll({
+      include: [{ model: Favorites, as: "favorites" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("favorites.id")), "FavoritesCount"],
+      ],
+      group: ["Product.id"],
+      order: [[literal("FavoritesCount"), "DESC"]],
+    });
+
+    if (!listProduct || listProduct.length === 0) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Products not found" });
+    }
+
     return res.status(200).json({ status: 200, data: listProduct });
   } catch (error) {
     console.log(error);

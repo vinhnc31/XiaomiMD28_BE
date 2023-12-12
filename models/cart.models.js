@@ -1,10 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const Cart = sequelize.define("Cart", {
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+  const Cart = sequelize.define(
+    "Cart",
+    {
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-  });
+    { paranoid: true, timestamps: true }
+  );
 
   Cart.associate = (models) => {
     Cart.belongsTo(models.Product, {
@@ -24,14 +32,12 @@ module.exports = (sequelize, DataTypes) => {
     Cart.belongsTo(models.productcolor, {
       foreignKey: {
         name: "ProductColorId",
-        allowNull: false,
       },
     });
 
     Cart.belongsTo(models.ProductColorConfig, {
       foreignKey: {
         name: "ProductColorConfigId",
-        allowNull: false,
       },
     });
   };

@@ -1,10 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const Config = sequelize.define("Config", {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  const Config = sequelize.define(
+    "Config",
+    {
+      nameConfig: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-  });
+    { paranoid: true, timestamps: true }
+  );
 
   Config.associate = (models) => {
     Config.hasMany(models.ProductColorConfig, {

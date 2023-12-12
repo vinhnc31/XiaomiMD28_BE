@@ -1,22 +1,38 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define("Product", {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  const Product = sequelize.define(
+    "Product",
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING(10000),
+        allowNull: false,
+      },
+      images: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      importPrice: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING(10000),
-      allowNull: false,
-    },
-    images: {
-      type: DataTypes.TEXT, // Chỉnh sửa kiểu dữ liệu thành TEXT nếu cần
-      allowNull: false,
-    },
-  });
+    { paranoid: true, timestamps: true }
+  );
 
   Product.associate = (models) => {
     // Thiết lập quan hệ một-nhiều với mô hình "Comment"
@@ -51,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
     Product.hasMany(models.OrdersProduct, {
       onDelete: "CASCADE",
       foreignKey: "productId",
-      as: "orders",
+      as: "OrdersProducts",
     });
     Product.belongsTo(models.Category, {
       foreignKey: "CategoryId",

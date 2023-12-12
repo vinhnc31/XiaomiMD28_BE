@@ -149,7 +149,7 @@
                                                         <%})%>
                                                 </td>
                                                 <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
-                                                    <%=product.total%>
+                                                    <%=new Intl.NumberFormat('en-US').format(product.total)%>
                                                 </td>
 
                                                 <td data-toggle="modal" data-target="#chitietorder<%=product.id%>">
@@ -213,7 +213,7 @@
                                                                                                             <%=product.quantity%>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <%=product.productcolor.Color.nameColor%>
+                                                                                                            <%=product.productcolor.Color.nameColor || 0%>
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <%

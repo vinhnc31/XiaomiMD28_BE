@@ -3,10 +3,15 @@ const app = express();
 require("dotenv").config();
 require("./untils/passport");
 const moment = require("moment");
-
+const admin = require("firebase-admin");
+const serviceAccount = require("./config/xioami-md28-firebase-adminsdk-xzypw-b20593eec4.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+const session = require("express-session");
+const middleware = require("./middleWare/auth.middlewere");
 const bodyParser = require("body-parser");
 const swaggerjsdoc = require("swagger-jsdoc");
-const admin = require("firebase-admin");
 const swaggerUi = require("swagger-ui-express");
 const category = require("./routers/category.router");
 const product = require("./routers/product.router");
@@ -52,6 +57,14 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 
+app.use(
+  session({
+    secret: "process.env.SESSION_SECRET",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
 app.use(express.static("views"));
 const options = {
   definition: {
@@ -75,7 +88,6 @@ app.use("/api", category);
 app.use("/api", product);
 app.use("/api", promotion);
 app.use("/api", comment);
-app.use("/", account);
 app.use("/api", account);
 app.use("/api", address);
 app.use("/api", favorites);
@@ -89,13 +101,21 @@ app.use("/api", vnPay);
 app.use("/", staff);
 app.use("/", salary);
 app.use("/", internal);
+app.use("/api", internal);
 app.use("/api", notify);
 app.use("/home", home);
 app.use("/statistical", statistical);
+app.use("/", account);
 app.use("/", loginView);
 app.use("/", voucherView);
+app.use("/", staff);
+app.use("/", salary);
 app.get("/", function (req, res) {
-  res.render("login", { message: "", email: "", password: "" });
+  res.render("login", {
+    message: "",
+    email: "",
+    password: "",
+  });
 });
 
 app.use("/products", productView);

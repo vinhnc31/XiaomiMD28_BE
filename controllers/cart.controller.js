@@ -10,7 +10,19 @@ const {
 const jwt = require("jsonwebtoken");
 exports.getCartByAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ status: 401, message: "Unauthorized" });
+  }
   try {
+    // Giải mã token để lấy thông tin người dùng
+    const decodedToken = jwt.verify(token, process.env.SIGN_PRIVATE);
+
+    // Lấy thông tin người dùng từ decodedToken
+    const userId = decodedToken.id;
+    if (userId !== AccountId) {
+      return res.status(403).json({ status: 403, message: "Forbidden" });
+    }
     const account = Account.findByPk(AccountId);
     console.log("Account.........." + account);
     if (!account) {
@@ -65,38 +77,37 @@ exports.createCart = async (req, res) => {
     quantity,
     ProductColorConfigId,
   } = req.body;
-  console.log(req.body);
   try {
-    let productColor = null;
+    const cart = {
+      productId,
+      AccountId,
+      quantity,
+      ProductColorId,
+      ProductColorConfigId,
+    };
     if (ProductColorId) {
-      productColor = await productcolor.findByPk(ProductColorId);
+      const productColor = await productcolor.findByPk(ProductColorId);
+
       if (!productColor) {
-        return res.status(404).json({
-          status: 404,
-          message: "productColor not found",
-        });
+        return res
+          .status(404)
+          .json({ status: 404, message: "Product Config not found" });
       }
+      cart.ProductColorId = ProductColorId;
     }
-    let productColorConfig = null;
-    if (ProductColorId) {
-      productColorConfig = await ProductColorConfig.findByPk(
+    if (ProductColorConfigId) {
+      const productColorConfig = await ProductColorConfig.findByPk(
         ProductColorConfigId
       );
-      if (!productColor) {
-        return res.status(404).json({
-          status: 404,
-          message: "productColor not found",
-        });
+      if (!productColorConfig) {
+        return res
+          .status(404)
+          .json({ status: 404, message: "Product Config not found" });
       }
+      cart.ProductColorConfigId = ProductColorConfigId;
     }
-
-    console.log("vào");
     const product = await Product.findByPk(productId);
     const account = await Account.findByPk(AccountId);
-    console.log("Product.........." + product);
-    console.log("Product Color Id........." + productColor);
-    console.log("Account.........." + account);
-    console.log("Product Color Config Id......." + productColorConfig);
     if (!product || !account) {
       return res.status(404).json({
         status: 404,
@@ -104,17 +115,6 @@ exports.createCart = async (req, res) => {
       });
     }
 
-    const cart = {
-      productId,
-      AccountId,
-      quantity,
-    };
-    if (ProductColorId) {
-      cart.ProductColorId = ProductColorId;
-    }
-    if (ProductColorConfigId) {
-      cart.ProductColorConfigId = ProductColorConfigId;
-    }
     const createCart = await Cart.create(cart);
     if (!createCart) {
       return res

@@ -146,7 +146,7 @@ exports.register = async (req, res, next) => {
 
 exports.verifyEmail = async (req, res) => {
   try {
-    const user = await User.findOne({ where: { id: req.params.id } });
+    const user = await Account.findOne({ where: { id: req.params.id } });
 
     if (!user) return res.status(400).json({ message: "Invalid link" });
     const account = await Account.findOne({ where: { id: req.params.id } });

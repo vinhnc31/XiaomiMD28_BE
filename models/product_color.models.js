@@ -1,10 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProductColor = sequelize.define("productcolor", {
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
+  const ProductColor = sequelize.define(
+    "productcolor",
+    {
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-  });
+    { paranoid: true, timestamps: true }
+  );
 
   ProductColor.associate = (models) => {
     ProductColor.belongsTo(models.Product, { foreignKey: "productId" });

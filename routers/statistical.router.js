@@ -16,4 +16,8 @@ router.get(
   "/all",
   statisticalController.getAll
 );
+router.get("/staffNew", statisticalController.getStaffNew);
+router.get("/orderNew", statisticalController.getOrderNew);
+router.get("/RevenueInMonth", statisticalController.getRevenueInMonth);
+router.get("/chartProductSel", statisticalController.getChartProductSel);
 module.exports = router;
