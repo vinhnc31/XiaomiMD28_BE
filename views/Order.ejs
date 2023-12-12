@@ -213,13 +213,19 @@
                                                                                                             <%=product.quantity%>
                                                                                                         </td>
                                                                                                         <td>
-                                                                                                            <%=product.productcolor.Color.nameColor || 0%>
+                                                                                                            <%
+                                                                                                                if(!product.productcolor){%>
+                                                                                                                <span>Không</span>
+                                                                                                                <%}else{%>
+                                                                                                                    <span>
+                                                                                                                        <%=product.productcolor.Color.nameColor%>
+                                                                                                                    </span>
+                                                                                                                    <%}%>
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <%
                                                                                                                 if(!product.ProductColorConfig){%>
-                                                                                                                <span>Tiêu
-                                                                                                                    chuẩn</span>
+                                                                                                                <span>Không</span>
                                                                                                                 <%}else{%>
                                                                                                                     <span>
                                                                                                                         <%=product.ProductColorConfig.Config.nameConfig%>
@@ -231,6 +237,19 @@
                                                                                                     <%})%>
                                                                                             </tbody>
                                                                                         </table>
+                                                                                        <p>Phương thức thanh toán:
+                                                                                            <%if(product.PayId==1){%>
+                                                                                                <span>Thanh toán khi
+                                                                                                    nhận hàng</span>
+                                                                                                <%}else{%>
+                                                                                                    <span>Thanh toán qua
+                                                                                                        VNPay</span>
+                                                                                                    <% }%>
+                                                                                        </p>
+                                                                                        <p>Tổng tiền: <span>
+                                                                                                <%=new
+                                                                                                    Intl.NumberFormat('en-US').format(product.total)%>
+                                                                                            </span>VNĐ</p>
                                                                                         <BR>
                                                                                         <a class="btn btn-cancel"
                                                                                             data-dismiss="modal"
@@ -353,6 +372,12 @@
                                                             </p>
                                                             <p>Địa chỉ:<%=product.Address.address%>
                                                             </p>
+                                                            <p>Phương thức thanh toán:<%if(product.PayId==1){%>
+                                                                    <span>Thanh toán khi nhận hàng</span>
+                                                                    <%}else{%>
+                                                                        <span>Thanh toán qua VNPay</span>
+                                                                        <% }%>
+                                                            </p>
                                                             <p>Ghi chú:<%=product.Address.note%>
                                                             </p>
                                                             <p>Nội dung đơn hàng:</p>
@@ -375,17 +400,31 @@
                                                                                 <%=product.quantity%>
                                                                             </td>
                                                                             <td class="col-sm-2">
-                                                                                <%=product.productcolor.Color.nameColor%>
+                                                                                <% if(!product.productcolor){%>
+                                                                                    <span>Không</span>
+                                                                                    <%}else{%>
+                                                                                        <span>
+                                                                                            <%=product.productcolor.Color.nameColor%>
+                                                                                        </span>
+                                                                                        <%}%>
                                                                             </td>
                                                                             <td class="col-sm-3">
-                                                                                <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                                <% if(!product.ProductColorConfig){%>
+                                                                                    <span>Không</span>
+                                                                                    <%}else{%>
+                                                                                        <span>
+                                                                                            <%=product.ProductColorConfig.Config.nameConfig%>
+                                                                                        </span>
+                                                                                        <%}%>
                                                                             </td>
                                                                         </tr>
 
                                                                         <%})%>
                                                                 </tbody>
                                                             </table>
-                                                            <p style="font-size: 20px">Tổng tiền:<%=product.total%>đ
+                                                            <p style="font-size: 20px">Tổng tiền:<%=new
+                                                                    Intl.NumberFormat('en-US').format(product.total)%>
+                                                                    VNĐ
                                                             </p>
 
 
@@ -410,19 +449,18 @@
                                     <ul class="pagination">
                                         <li class="paginate_button page-item previous " id="sampleTable_previous">
                                             <%if(name){%>
-                                                <a href="/products/?page=<%=page>1?page-1:1%>&name=<%=search%>"
+                                                <a href="?page=<%=page>1?page-1:1%>&name=<%=search%>"
                                                     aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
                                                     class="page-link">Lùi</a>
                                                 <%}else{%>
-                                                    <a href="/products/?page=<%=page>1?page-1:1%>"
-                                                        aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
-                                                        class="page-link">Lùi</a>
+                                                    <a href="?page=<%=page>1?page-1:1%>" aria-controls="sampleTable"
+                                                        data-dt-idx="0" tabindex="0" class="page-link">Lùi</a>
                                         </li>
                                         <%}%>
                                             <%if(totalPage>5){%>
                                                 <%if(page>3&&page<=(totalPage-2)){ %>
                                                         <li class="paginate_button page-item ">
-                                                            <a href="/products/?page=1" aria-controls="sampleTable"
+                                                            <a href="?page=1" aria-controls="sampleTable"
                                                                 data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <i class="fas fa-angle-double-left"></i>
                                                             </a>
@@ -435,37 +473,32 @@
                                                         </li>
 
                                                         <li class="paginate_button page-item   ">
-                                                            <a href="/products/?page=<%=page-2%>"
-                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                                class="page-link">
+                                                            <a href="?page=<%=page-2%>" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <%=page-2%>
                                                             </a>
                                                         </li>
                                                         <li class="paginate_button page-item   ">
-                                                            <a href="/products/?page=<%=page-1%>"
-                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                                class="page-link">
+                                                            <a href="?page=<%=page-1%>" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <%=page-1%>
                                                             </a>
                                                         </li>
                                                         <li class="paginate_button page-item  active">
-                                                            <a href="/products/?page=<%=page%>"
-                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                                class="page-link">
+                                                            <a href="/order/?page=<%=page%>" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <%=page%>
                                                             </a>
                                                         </li>
                                                         <li class="paginate_button page-item   ">
-                                                            <a href="/products/?page=<%=page+1%>"
-                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                                class="page-link">
+                                                            <a href="?page=<%=page+1%>" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <%=page+1%>%>
                                                             </a>
                                                         </li>
                                                         <li class="paginate_button page-item   ">
-                                                            <a href="/products/?page=<%=page+2%>"
-                                                                aria-controls="sampleTable" data-dt-idx="1" tabindex="0"
-                                                                class="page-link">
+                                                            <a href="?page=<%=page+2%>" aria-controls="sampleTable"
+                                                                data-dt-idx="1" tabindex="0" class="page-link">
                                                                 <%=page+2%>%>
                                                             </a>
                                                         </li>
@@ -473,7 +506,7 @@
                                                             <% for(i=1;i<=5;i++){ if(name){ %>
                                                                 <li
                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                    <a href="?page=<%=i%>&name=<%=search%>"
                                                                         aria-controls="sampleTable" data-dt-idx="1"
                                                                         tabindex="0" class="page-link">
                                                                         <%=i%>
@@ -482,7 +515,7 @@
                                                                 <%}else{ %>
                                                                     <li
                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                        <a href="/products/?page=<%=i%>"
+                                                                        <a href="?page=<%=i%>"
                                                                             aria-controls="sampleTable" data-dt-idx="1"
                                                                             tabindex="0" class="page-link">
                                                                             <%=i%>
@@ -490,7 +523,7 @@
                                                                     </li>
                                                                     <%} }}else if(page>(totalPage-2)){%>
                                                                         <li class="paginate_button page-item ">
-                                                                            <a href="/products/?page=1"
+                                                                            <a href="?page=1"
                                                                                 aria-controls="sampleTable"
                                                                                 data-dt-idx="1" tabindex="0"
                                                                                 class="page-link">
@@ -508,7 +541,7 @@
                                                                             if(name){%>
                                                                             <li
                                                                                 class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                <a href="?page=<%=i%>&name=<%=search%>"
                                                                                     aria-controls="sampleTable"
                                                                                     data-dt-idx="1" tabindex="0"
                                                                                     class="page-link">
@@ -518,7 +551,7 @@
                                                                             <%}else{ %>
                                                                                 <li
                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                    <a href="/products/?page=<%=i%>"
+                                                                                    <a href="?page=<%=i%>"
                                                                                         aria-controls="sampleTable"
                                                                                         data-dt-idx="1" tabindex="0"
                                                                                         class="page-link">
@@ -542,7 +575,7 @@
                                                                                         </li>
                                                                                         <li
                                                                                             class="paginate_button page-item ">
-                                                                                            <a href="/products/?page=<%=totalPage%>"
+                                                                                            <a href="?page=<%=totalPage%>"
                                                                                                 aria-controls="sampleTable"
                                                                                                 data-dt-idx="1"
                                                                                                 tabindex="0"
@@ -556,7 +589,7 @@
                                                                                                 if(name){ %>
                                                                                                 <li
                                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                                    <a href="?page=<%=i%>&name=<%=search%>"
                                                                                                         aria-controls="sampleTable"
                                                                                                         data-dt-idx="1"
                                                                                                         tabindex="0"
@@ -567,7 +600,7 @@
                                                                                                 <%}else{ %>
                                                                                                     <li
                                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                        <a href="/products/?page=<%=i%>"
+                                                                                                        <a href="?page=<%=i%>"
                                                                                                             aria-controls="sampleTable"
                                                                                                             data-dt-idx="1"
                                                                                                             tabindex="0"
@@ -580,14 +613,14 @@
                                                                                                             <li class="paginate_button page-item next"
                                                                                                                 id="sampleTable_next">
                                                                                                                 <%if(name){%>
-                                                                                                                    <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
+                                                                                                                    <a href="?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
                                                                                                                         aria-controls="sampleTable"
                                                                                                                         data-dt-idx="3"
                                                                                                                         tabindex="0"
                                                                                                                         class="page-link">Tiếp</a>
                                                                                                                     <%
                                                                                                                         }else{%>
-                                                                                                                        <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                                        <a href="?page=<%=page<totalPage?page+1:totalPage%>"
                                                                                                                             aria-controls="sampleTable"
                                                                                                                             data-dt-idx="3"
                                                                                                                             tabindex="0"

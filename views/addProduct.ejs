@@ -91,6 +91,14 @@
                                     <input class="form-control" type="text" name="price" value="<%=product.price%>"
                                         required>
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Giá nhập</label>
+                                    <input class="form-control" type="text" name="importPrice" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="control-label">Số lượng</label>
+                                    <input class="form-control" type="text" name="quantity" value="0" required>
+                                </div>
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Ảnh sản phẩm</label>
                                     <input class="form-control" type="text" name="images" id="editimg">
@@ -138,9 +146,8 @@
         data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-
                 <div class="modal-body">
-                    <form action="/products/addCategory" method="post">
+                    <form action="/products/addCategory" method="post" id="ok">
                         <div class="row">
                             <div class="form-group  col-md-12">
                                 <span class="thong-tin-thanh-toan">
@@ -155,17 +162,54 @@
                                 <label class="control-label">Danh mục sản phẩm hiện đang có</label>
                                 <ul style="padding-left: 20px;">
                                     <% category.map(function(category){%>
-                                        <li value="<%=category.id %>">
-                                            <%=category.name %>
+                                        <li value="<%=category.id %>"
+                                            class="item d-flex justify-content-between align-items-center">
+                                            <label for="">
+                                                <%=category.name %>
+                                            </label><button class="btn btn-primary btn-sm trash" type="button"
+                                                title="Xóa" data-toggle="modal" data-target="#<%=category.id%>"><i
+                                                    class="fas fa-trash-alt"></i>
+                                            </button>
+                                            <!-- model xoa danh muc -->
+                                            <div class="modal fade" id="<%=category.id%>" tabindex="-1" role="dialog"
+                                                aria-labelledby="exampleModalCenterTitle" data-backdrop="static"
+                                                data-keyboard="false">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content text-center">
+                                                        <div class="modal-header text-center  ">
+                                                            <h2 class="modal-title w-100">
+                                                                fa</h2>
+                                                        </div>
+                                                        <div class="modal-body text-center text-dark ">
+                                                            <h2 class="modal-title w-100">Cảnh báo</h2>
+                                                            <h5>Bạn có chắc muốn xóa danh mục này không?
+                                                            </h5>
+                                                            <BR>
+                                                            <form class="text-right" id="form2"
+                                                                action="/products/delete/category" method="post">
+                                                                <button class="btn btn-cancel" type="button"
+                                                                    data-dismiss="modal">Hủy
+                                                                    bỏ</button>
+                                                                <input type="hidden" value="<%=category.id%>" name="id">
+                                                                <button class="btn btn-save" type="submit" id="submit2"
+                                                                    onclick="click2()">Đồng
+                                                                    ý</button>
+                                                            </form>
+                                                            <BR>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </li>
                                         <%})%>
-
                                 </ul>
                             </div>
                         </div>
                         <BR>
-                        <button class="btn btn-save" type="submit">Lưu lại</button>
-                        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+                        <button class="btn btn-save" type="submit" onclick="onclicksubmit()" id="form1">Lưu lại</button>
+                        <button class="btn btn-cancel" data-dismiss="modal">Hủy bỏ</button>
                         <BR>
                     </form>
                 </div>
@@ -197,5 +241,24 @@
         });
 
     </script>
+    <script>
+        function submit2() {
+            document.getElementById('submit2').onclick = function () {
+                document.getElementById('form2').submit();
+            };
+        }
+        function onclicksubmit() {
+            document.getElementById('form1').onclick = function () {
+                document.getElementById('ok').submit();
+            };
+        }
+        // function showoffmodal(id) {
+        //     var modal = document.getElementById(id);
+        //     modal.style.;
+        // }
+
+    </script>
+
+
 
     <%- include('footer') %>
