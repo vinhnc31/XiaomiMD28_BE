@@ -426,48 +426,59 @@ exports.getChartProductSel = async (req, res) => {
     const currentDate = new Date();
     const startOfLast6Months = new Date();
     startOfLast6Months.setMonth(currentDate.getMonth() - 5);
-    console.log(startOfLast6Months);
-    const listFilter = await Product.findAll({
-      include: [
-        {
-          model: Category,
-          attributes: ["name"],
+
+    const totalOrders = await OrdersProduct.count({
+      where: {
+        createdAt: {
+          [Op.gte]: startOfLast6Months,
+          [Op.lte]: currentDate,
         },
-        {
-          model: OrdersProduct,
-          as: "OrdersProducts",
-          where: {
-            createdAt: {
-              [Op.gte]: startOfLast6Months,
-              [Op.lte]: currentDate,
-            },
-          },
-        },
-      ],
-      attributes: [
-        "id",
-        "name",
-        "price",
-        "images",
-        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"],
-      ],
-      subQuery: false,
-      order: [[literal("ordersCount"), "DESC"]],
-      group: ["Product.id"],
-      limit: 5,
+      },
     });
 
-    if (!listFilter) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Failed to connect to the database" });
+    if (totalOrders === 0) {
+      // Avoid division by zero
+      return res.status(200).json({ status: 200, data: [] });
     }
 
-    return res.status(200).json({ status: 200, data: listFilter });
+    const categories = await Category.findAll({
+      attributes: ["id", "name"],
+    });
+
+    const categoryData = await Promise.all(
+      categories.map(async (category) => {
+        const ordersCount = await Product.count({
+          include: [
+            {
+              model: OrdersProduct,
+              as: "OrdersProducts",
+              where: {
+                createdAt: {
+                  [Op.gte]: startOfLast6Months,
+                  [Op.lte]: currentDate,
+                },
+              },
+            },
+          ],
+          where: {
+            CategoryId: category.id,
+          },
+        });
+        const percentage = (ordersCount / totalOrders) * 100;
+        return {
+          id: category.id,
+          name: category.name,
+          percentage,
+        };
+      })
+    );
+
+    return res.status(200).json({ status: 200, data: categoryData });
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
+    console.error("Error fetching categories and orders:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+    });
   }
 };
