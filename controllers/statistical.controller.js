@@ -484,7 +484,7 @@ exports.getChartProductSel = async (req, res) => {
     const listFilter = await Product.findAll({
       include: [
         {
-          model: Category,
+          model: Category, 
         },
         {
           model: OrdersProduct,
