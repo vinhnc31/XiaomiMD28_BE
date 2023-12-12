@@ -86,9 +86,14 @@
                                     <td><%= salary.staff.name %></td>
                                     <td><%= salary.staff.gender %></td>
                                     <td><%= salary.staff.position %></td>
-                                    <td><%= salary.salary %> đ</td>
-                                    <td><%= salary.salaryDeduction %> đ</td>
-                                    <td><%= salary.totalPrice %> đ</td>
+                                    <td>
+                                      <%= new Intl.NumberFormat('en-US').format(salary.salary) %> VNĐ
+                                    </td>
+                                      <%= new Intl.NumberFormat('en-US').format(salary.salaryDeduction) %> VNĐ
+                                    </td>
+                                    <td>
+                                      <%= new Intl.NumberFormat('en-US').format(salary.totalPrice) %> VNĐ
+                                    </td>
                                     <td>
                                       <% if (salary.status === 1) { %>
                                         <span class="badge bg-success">Đã nhận tiền </span>

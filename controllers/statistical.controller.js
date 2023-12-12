@@ -303,7 +303,7 @@ exports.getAll = async (req, res) => {
         },
       ],
       attributes: [
-        "id",
+        "id", 
         "name",
         "price",
         "images",
@@ -480,6 +480,7 @@ exports.getChartProductSel = async (req, res) => {
     const currentDate = new Date();
     const startOfLast6Months = new Date();
     startOfLast6Months.setMonth(currentDate.getMonth() - 5);
+
     const listFilter = await Product.findAll({
       include: [
         {
@@ -507,7 +508,24 @@ exports.getChartProductSel = async (req, res) => {
       group: ["Product.id"],
     });
 
-    console.log(listFilter);
+    // Tính phần trăm cho mỗi sản phẩm
+    const productListWithPercentage = listFilter.map(product => {
+      const totalQuantity = listFilter.reduce((total, product) => {
+        return total + product.OrdersProducts.reduce((orderTotal, order) => orderTotal + order.quantity, 0);
+      }, 0);
+      const percentageSold = (product.ordersCount / totalQuantity) * 100;
+      
+      return {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        images: product.images,
+        ordersCount: product.ordersCount,
+        percentageSold: percentageSold.toFixed(2), // Làm tròn đến 2 chữ số sau dấu thập phân
+      };
+    });
+
+    console.log(productListWithPercentage);
 
     if (!listFilter) {
       return res
@@ -515,7 +533,7 @@ exports.getChartProductSel = async (req, res) => {
         .json({ status: 400, message: "Failed to connect to the database" });
     }
 
-    return res.status(200).json({ status: 200, data: listFilter });
+    return res.status(200).json({ status: 200, data: productListWithPercentage });
   } catch (error) {
     console.error("Error fetching products:", error);
     return res
@@ -523,3 +541,4 @@ exports.getChartProductSel = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+
