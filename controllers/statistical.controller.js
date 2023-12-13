@@ -326,6 +326,8 @@ exports.getAll = async (req, res) => {
       group: ["Product.id"],
       limit: 10,
     });
+
+    
     if (!listFilterSelling) {
       return res
         .status(404)

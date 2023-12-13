@@ -1,45 +1,45 @@
 <%- include('head') %>
-<aside class="app-sidebar">
-  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
-          alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+  <aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
+        alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
       <div>
-          <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
-          <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+        <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
+        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
       </div>
-  </div>
-  <hr>
-  <ul class="app-menu">
-      <li><a class="app-menu__item haha" href="#"><i class='app-menu__icon bx bx-cart-alt'></i>
-              <span class="app-menu__label">MD VN</span></a></li>
+    </div>
+    <hr>
+    <ul class="app-menu">
+      <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
+          <span class="app-menu__label">MD VN</span></a></li>
       <li><a class="app-menu__item " href="http://localhost:3000/home"><i
-                  class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
-                  khiển</span></a></li>
+            class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+            khiển</span></a></li>
       <li><a class="app-menu__item active" href="http://localhost:3000/staff"><i
-                  class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
-                  viên</span></a></li>
+            class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+            viên</span></a></li>
       <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i
-                  class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
-                  hàng</span></a></li>
+            class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
+            hàng</span></a></li>
       <li><a class="app-menu__item " href="http://localhost:3000/products"><i
-                  class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
-                  sản phẩm</span></a>
+            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+            sản phẩm</span></a>
       </li>
       <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
-                  class="app-menu__label">Quản lý đơn hàng</span></a></li>
-      <li><a class="app-menu__item" href="http://localhost:3000/internal"><i
-                  class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
-              </span></a></li>
-      <li><a class="app-menu__item" href="http://localhost:3000/salary"><i
-                  class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
-                  lương</span></a></li>
+            class="app-menu__label">Quản lý đơn hàng</span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/internal"><i class='app-menu__icon bx bx-run'></i><span
+            class="app-menu__label">Quản lý nội bộ
+          </span></a></li>
+      <li><a class="app-menu__item" href="http://localhost:3000/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+            class="app-menu__label">Bảng kê
+            lương</span></a></li>
       <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
-                  class="app-menu__label">Quản lí Voucher</span></a></li>
+            class="app-menu__label">Quản lí Voucher</span></a></li>
       <li><a class="app-menu__item" href="http://localhost:3000/statistical/all"><i
-                  class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
-                  doanh thu</span></a>
+            class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
+            doanh thu</span></a>
       </li>
-  </ul>
-</aside>
+    </ul>
+  </aside>
 
   <body onload="time()" class="app sidebar-mini rtl">
 
@@ -80,16 +80,17 @@
                         </select> danh mục</label></div>
                   </div>
                   <div class="col-sm-12 col-md-6">
-                    <form action="/api/search" method="post" role="form">
+                    <form action="/searchStaff" method="post" role="form">
                       <div id="sampleTable_filter" class="dataTables_filter">
                         <label>Tìm kiếm:
                           <input type="search" class="form-control form-control-sm" placeholder="Nhập tên nhân viên"
-                            name="name" aria-controls="sampleTable" value="">
+                            name="name" aria-controls="sampleTable" value="" oninput="searchStaff()">
+
                           <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-search"></i></button>
                         </label>
                       </div>
                     </form>
-                    
+
                   </div>
 
                 </div>
@@ -258,22 +259,28 @@
           win.print();
         }
       }
-      //     //Sao chép dữ liệu
-      //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
 
-      // copyTextareaBtn.addEventListener('click', function(event) {
-      //   var copyTextarea = document.querySelector('.js-copytextarea');
-      //   copyTextarea.focus();
-      //   copyTextarea.select();
 
-      //   try {
-      //     var successful = document.execCommand('copy');
-      //     var msg = successful ? 'successful' : 'unsuccessful';
-      //     console.log('Copying text command was ' + msg);
-      //   } catch (err) {
-      //     console.log('Oops, unable to copy');
-      //   }
-      // });
+      function searchStaff() {
+        var searchValue = document.querySelector('input[name="name"]').value;
+
+        // Gọi API để thực hiện tìm kiếm
+        fetch(`http://localhost:3000/searchStaff`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: searchValue }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Xử lý dữ liệu trả về từ API, có thể làm điều gì đó với dữ liệu tìm kiếm
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Error searching staff:', error);
+          });
+      }
 
 
       //Modal
