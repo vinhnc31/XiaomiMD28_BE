@@ -89,7 +89,7 @@
                           </td>
                           <td>
                             <%= order.account.name %>
-                          </td> 
+                          </td>
                           <td>
                             <%= new Intl.NumberFormat('en-US').format(order.total) %> VNĐ
                           </td>
@@ -97,7 +97,7 @@
                             <span
                               class="badge <%= order.status === '0' ? 'bg-info' : order.status === '1' ? 'bg-warning' : order.status === '2' ? 'bg-success' : 'bg-danger' %>">
                               <%= order.status==='0' ? 'Chờ xác nhận' : order.status==='1' ? 'Đang vận chuyển' :
-                                order.statusOrder==='2' ? 'Đã nhận' : 'Đã hủy' %>
+                                order.status==='2' ? 'Đã nhận' : 'Đã hủy' %>
                             </span>
 
                           </td>
@@ -198,8 +198,8 @@
     <!--===============================================================================================-->
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
+    <script type="text/javascript" src="js/plugins/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <script>
@@ -221,21 +221,25 @@
           const response = await fetch('http://localhost:3000/home/RevenueInMonth');
           const data = await response.json();
           const labels = [];
-          const revenueData =[];
+          const revenueData = [];
+          const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
+
           data.data.forEach(item => {
             labels.push(item.month);
             revenueData.push(item.revenue);
+            // Đây là nơi bạn lấy dữ liệu cho đường kẻ đỏ từ item hoặc một nguồn dữ liệu khác
+            anotherDataSet.push(item.expense);
           });
 
           const intLabels = labels.map(month => parseInt(month));
-          updateChart(intLabels, revenueData);
+          updateChart(intLabels, revenueData, anotherDataSet);
         } catch (error) {
           console.error('Error fetching data from API:', error);
         }
       }
 
       // Hàm để cập nhật biểu đồ với dữ liệu mới
-      function updateChart(labels, data) {
+      function updateChart(labels, data, anotherDataSet) {
         const myChart = new Chart("myChart", {
           type: "line",
           data: {
@@ -244,6 +248,12 @@
               label: "Doanh thu thực tế",
               data: data,
               borderColor: "green",
+              fill: false
+            },
+            {
+              label: "Chi phí",
+              data: anotherDataSet,
+              borderColor: "red",
               fill: false
             }]
           },

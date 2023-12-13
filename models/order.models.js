@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     Orders.belongsTo(models.Account, { foreignKey: "AccountId" });
     Orders.belongsTo(models.Address, { foreignKey: "AddressId" });
-    Orders.belongsTo(models.Pay, { foreignKey: "PayId" });
+    Orders.belongsTo(models.Pay, { foreignKey: "PayId" }); 
     Orders.belongsTo(models.Promotion, { foreignKey: "PromotionId" });
     Orders.hasMany(models.OrdersProduct, { foreignKey: "OrderId" });
   };
