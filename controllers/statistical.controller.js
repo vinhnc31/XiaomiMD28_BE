@@ -10,6 +10,7 @@ const {
   ProductColorConfig,
   Config,
   Category,
+  sequelize,
 } = require("../models");
 const { Op, fn, col, literal } = require("sequelize");
 exports.getStaff = async (req, res) => {
@@ -172,6 +173,10 @@ exports.getProductSelling = async (req, res) => {
     const listFilter = await Product.findAll({
       include: [
         {
+          model: Category,
+          attributes: ["name"],
+        },
+        {
           model: productcolor,
           as: "colorProducts",
           include: [
@@ -202,8 +207,9 @@ exports.getProductSelling = async (req, res) => {
         [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
       ],
       order: [[literal("ordersCount"), "DESC"]],
+      subQuery: false,
       group: ["Product.id"],
-      // limit: 10
+      limit: 10,
     });
 
     console.log(listFilter);
@@ -275,10 +281,16 @@ exports.getAll = async (req, res) => {
     const totalOrder = await Orders.count("id");
     const totalRevenue = await Orders.sum("total");
     const totalOrderCancellation = await Orders.count({ where: { status: 3 } });
-    const totalProhibitedStaff = await Internals.count({ where: { status: 1 } });
+    const totalProhibitedStaff = await Internals.count({
+      where: { status: 1 },
+    });
 
     const listFilterSelling = await Product.findAll({
       include: [
+        {
+          model: Category,
+          attributes: ["name"],
+        },
         {
           model: productcolor,
           as: "colorProducts",
@@ -303,17 +315,23 @@ exports.getAll = async (req, res) => {
         },
       ],
       attributes: [
-        "id", 
+        "id",
         "name",
         "price",
         "images",
         [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
       ],
       order: [[literal("ordersCount"), "DESC"]],
+      subQuery: false,
       group: ["Product.id"],
-      // limit: 10,
+      limit: 10,
     });
- 
+    if (!listFilterSelling) {
+      return res
+        .status(404)
+        .json({ status: 400, message: "connect fail database" });
+    }
+
     const listFilterOutOfStock = await Product.findAll({
       include: [
         {
@@ -406,7 +424,9 @@ console.log(listFilterSelling)
     // });
   } catch (error) {
     console.error("Error fetching data:", error);
-    return res.status(500).json({ status: 500, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 
@@ -481,64 +501,59 @@ exports.getChartProductSel = async (req, res) => {
     const startOfLast6Months = new Date();
     startOfLast6Months.setMonth(currentDate.getMonth() - 5);
 
-    const listFilter = await Product.findAll({
-      include: [
-        {
-          model: Category, 
-        },
-        {
-          model: OrdersProduct,
-          as: "OrdersProducts",
-        },
-      ],
-      attributes: [
-        "id",
-        "name",
-        "price",
-        "images",
-        [fn("COUNT", col("OrdersProducts.id")), "ordersCount"], // Count orders for each product
-      ],
+    const totalOrders = await OrdersProduct.count({
       where: {
         createdAt: {
           [Op.gte]: startOfLast6Months,
           [Op.lte]: currentDate,
         },
       },
-      order: [[literal("ordersCount"), "DESC"]],
-      group: ["Product.id"],
     });
 
-    // Tính phần trăm cho mỗi sản phẩm
-    const productListWithPercentage = listFilter.map(product => {
-      const totalQuantity = listFilter.reduce((total, product) => {
-        return total + product.OrdersProducts.reduce((orderTotal, order) => orderTotal + order.quantity, 0);
-      }, 0);
-      const percentageSold = (product.ordersCount / totalQuantity) * 100;
-      
-      return {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        images: product.images,
-        ordersCount: product.ordersCount,
-        percentageSold: percentageSold.toFixed(2), // Làm tròn đến 2 chữ số sau dấu thập phân
-      };
-    });
-
-    console.log(productListWithPercentage);
-
-    if (!listFilter) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Failed to connect to the database" });
+    if (totalOrders === 0) {
+      // Avoid division by zero
+      return res.status(200).json({ status: 200, data: [] });
     }
 
-    return res.status(200).json({ status: 200, data: productListWithPercentage });
+    const categories = await Category.findAll({
+      attributes: ["id", "name"],
+    });
+
+    const categoryData = await Promise.all(
+      categories.map(async (category) => {
+        const ordersCount = await Product.count({
+          include: [
+            {
+              model: OrdersProduct,
+              as: "OrdersProducts",
+              where: {
+                createdAt: {
+                  [Op.gte]: startOfLast6Months,
+                  [Op.lte]: currentDate,
+                },
+              },
+            },
+          ],
+          where: {
+            CategoryId: category.id,
+          },
+        });
+        const percentage = (ordersCount / totalOrders) * 100;
+        return {
+          id: category.id,
+          name: category.name,
+          percentage,
+        };
+      })
+    );
+
+    return res.status(200).json({ status: 200, data: categoryData });
   } catch (error) {
-    console.error("Error fetching products:", error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
+    console.error("Error fetching categories and orders:", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+    });
   }
 };
 

@@ -145,7 +145,7 @@
                                             <%= new Intl.NumberFormat('en-US').format(product.price) %> VNĐ
                                         </td>
                                         <td>
-                                            <%= product.CategoryId %>
+                                            <%= product.Category.name %>
                                         </td>
                                     </tr>
                                     <% }); %>
@@ -176,35 +176,45 @@
                             <tbody>
                                 <% let total=0 %>
                                     <% dataOrder.forEach(order=> { %>
-                                        <% total +=order.total %>
-                                            <tr>
-                                                <td>
-                                                    <%= order.id %>
-                                                </td>
-                                                <td>
-                                                    <%= order.Account.name %>
-                                                </td>
-                                                <td>
-                                                    <%= order.OrdersProducts.productId %>
-                                                </td>
-                                                <td>
-                                                    <%= order.OrdersProducts.quantity %>
-                                                </td>
+                                        <% let totalQuantity=0 %>
+                                            <% order.OrdersProducts.forEach(product=> { %>
+                                                <% totalQuantity +=product.quantity %>
+                                                    <% }); %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= order.id %>
+                                                            </td>
+                                                            <td>
+                                                                <%= order.Account.name %>
+                                                            </td>
+                                                            <td>
+                                                                <!-- Hiển thị tên sản phẩm -->
+                                                                <% order.OrdersProducts.forEach(product=> { %>
+                                                                    <%= product.Product.name %>
+                                                                        <% }); %>
+                                                            </td>
+                                                            <td>
+                                                                <%= totalQuantity %>
+                                                            </td>
+                                                            <td>
+                                                                <%= new Intl.NumberFormat('en-US').format(order.total)
+                                                                    %> VNĐ
+                                                            </td>
+                                                        </tr>
+                                                        <% total +=order.total %>
+                                                            <% totalQuantity=0 %>
+                                                                <% }); %>
 
-                                                <td>
-                                                    <%= new Intl.NumberFormat('en-US').format(order.total) %> VNĐ
-                                                </td>
-                                            </tr>
-                                            <% }); %>
-
-                                                <tr>
-                                                    <th colspan="4">Tổng cộng:</th>
-                                                    <td>
-                                                        <%= new Intl.NumberFormat('en-US').format(total) %> VNĐ
-                                                    </td>
-                                                </tr>
-
+                                                                    <tr>
+                                                                        <th colspan="4">Tổng cộng:</th>
+                                                                        <td>
+                                                                            <%= new
+                                                                                Intl.NumberFormat('en-US').format(total)
+                                                                                %> VNĐ
+                                                                        </td>
+                                                                    </tr>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -346,93 +356,125 @@
 
     <script type="text/javascript">
         async function fetchDataAndRenderChart() {
-        try {
-          // Gọi API để lấy dữ liệu từ server
-          const response = await fetch('http://localhost:3000/statistical/RevenueInMonth');
-          const data = await response.json();
-          const labels = [];
-          const revenueData = [];
-          const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
+            try {
+                // Gọi API để lấy dữ liệu từ server
+                const response = await fetch('http://localhost:3000/statistical/RevenueInMonth');
+                const data = await response.json();
+                const labels = [];
+                const revenueData = [];
+                const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
 
-          data.data.forEach(item => {
-            labels.push(item.month);
-            revenueData.push(item.revenue);
-            // Đây là nơi bạn lấy dữ liệu cho đường kẻ đỏ từ item hoặc một nguồn dữ liệu khác
-            anotherDataSet.push(item.expense);
-          });
+                data.data.forEach(item => {
+                    labels.push(item.month);
+                    revenueData.push(item.revenue);
+                    // Đây là nơi bạn lấy dữ liệu cho đường kẻ đỏ từ item hoặc một nguồn dữ liệu khác
+                    anotherDataSet.push(item.expense);
+                });
 
-          const intLabels = labels.map(month => parseInt(month));
-          updateChart(intLabels, revenueData, anotherDataSet);
-        } catch (error) {
-          console.error('Error fetching data from API:', error);
+                const intLabels = labels.map(month => parseInt(month));
+                updateChart(intLabels, revenueData, anotherDataSet);
+            } catch (error) {
+                console.error('Error fetching data from API:', error);
+            }
         }
-      }
 
-      // Hàm để cập nhật biểu đồ với dữ liệu mới
-      function updateChart(labels, data, anotherDataSet) {
-        const myChart = new Chart("myChart", {
-          type: "line",
-          data: {
-            labels: labels,
-            datasets: [{
-              label: "Doanh thu thực tế",
-              data: data,
-              borderColor: "green",
-              fill: false
-            },
-            {
-              label: "Chi phí",
-              data: anotherDataSet,
-              borderColor: "red",
-              fill: false
-            }]
-          },
-          options: {
-            legend: { display: true }
-          }
-        });
-      }
+        // Hàm để cập nhật biểu đồ với dữ liệu mới
+        function updateChart(labels, data, anotherDataSet) {
+            const myChart = new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Doanh thu thực tế",
+                        data: data,
+                        borderColor: "green",
+                        fill: false
+                    },
+                    {
+                        label: "Chi phí",
+                        data: anotherDataSet,
+                        borderColor: "red",
+                        fill: false
+                    }]
+                },
+                options: {
+                    legend: { display: true }
+                }
+            });
+        }
 
-      // Gọi hàm để bắt đầu quá trình
-      fetchDataAndRenderChart();
-
+        // Gọi hàm để bắt đầu quá trình
+        fetchDataAndRenderChart();
 
 
-        new Chart("pieChart", {
-            type: "pie",
-            data: {
-                labels: ["Robot & máy hút bụi", "Điện thoại", "Xe điện & xe cân bằng", "Tivi", "Củ sạc", "Cáp sạc", "Loa & tai nghe", "Sạc dự phòng"],
-                datasets: [{
-                    data: [5000, 6000, 4000, 2000, 1000, 200, 500, 1000],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(255, 159, 64, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 25, 2)'
-                    ]
-                }]
-            },
-            options: {
-                legend: { display: true },
-                tooltips: {
-                    callbacks: {
-                        label: function (tooltipItem, data) {
-                            var dataset = data.datasets[tooltipItem.datasetIndex];
-                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                                return previousValue + currentValue;
-                            });
-                            var currentValue = dataset.data[tooltipItem.index];
-                            var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-                            return percentage + "%";
+
+        async function fetchDataAndRenderChartPie() {
+            try {
+                // Gọi API để lấy dữ liệu từ server
+                const response = await fetch('http://localhost:3000/statistical/chartProductSel');
+                const data = await response.json();
+
+                // Trích xuất nhãn và dữ liệu từ phản hồi API
+                const labels = []
+                const dataValues = []
+                data.data.forEach(item => {
+                    labels.push(item.name);
+                    dataValues.push(item.percentage);
+                });
+                console.log(data)
+
+                // Tạo biểu đồ
+                const pieChart = new Chart("pieChart", {
+                    type: "pie",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: dataValues,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(153, 102, 255, 0.8)',
+                                'rgba(255, 159, 64, 0.8)',
+                                'rgba(0, 255, 0, 0.8)',
+                                'rgba(255, 0, 0, 0.8)',
+                                'rgba(0, 0, 255, 0.8)',
+                                'rgba(255, 0, 255, 0.8)',
+                                'rgba(0, 255, 255, 0.8)',
+                                'rgba(128, 0, 128, 0.8)',
+                                'rgba(128, 128, 0, 0.8)',
+                                'rgba(0, 128, 128, 0.8)',
+                                'rgba(128, 0, 0, 0.8)',
+                                'rgba(0, 128, 0, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        legend: { display: true },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem, data) {
+                                    var dataset = data.datasets[tooltipItem.datasetIndex];
+                                    var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                        return previousValue + currentValue;
+                                    });
+                                    var currentValue = dataset.data[tooltipItem.index];
+                                    var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                                    return percentage + "%";
+                                }
+                            }
                         }
                     }
-                }
+                });
+            } catch (error) {
+                console.error('Error fetching data from API:', error);
             }
-        });
+        }
+
+        // Gọi hàm để bắt đầu quá trình
+        fetchDataAndRenderChartPie();
+
 
     </script>
     <!-- Google analytics script-->

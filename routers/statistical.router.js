@@ -12,11 +12,7 @@ router.get(
   "/ProductIsOutOfStock",
   statisticalController.getProductIsOutOfStock
 );
-router.get(
-  "/all",
-  statisticalController.getAll
-);
-// router.get("/staffNew", statisticalController.getStaffNew);
+router.get("/all", statisticalController.getAll);
 router.get("/orderNew", statisticalController.getOrderNew);
 router.get("/RevenueInMonth", statisticalController.getRevenueInMonth);
 router.get("/chartProductSel", statisticalController.getChartProductSel);
