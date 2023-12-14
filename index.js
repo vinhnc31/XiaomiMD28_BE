@@ -121,22 +121,11 @@ app.get("/", function (req, res) {
 app.use("/products", productView);
 app.use("/order", orderView);
 
-app.get("/updateStaffTest", function (req, res) {
-  res.render("updateStaff");
-});
-app.get("/passTest", function (req, res) {
-  res.render("reset-password");
-});
-app.get("/salesTest", function (req, res) {
-  res.render("salesReport");
-});
 
 app.get("/form-addStaff", function (req, res) {
   res.render("addStaff");
 });
-app.get("/InternalManagement", function (req, res) {
-  res.render("InternalManagement");
-});
+
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

@@ -10,8 +10,14 @@ exports.getStaff = async (req, res) => {
     if (!listStaff) {
       return res.status(404).json({ status: 404, message: "No staff found" });
     }
-    res.render('staffManager', {"staffs": listStaff });
-console.log(listStaff)
+
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+
+      res.render('staffManager', {"staffs": listStaff, user: loggedInUser });
+      }
+    
     // return res.status(200).json({ status: 200, data: listStaff });
   } catch (error) {
     console.error(error);
