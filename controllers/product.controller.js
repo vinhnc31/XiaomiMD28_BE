@@ -609,7 +609,10 @@ exports.getFilterInStart = async (req, res) => {
 exports.getMostFavorites = async (req, res) => {
   try {
     const listProduct = await Product.findAll({
-      include: [{ model: Favorites, as: "favorites" }],
+      include: [
+        { model: Favorites, as: "favorites" },
+        { model: Comment, as: "comments" },
+      ],
       attributes: [
         "id",
         "name",
@@ -620,6 +623,13 @@ exports.getMostFavorites = async (req, res) => {
         "updatedAt",
         "CategoryId",
         [fn("COUNT", col("favorites.id")), "FavoritesCount"],
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
       ],
       group: ["Product.id"],
       order: [[literal("FavoritesCount"), "DESC"]],

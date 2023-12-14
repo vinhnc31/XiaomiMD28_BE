@@ -3,12 +3,17 @@ const router = expess.Router();
 
 const productController = require("../controllers/productView.Controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
+const middleWare = require("../middleWare/auth.middlewere");
 
-router.get("/", productController.index);
-router.get("/add", productController.indexAddProduct);
+router.get("/", middleWare.loggedin, productController.index);
+router.get("/add", middleWare.loggedin, productController.indexAddProduct);
 router.post("/delete/:id", productController.deleteProduct);
 router.post("/add", cloudinary.single("images"), productController.addProduct);
-router.get("/update/:id", productController.indexUpdateProduct);
+router.get(
+  "/update/:id",
+  middleWare.loggedin,
+  productController.indexUpdateProduct
+);
 router.post(
   "/update/:id",
   cloudinary.single("images"),
@@ -19,7 +24,11 @@ router.post("/delete/category", productController.deleteCategory);
 router.post("/delete/color/:id", productController.deleteColor);
 router.post("/delete/config/:id", productController.deleteConfig);
 
-router.get("/add/colorProduct/:id", productController.indexColorProduct);
+router.get(
+  "/add/colorProduct/:id",
+  middleWare.loggedin,
+  productController.indexColorProduct
+);
 router.post("/add/color/:id", productController.addColor);
 router.post(
   "/add/colorProduct/:id",
@@ -33,6 +42,7 @@ router.post(
 
 router.get(
   "/add/colorProduct_config/:id",
+  middleWare.loggedin,
   productController.indexConfigProductColor
 );
 router.post("/add/config/:id", productController.addConfig);

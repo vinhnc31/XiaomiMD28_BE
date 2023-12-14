@@ -40,6 +40,7 @@ const apiAuth = async (req, res, next) => {
   }
 };
 const loggedin = (req, res, next) => {
+  console.log(req.session.loggedin);
   if (req.session.loggedin) {
     res.locals.user = req.session.user;
     next();

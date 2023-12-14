@@ -3,8 +3,8 @@ const routers = express.Router();
 const voucher = require("../controllers/voucherView.controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
 const middleWare = require("../middleWare/auth.middlewere");
-routers.get("/voucher",  voucher.getData);
-routers.get("/voucher/add", voucher.indexaddPromotion);
+routers.get("/voucher", middleWare.loggedin, voucher.getData);
+routers.get("/voucher/add", middleWare.loggedin, voucher.indexaddPromotion);
 routers.post(
   "/voucher/add",
   cloudinary.single("image"),

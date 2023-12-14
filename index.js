@@ -110,7 +110,7 @@ app.use("/", loginView);
 app.use("/", voucherView);
 app.use("/", staff);
 app.use("/", salary);
-app.get("/", function (req, res) {
+app.get("/", middleware.isAuth, function (req, res) {
   res.render("login", {
     message: "",
     email: "",
