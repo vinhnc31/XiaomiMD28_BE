@@ -1,5 +1,6 @@
 const { Staff } = require("../models/index");
 const bcrypt = require("bcrypt");
+
 exports.login = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -11,12 +12,13 @@ exports.login = async (req, res, next) => {
         password: req.body.password,
       });
     }
-    console.log(req.body.email);
+
     const result = await Staff.findOne({
       where: {
         email: req.body.email,
       },
     });
+    console.log(result)
     if (!result) {
       return res.render("login", {
         status: 401,
@@ -25,7 +27,7 @@ exports.login = async (req, res, next) => {
         password: req.body.password,
       });
     }
-    console.log("chạy");
+
     const isPasswordMatch = await bcrypt.compare(
       req.body.password,
       result.password
@@ -39,16 +41,23 @@ exports.login = async (req, res, next) => {
         password: req.body.password,
       });
     }
+
+    // Lưu thông tin người dùng vào session
     req.session.loggedin = true;
-    req.session.user = result;
+    req.session.user = {
+      id: result.id,
+      name: result.name,
+      avatar: result.avatar,
+      // Thêm các thông tin khác cần thiết
+    };
+console.log(req.session.user)
     return res.redirect("/home");
   } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ status: 500, message: "Internal server error" });
+    console.error(error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
   }
 };
+
 exports.logout = (req, res) => {
   console.log("ok");
   req.session.destroy((err) => {

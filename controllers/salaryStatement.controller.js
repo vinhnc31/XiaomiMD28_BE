@@ -9,7 +9,12 @@ exports.getSalary = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    res.render('salaryStatement', {"salaryList": listSalary });
+    
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      res.render('salaryStatement', {"salaryList": listSalary, user: loggedInUser });
+    }
     console.log(listSalary)
   } catch (error) {
     console.log(error);
@@ -110,7 +115,7 @@ exports.deleteSalary = async (req, res) => {
 };
 exports.viewAdd = async (req, res) => {
   const listStaff = await Staff.findAll();
-
+  
     if (!listStaff) {
       return res.status(404).json({ status: 404, message: "No staff found" });
     }
@@ -130,9 +135,15 @@ exports.viewUpdateSalary = async (req, res, next) => {
     id: salaries.StaffId,
   },
 });
+if (req.session.loggedin && req.session.user) {
+  // Lấy thông tin người dùng từ đối tượng session
+  const loggedInUser = req.session.user;
   res.render("updateSalary", {
     staff: staff,
     Salaries: salaries,
     title: "Sửa lương",
+    user: loggedInUser
   });
+}
+  
 }; 

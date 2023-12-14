@@ -1,40 +1,40 @@
 <%- include('head') %>
     <aside class="app-sidebar">
-        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/ava.png" width="50px"
-                alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
-            <div>
-                <p class="app-sidebar__user-name"><b>Công Vinh</b></p>
-                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-            </div>
+        <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
+            alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+        <div>
+            <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
+            <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
         </div>
+    </div>
         <hr>
         <ul class="app-menu">
             <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
                     <span class="app-menu__label">MD VN</span></a></li>
-            <li><a class="app-menu__item " href="http://localhost:3000/home"><i
+            <li><a class="app-menu__item " href="/home"><i
                         class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
                         khiển</span></a></li>
-            <li><a class="app-menu__item " href="http://localhost:3000/staff"><i
+            <li><a class="app-menu__item " href="/staff"><i
                         class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
                         viên</span></a></li>
-            <li><a class="app-menu__item" href="http://localhost:3000/account/listAccount"><i
+            <li><a class="app-menu__item" href="/account/listAccount"><i
                         class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
                         hàng</span></a></li>
-            <li><a class="app-menu__item " href="http://localhost:3000/products"><i
+            <li><a class="app-menu__item " href="/products"><i
                         class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
                         sản phẩm</span></a>
             </li>
             <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
                         class="app-menu__label">Quản lý đơn hàng</span></a></li>
-            <li><a class="app-menu__item" href="http://localhost:3000/internal"><i
+            <li><a class="app-menu__item" href="/internal"><i
                         class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
-            <li><a class="app-menu__item" href="http://localhost:3000/salary"><i
+            <li><a class="app-menu__item" href="/salary"><i
                         class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
                         lương</span></a></li>
             <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
                         class="app-menu__label">Quản lí Voucher</span></a></li>
-            <li><a class="app-menu__item active" href="http://localhost:3000/statistical/all"><i
+            <li><a class="app-menu__item active" href="/statistical/all"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
                         doanh thu</span></a>
             </li>
@@ -358,27 +358,24 @@
         async function fetchDataAndRenderChart() {
             try {
                 // Gọi API để lấy dữ liệu từ server
-                const response = await fetch('http://localhost:3000/statistical/RevenueInMonth');
+                const response = await fetch('/statistical/RevenueInMonth');
                 const data = await response.json();
                 const labels = [];
                 const revenueData = [];
                 const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
 
                 data.data.forEach(item => {
-                    labels.push(item.month);
+                    labels.push("Tháng "+item.month);
                     revenueData.push(item.revenue);
-                    // Đây là nơi bạn lấy dữ liệu cho đường kẻ đỏ từ item hoặc một nguồn dữ liệu khác
                     anotherDataSet.push(item.expense);
                 });
 
-                const intLabels = labels.map(month => parseInt(month));
-                updateChart(intLabels, revenueData, anotherDataSet);
+                updateChart(labels, revenueData, anotherDataSet); 
             } catch (error) {
                 console.error('Error fetching data from API:', error);
             }
         }
 
-        // Hàm để cập nhật biểu đồ với dữ liệu mới
         function updateChart(labels, data, anotherDataSet) {
             const myChart = new Chart("myChart", {
                 type: "line",
@@ -411,7 +408,7 @@
         async function fetchDataAndRenderChartPie() {
             try {
                 // Gọi API để lấy dữ liệu từ server
-                const response = await fetch('http://localhost:3000/statistical/chartProductSel');
+                const response = await fetch('/statistical/chartProductSel');
                 const data = await response.json();
 
                 // Trích xuất nhãn và dữ liệu từ phản hồi API

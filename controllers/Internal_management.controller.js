@@ -11,7 +11,12 @@ exports.getInternal = async (req, res) => {
       });
     }
     console.log(listInternal)
-    res.render('InternalManagement', {"listInternal": listInternal });
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      res.render('InternalManagement', {"listInternal": listInternal , user: loggedInUser});
+    }
+    
     // return res.status(200).json({ status: 200, data: listInternal });
   } catch (error) {
     console.error("Error in getInternal:", error);
@@ -81,7 +86,11 @@ exports.deleteInternal = async (req, res) => {
 exports.viewAddInternal = async (req, res) => {
   const staffs = await Staff.findAll();
 console.log(staffs)
-  res.render('addInternal', {"staffs" : staffs});
+if (req.session.loggedin && req.session.user) {
+  // Lấy thông tin người dùng từ đối tượng session
+  const loggedInUser = req.session.user;
+  res.render('addInternal', {"staffs" : staffs, user: loggedInUser});
+}
 };
 
 exports.viewUpdate = async (req, res) => {
@@ -97,9 +106,16 @@ exports.viewUpdate = async (req, res) => {
     id: internal.StaffId,
   },
 });
+
+if (req.session.loggedin && req.session.user) {
+  // Lấy thông tin người dùng từ đối tượng session
+  const loggedInUser = req.session.user;
   res.render("updateInternal", {
     staff: staff,
     internal: internal,
     title: "Sửa lương",
+    user: loggedInUser
   });
+}
+  
 };

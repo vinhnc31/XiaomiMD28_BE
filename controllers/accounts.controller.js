@@ -14,8 +14,13 @@ exports.getAccounts = async (req, res) => {
     if (!listUser || listUser.length === 0) {
       return res.status(400).json({ status: 400, message: "No users found" });
     }
-    res.render("customerManager", { accounts: listUser });
+    
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
+      res.render("customerManager", { accounts: listUser, user: loggedInUser });
+    }
     // return res.status(200).json({ status: 200, data: listUser });
   } catch (error) {
     console.error(error);
