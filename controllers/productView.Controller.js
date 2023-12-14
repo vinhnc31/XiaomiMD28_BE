@@ -52,17 +52,22 @@ exports.index = async (req, res) => {
         limit: _limit,
       });
     }
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
-    return res.render("product", {
-      data: listProduct,
-      search: _name,
-      totalPage: totalPage,
-      name: _name,
-      page: _page,
-      limit: _limit,
+      return res.render("product", {
+        data: listProduct,
+        search: _name,
+        totalPage: totalPage,
+        name: _name,
+        page: _page,
+        limit: _limit,
+        user: loggedInUser,
 
-      //return res.status(200).json({ status: 200, data: listProduct });
-    });
+        //return res.status(200).json({ status: 200, data: listProduct });
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.render("product", {
@@ -78,24 +83,29 @@ exports.indexAddProduct = async (req, res) => {
   } else {
     res.status(400).json({ status: 400, message: "false connexting db" });
   }
-  res.render("addProduct", {
-    category: listCategory,
-    title: "Thêm sản phẩm",
-    product: [
-      {
-        name: "",
-        price: "",
-        quantity: "",
-        images: "",
-        description: "",
-        CategoryId: [
-          {
-            name: "",
-          },
-        ],
-      },
-    ],
-  });
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
+    res.render("addProduct", {
+      user: loggedInUser,
+      category: listCategory,
+      title: "Thêm sản phẩm",
+      product: [
+        {
+          name: "",
+          price: "",
+          quantity: "",
+          images: "",
+          description: "",
+          CategoryId: [
+            {
+              name: "",
+            },
+          ],
+        },
+      ],
+    });
+  }
 };
 
 exports.addProduct = async (req, res) => {
@@ -190,12 +200,17 @@ exports.indexUpdateProduct = async (req, res, next) => {
       .status(400)
       .json({ status: 400, message: "false connexting db" });
   }
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
 
-  res.render("updateProduct", {
-    category: listCategory,
-    product: product,
-    title: "Sửa sản phẩm",
-  });
+    res.render("updateProduct", {
+      category: listCategory,
+      product: product,
+      title: "Sửa sản phẩm",
+      user: loggedInUser,
+    });
+  }
   //res.status(200).json(product);
 };
 
@@ -339,12 +354,17 @@ exports.indexColorProduct = async (req, res, next) => {
         },
       ],
     });
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
-    res.render("colorsProduct", {
-      color: listColor,
-      productId: productId,
-      data: productColor,
-    });
+      res.render("colorsProduct", {
+        user: loggedInUser,
+        color: listColor,
+        productId: productId,
+        data: productColor,
+      });
+    }
   } catch (error) {
     console.log(error);
     return res
@@ -473,13 +493,18 @@ exports.indexConfigProductColor = async (req, res) => {
         model: Product,
       },
     });
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
-    res.render("configProduct", {
-      config: listConfig,
-      productColorId: productColorId,
-      data: productColorConfig,
-      productId: product.Product.id,
-    });
+      res.render("configProduct", {
+        user: loggedInUser,
+        config: listConfig,
+        productColorId: productColorId,
+        data: productColorConfig,
+        productId: product.Product.id,
+      });
+    }
   } catch (error) {
     console.log(error);
     return res

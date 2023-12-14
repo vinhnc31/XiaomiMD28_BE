@@ -55,17 +55,22 @@ exports.getData = async (req, res) => {
       };
       promotion.push(newitem);
     }
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
-    return res.render("Voucher", {
-      data: promotion,
-      search: _name,
-      totalPage: totalPage,
-      name: _name,
-      page: _page,
-      limit: _limit,
+      return res.render("Voucher", {
+        user: loggedInUser,
+        data: promotion,
+        search: _name,
+        totalPage: totalPage,
+        name: _name,
+        page: _page,
+        limit: _limit,
 
-      //return res.status(200).json({ status: 200, data: listProduct });
-    });
+        //return res.status(200).json({ status: 200, data: listProduct });
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.render("Voucher", {
@@ -75,7 +80,11 @@ exports.getData = async (req, res) => {
   }
 };
 exports.indexaddPromotion = async (req, res, next) => {
-  res.render("addVoucher");
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
+    res.render("addVoucher", { user: loggedInUser });
+  }
 };
 exports.createPromotion = async (req, res) => {
   const { name, image, discount, startDate, endDate } = req.body;

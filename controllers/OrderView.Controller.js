@@ -62,16 +62,21 @@ exports.index = async (req, res) => {
         order: [["id", "DESC"]],
       });
     }
-    return res.render("Order", {
-      data: listOrder,
-      search: _name,
-      totalPage: totalPage,
-      name: _name,
-      page: _page,
-      status: -1,
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      return res.render("Order", {
+        data: listOrder,
+        search: _name,
+        totalPage: totalPage,
+        name: _name,
+        page: _page,
+        status: -1,
+        user: loggedInUser,
 
-      //return res.status(200).json({ status: 200, data: listOrder });
-    });
+        //return res.status(200).json({ status: 200, data: listOrder });
+      });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -165,17 +170,22 @@ exports.getstatus = async (req, res) => {
         };
       }
     }
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
 
-    return res.render("Order", {
-      data: listOrder,
-      search: _name,
-      totalPage: totalPage,
-      name: _name,
-      page: _page,
-      status: status,
+      return res.render("Order", {
+        data: listOrder,
+        search: _name,
+        totalPage: totalPage,
+        name: _name,
+        page: _page,
+        status: status,
+        user: loggedInUser,
 
-      //return res.status(200).json({ status: 200, data: listOrder });
-    });
+        //return res.status(200).json({ status: 200, data: listOrder });
+      });
+    }
   } catch (error) {
     console.log(error);
   }
