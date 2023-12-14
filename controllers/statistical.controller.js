@@ -398,32 +398,26 @@ exports.getAll = async (req, res) => {
       order: [['createdAt', 'DESC']], // Order by createdAt in descending order (latest first)
       limit: 10, // Limit the result to 10 records
     });
-console.log(listFilterSelling)
-// return listOrder
-    res.render("salesReport", {
-      totalStaff,
-      totalProduct,
-      totalOrder,
-      totalRevenue,
-      totalOrderCancellation, 
-      totalProhibitedStaff,
-      dataStaff: listStaff,
-      dataSelling: listFilterSelling,
-      dataOutOfStock: listFilterOutOfStock,
-      dataOrder: listOrder
-    });
-    // return res.status(200).json({ 
-    //   status: 200,
-    //   totalStaff,
-    //   totalProduct,
-    //   totalOrder,
-    //   totalRevenue,
-    //   totalOrderCancellation,
-    //   totalProhibitedStaff,
-    //   dataSelling: listFilterSelling,
-    //   dataOutOfStock: listFilterOutOfStock,
-    //   dataOrder: listOrder
-    // });
+
+    
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+
+      res.render("salesReport", {
+        totalStaff,
+        totalProduct,
+        totalOrder,
+        totalRevenue,
+        totalOrderCancellation, 
+        totalProhibitedStaff,
+        dataStaff: listStaff,
+        dataSelling: listFilterSelling,
+        dataOutOfStock: listFilterOutOfStock,
+        dataOrder: listOrder,
+        user: loggedInUser
+      });
+      }
   } catch (error) {
     console.error("Error fetching data:", error);
     return res
