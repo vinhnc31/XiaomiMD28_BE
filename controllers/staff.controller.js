@@ -95,10 +95,7 @@ exports.createStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    const listStaff = await Staff.findAll();
-    // return res.render('/', {"staffs": listStaff });
-    return res.render('staffManager', {"staffs": listStaff });
-    // return res.status(201).json({ status: 201, data: createStaff });
+    return res.redirect("/staff");
   } catch (error) {
     console.log(error);
     return res
@@ -174,12 +171,9 @@ exports.deleteStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "Error connecting to database" });
     }
-    const listStaff = await Staff.findAll();
-    // res.render('/staffManager', {"staffs": listStaff });
+    
     return res.redirect("/staff");
-    // return res
-    //   .status(200)
-    //   .json({ status: 200, message: "delete successfully" });
+   
   } catch (error) {
     console.log(error);
     return res
@@ -195,17 +189,16 @@ exports.viewUpdateStaff = async (req, res, next) => {
       id: id,
     },
   });
-  // const listCategory = await Category.findAll();
-  // if (listCategory) {
-  // } else {
-  //   res.status(400).json({ status: 400, message: "false connexting db" });
-  // }
- console.log(staff)
-  res.render("updateStaff", {
-    // category: listCategory,
-    staff: staff,
-    title: "Sửa nhân viên",
-  });
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
+    res.render("updateStaff", {
+      // category: listCategory,
+      staff: staff,
+      title: "Sửa nhân viên",
+      user: loggedInUser
+    });  }
+  
 };
 
 exports.searchStaff = async (req, res) => {
@@ -225,12 +218,11 @@ exports.searchStaff = async (req, res) => {
       },
     });
 
-    if (!listStaff || listStaff.length === 0) {
-      return res.redirect("/staff");
-    }
-
-    res.render('staffManager', { staffs: listStaff });
-  } catch (error) {
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      res.render('staffManager', { staffs: listStaff, user: loggedInUser });
+    }  } catch (error) {
     console.error(error);
     return res.status(500).json({ status: 500, message: "Internal server error" });
   }
@@ -273,3 +265,10 @@ exports.loginWeb = async (req, res) => {
       .json({ status: 500, message: "Internal server error" });
   }
 };
+exports.addStaffView = async (req, res) => {
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
+    res.render('addStaff', { user: loggedInUser });
+  } 
+}

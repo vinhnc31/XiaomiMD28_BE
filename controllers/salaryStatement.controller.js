@@ -13,9 +13,9 @@ exports.getSalary = async (req, res) => {
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
-      res.render('salaryStatement', {"salaryList": listSalary, user: loggedInUser });
+      res.render('salaryStatement', {salaryList: listSalary, user: loggedInUser });
     }
-    console.log(listSalary)
+
   } catch (error) {
     console.log(error);
     return res
