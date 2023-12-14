@@ -130,7 +130,7 @@ const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/product.controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
-
+router.get("/products", productController.getProducts);
 router.get("/product", productController.getProduct);
 router.get("/product/filter", productController.getFilter);
 router.get("/product/:id", productController.getProductId);

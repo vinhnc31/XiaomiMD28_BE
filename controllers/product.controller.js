@@ -12,6 +12,44 @@ const {
 
 const { Op, fn, col, literal } = require("sequelize");
 
+exports.getProducts = async (req, res) => {
+  try {
+    const listProduct = await Product.findAll({
+      include: [{ model: Comment, as: "comments" }],
+      attributes: [
+        "id",
+        "name",
+        "price",
+        "images",
+        "description",
+        "createdAt",
+        "updatedAt",
+        "CategoryId",
+        [fn("COUNT", col("comments.id")), "commentCount"],
+        [
+          literal(
+            "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
+          ),
+          "averageRating",
+        ],
+      ],
+      group: ["`Product`.`id`"],
+    });
+    if (!listProduct || listProduct.length === 0) {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Products not found" });
+    }
+
+    return res.status(200).json({ status: 200, data: listProduct });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+};
+
 exports.getProduct = async (req, res) => {
   try {
     const name = req.query.name;
