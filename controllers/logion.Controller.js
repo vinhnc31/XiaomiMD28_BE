@@ -62,7 +62,6 @@ exports.logout = (req, res) => {
   console.log("ok");
   req.session.destroy((err) => {
     if (err) res.redirect("/home");
-    req.session.destroy()
     res.redirect("/");
   });
 };
