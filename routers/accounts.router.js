@@ -111,5 +111,5 @@ router.put(
   account.updateProfile
 );
 router.get("/account/listAccount", middleWare.loggedin,account.getAccounts);
-
+router.post("/account/search", middleWare.loggedin,account.searchAccount);
 module.exports = router;

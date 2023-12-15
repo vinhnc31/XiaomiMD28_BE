@@ -11,10 +11,9 @@ router.post(
   cloudinary.single("avatar"),
   staffController.updateStaff
 ); 
-router.post("/staff/:id", staffController.deleteStaff);
+router.post("/staff/:id",  middleWare.loggedin, staffController.deleteStaff);
 router.get("/updateStaff/:id", middleWare.loggedin, staffController.viewUpdateStaff);
-router.post("/searchStaff", staffController.searchStaff);
+router.post("/searchStaff",  middleWare.loggedin, staffController.searchStaff);
 router.post("/loginWeb", staffController.loginWeb);
-router.post("/staff/:id", staffController.deleteStaff); 
 router.get("/form-addStaff", middleWare.loggedin, staffController.addStaffView);
 module.exports = router;

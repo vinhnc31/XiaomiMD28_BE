@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <link rel="stylesheet" href="globals.css" />
@@ -18,8 +18,8 @@
                             <%=message%>
                         </span>
                         <div class="div">
-                            <input class="text-wrapper-2" placeholder="Nhập Email" name="email"
-                                value="<%=email%>"></input>
+                            <input class="text-wrapper-2" placeholder="Nhập Email" name="email" value="<%=email%>">
+                            </input>
                             <img class="mail" src="img/mail-1.png" />
                         </div>
 
@@ -27,35 +27,42 @@
                             <div class="rectangle"></div>
                             <div class="text-wrapper-3">Password</div>
                             <div class="flex justify-between" style="align-items: baseline;">
-                                <img class="hide" src="img/hide-1.png" />
-                                <input type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu"
-                                    name="password" value="<%=password%>"></input>
-                                <img class="key" src="img/key-1.png" />
+                                <img class="hide" src="img/hide-1.png" onclick="togglePasswordVisibility()"/>
+                                <input id="password" type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu" name="password"
+                                    value="<%=password%>">
+                                </input>
+                                <img class="key" id="showPass" src="img/key-1.png"  style="cursor: pointer;">
                             </div>
-
                         </div>
 
                         <div class="text-wrapper-5">Email</div>
-                        <div class="text-wrapper-6">Quên mật khẩu ?</div>
                         <div class="div-wrapper">
                             <button type="submit" class="text-wrapper-7">Đăng nhập</button>
-                    </form>
-
+                        </form>
+                    </div>
                 </div>
-
-            </div>
-            <div class="overlap-3">
-                <div class="overlap-4">
-                    <img class="element-px" src="img/52616b-770-720-px-2-1-1.png" />
-                    <img class="element" src="img/logoapp.jpg" />
+                <div class="overlap-3">
+                    <div class="overlap-4">
+                        <img class="element-px" src="img/52616b-770-720-px-2-1-1.png" />
+                        <img class="element" src="img/logoapp.jpg" />
+                    </div>
+                    <div class="text-wrapper-8">MD VN</div>
                 </div>
-                <div class="text-wrapper-8">MD VN</div>
             </div>
         </div>
     </div>
-    </div>
     <script>
-
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('password');
+            // var keyImage = document.querySelector('.key');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                // keyImage.src = 'img/visible.png'; // Thay đổi hình ảnh khi hiển thị mật khẩu
+            } else {
+                passwordInput.type = 'password';
+                // keyImage.src = 'img/key-1.png'; // Thay đổi hình ảnh khi ẩn mật khẩu
+            }
+        }
     </script>
 </body>
 
