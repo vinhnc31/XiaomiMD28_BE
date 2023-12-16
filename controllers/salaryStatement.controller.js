@@ -147,3 +147,39 @@ if (req.session.loggedin && req.session.user) {
 }
   
 }; 
+
+const { Op } = require("sequelize");
+
+exports.searchSalary = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    // Kiểm tra xem 'name' có tồn tại hay không
+    if (!name) {
+      return res.status(400).json({ status: 400, message: "'name' parameter is required" });
+    }
+
+    const listSalary = await Salaries.findAll({
+      include: [
+        {
+          model: Staff,
+          as: "staff",
+          where: {
+            name: {
+              [Op.like]: `%${name}%`,
+            },
+          },
+        },
+      ],
+    });
+
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      res.render('salaryStatement', { salaryList: listSalary, user: loggedInUser });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
+  }
+};

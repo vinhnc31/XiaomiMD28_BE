@@ -6,6 +6,7 @@ const sendEmail = require("../untils/email");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 require("dotenv").config;
+const { Op } = require("sequelize");
 
 exports.getAccounts = async (req, res) => {
   try {
@@ -412,5 +413,32 @@ exports.updateProfile = async (req, res) => {
     return res
       .status(500)
       .json({ status: 500, message: "Internal server error" });
+  }
+};
+
+exports.searchAccount = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    // Kiểm tra xem 'name' có tồn tại hay không
+    if (!name) {
+      return res.status(400).json({ status: 400, message: "'name' parameter is required" });
+    }
+
+    const listAccount = await Account.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      },
+    });
+
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+      res.render('customerManager', { accounts: listAccount, user: loggedInUser });
+    }  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: 500, message: "Internal server error" });
   }
 };
