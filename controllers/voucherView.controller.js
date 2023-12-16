@@ -154,6 +154,8 @@ exports.createPromotion = async (req, res) => {
         title: title,
         content: content,
         AccountId: users[index].id,
+        VoucherId: createPromotion.id,
+        imageVoucher: imageUrl,
       }));
       await notifyAccount.bulkCreate(notifications);
       console.log("Successfully sent multicast message:", response);

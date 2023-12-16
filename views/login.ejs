@@ -5,6 +5,20 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function showpass() {
+            let show = document.getElementById('show')
+            let pass = document.getElementById("pass")
+            if (pass.type === 'password') {
+                pass.type = "text";
+                show.src = "img/eye.png"
+            } else {
+                pass.type = "password"
+                show.src = "img/hide-eye.png"
+            }
+        }
+
+    </script>
 </head>
 
 <body>
@@ -27,8 +41,8 @@
                             <div class="rectangle"></div>
                             <div class="text-wrapper-3">Password</div>
                             <div class="flex justify-between" style="align-items: baseline;">
-                                <img class="hide" src="img/hide-1.png" />
-                                <input type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu"
+                                <img class="hide" id="show" src="img/hide-eye.png" onclick="showpass(this)" />
+                                <input type="password" class="text-wrapper-4" placeholder="Nhập mật khẩu" id="pass"
                                     name="password" value="<%=password%>"></input>
                                 <img class="key" src="img/key-1.png" />
                             </div>
@@ -54,9 +68,8 @@
         </div>
     </div>
     </div>
-    <script>
 
-    </script>
 </body>
+
 
 </html>

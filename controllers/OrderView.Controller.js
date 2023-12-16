@@ -223,14 +223,14 @@ exports.updateStatus = async (req, res) => {
     if (status === "1") {
       title = "Thông báo!";
       content =
-        "Đơn hàng với mã " +
+        "Đơn hàng với mã #" +
         id +
         " đã được xác nhận thành công. Đơn hàng đang được đưa tới đơn vị vận chuyển. Quý khách vui lòng kiểm tra thường xuyên để cập nhật trạng thái mới nhất.Xin cảm ơn Quý khách.";
     }
     if (status === "3") {
       title = "Thông báo!";
       content =
-        "Đơn hàng với mã " +
+        "Đơn hàng với mã #" +
         id +
         " đã bị hủy. Mọi thắc mắc vui lòng liên hệ tới hotline : 1900 1006 . Xin cảm ơn Quý khách";
     }
@@ -263,6 +263,7 @@ exports.updateStatus = async (req, res) => {
         title: title,
         content: content,
         AccountId: AccountId,
+        OrderId: id,
       });
 
       console.log("Successfully sent message:", response);
