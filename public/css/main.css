@@ -2585,6 +2585,7 @@ fieldset:disabled a.btn {
   /* width: 100px; */
   font-weight: 600;
   letter-spacing: 1px;
+  margin-right: 20px;
 }
 .btn-cancel{
   background-color: rgb(255 197 197);
