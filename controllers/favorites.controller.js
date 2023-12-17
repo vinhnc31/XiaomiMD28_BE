@@ -1,9 +1,10 @@
-const { Favorites, Product } = require("../models");
-const sequelize = require("sequelize");
+const { Favorites, Product, Comment } = require("../models");
 const jwt = require("jsonwebtoken");
+const { Op, fn, col, literal } = require("sequelize");
 exports.getAccount = async (req, res) => {
   const AccountId = +req.params.AccountId;
   try {
+    console.log("aaa");
     if (!AccountId) {
       return res
         .status(400)
@@ -14,6 +15,24 @@ exports.getAccount = async (req, res) => {
       include: [
         {
           model: Product,
+          include: [{ model: Comment, as: "comments" }],
+          attributes: [
+            "id",
+            "name",
+            "price",
+            "images",
+            "description",
+            "quantity",
+            "CategoryId",
+            [fn("COUNT", col("Product.comments.id")), "commentCount"],
+            [
+              literal(
+                "ROUND(IFNULL(SUM(`Product.comments`.`star`), 0) / NULLIF(COUNT(`Product.comments`.`id`), 0), 2)"
+              ),
+              "averageRating",
+            ],
+          ],
+          group: ["Product.id"],
         },
       ],
     });
