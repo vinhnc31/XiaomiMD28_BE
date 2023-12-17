@@ -12,6 +12,7 @@ const {
   Category,
 } = require("../models");
 const { Op, fn, col, literal } = require("sequelize");
+
 exports.getAll = async (req, res) => {
   try {
     const totalStaff = await Staff.count("id");
@@ -88,12 +89,20 @@ exports.getAll = async (req, res) => {
                   model: Config,
                 },
               ],
-              where: { quantity: 0 },
+              // where: { quantity: 0 },
             },
           ],
         },
-        { model: Category },
+        {
+          model: Category,
+          where: {
+            name: {
+              [Op.not]: "Điện thoại",
+            },
+          },
+        },
       ],
+      where: { quantity: 0 },
       group: ["Product.id"],
       limit: 10,
     });

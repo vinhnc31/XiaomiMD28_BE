@@ -15,7 +15,7 @@ exports.getAccounts = async (req, res) => {
     if (!listUser || listUser.length === 0) {
       return res.status(400).json({ status: 400, message: "No users found" });
     }
-    
+
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
@@ -94,7 +94,7 @@ exports.register = async (req, res, next) => {
           token: crypto.randomBytes(32).toString("hex"),
         });
 
-        const verificationLink = `http://localhost:3000/api/verify/${existingAccount.id}/${newVerificationToken.token}`;
+        const verificationLink = `http://54.206.98.206:3000/api/verify/${existingAccount.id}/${newVerificationToken.token}`;
 
         await sendEmail(
           existingAccount.email,
@@ -133,7 +133,7 @@ exports.register = async (req, res, next) => {
     });
 
     // Create a verification email message and send the email
-    const verificationLink = `http://localhost:3000/api/verify/${newAccount.id}/${newToken.token}`;
+    const verificationLink = `http://54.206.98.206:3000/api/verify/${newAccount.id}/${newToken.token}`;
     await sendEmail(newAccount.email, "Verify Email", verificationLink);
 
     return res.status(201).json({
@@ -422,7 +422,9 @@ exports.searchAccount = async (req, res) => {
 
     // Kiểm tra xem 'name' có tồn tại hay không
     if (!name) {
-      return res.status(400).json({ status: 400, message: "'name' parameter is required" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "'name' parameter is required" });
     }
 
     const listAccount = await Account.findAll({
@@ -436,9 +438,15 @@ exports.searchAccount = async (req, res) => {
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
-      res.render('customerManager', { accounts: listAccount, user: loggedInUser });
-    }  } catch (error) {
+      res.render("customerManager", {
+        accounts: listAccount,
+        user: loggedInUser,
+      });
+    }
+  } catch (error) {
     console.error(error);
-    return res.status(500).json({ status: 500, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };

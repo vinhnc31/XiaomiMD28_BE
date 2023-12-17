@@ -157,6 +157,12 @@ exports.createOrder = async (req, res) => {
       }
 
       if (ProductColorId && ProductColorConfigId) {
+        if (productColorConfig.quantity === 0) {
+          return res.status(400).json({
+            status: 400,
+            message: "The product is out of stock",
+          });
+        }
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
@@ -167,6 +173,13 @@ exports.createOrder = async (req, res) => {
             });
           }
           if (promotion.endDate > date) {
+            await transaction.rollback();
+            return res.status(400).json({
+              status: 404,
+              message: "Promotion expired",
+            });
+          }
+          if (promotion.quantity === 0) {
             await transaction.rollback();
             return res.status(400).json({
               status: 404,
@@ -177,6 +190,11 @@ exports.createOrder = async (req, res) => {
             productColorConfig.price *
             quantity *
             (1 - promotion.discount / 100);
+          const update = await promotion.update(
+            { quantity: sequelize.literal(`quantity - ${quantity}`) },
+            { where: { id: productId }, transaction }
+          );
+          console.log(update);
         } else {
           totalPrice += productColorConfig.price * quantity;
         }
@@ -186,6 +204,12 @@ exports.createOrder = async (req, res) => {
         );
         console.log(update);
       } else {
+        if (product.quantity === 0) {
+          return res.status(400).json({
+            status: 400,
+            message: "The product is out of stock",
+          });
+        }
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
@@ -202,8 +226,20 @@ exports.createOrder = async (req, res) => {
               message: "Promotion expired",
             });
           }
+          if (promotion.quantity === 0) {
+            await transaction.rollback();
+            return res.status(400).json({
+              status: 404,
+              message: "Promotion expired",
+            });
+          }
           totalPrice +=
             product.price * quantity * (1 - promotion.discount / 100);
+          const update = await promotion.update(
+            { quantity: sequelize.literal(`quantity - ${quantity}`) },
+            { where: { id: productId }, transaction }
+          );
+          console.log(update);
         } else {
           totalPrice += product.price * quantity;
         }
