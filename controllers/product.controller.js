@@ -226,8 +226,7 @@ exports.getProductId = async (req, res) => {
         "price",
         "images",
         "description",
-        "createdAt",
-        "updatedAt",
+        "quantity",
         "CategoryId",
         [fn("COUNT", col("comments.id")), "commentCount"],
         [
