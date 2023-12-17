@@ -617,6 +617,7 @@ exports.getMostFavorites = async (req, res) => {
         {
           model: Favorites,
           as: "favorites",
+          required: true,
         },
         {
           model: Comment,
@@ -630,7 +631,7 @@ exports.getMostFavorites = async (req, res) => {
         "images",
         "CategoryId",
         [fn("COUNT", col("favorites.id")), "FavoritesCount"],
-        [fn("COUNT", col("comments.id")), "commentCount"],
+        [fn("COUNT", fn("DISTINCT", col("comments.id"))), "commentCount"],
         [
           literal(
             "ROUND(IFNULL(SUM(comments.star), 0) / NULLIF(COUNT(comments.id), 0), 2)"
@@ -640,15 +641,14 @@ exports.getMostFavorites = async (req, res) => {
       ],
       group: ["Product.id"],
       order: [[literal("FavoritesCount"), "DESC"]],
-      distinct: true, // Add this line to ensure distinct products
       subQuery: false,
       limit: 5,
     });
 
-    if (!listProduct || listProduct.length === 0) {
+    if (!listProduct) {
       return res
-        .status(404)
-        .json({ status: 404, message: "Products not found" });
+        .status(400)
+        .json({ status: 400, message: "connect database fails" });
     }
 
     return res.status(200).json({ status: 200, data: listProduct });
