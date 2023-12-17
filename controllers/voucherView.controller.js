@@ -1,6 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const { Promotion, Account, notifyAccount } = require("../models");
 const moment = require("moment");
+const { Op } = require("sequelize");
 const FCM = require("fcm-node");
 //const fcm = new FCM(process.env.FCM);
 const fcm = new FCM(
