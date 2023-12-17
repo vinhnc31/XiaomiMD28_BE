@@ -261,7 +261,7 @@
 
 
             </div>
-            <button class="btn btn-save" type="submit">Lưu lại</button>
+            <button class="btn btn-save" type="submit" onclick="checkDuplicateEmail()">Lưu lại</button>
             <a class="btn btn-cancel" href="/staff">Hủy bỏ</a>
             </form>
           </div>
@@ -311,6 +311,21 @@
     <script src="js/main.js"></script>
     <!-- The javascript plugin to display page loading on top-->
     <script src="js/plugins/pace.min.js"></script>
+
+
+
+    <!-- Trong phần head của trang HTML -->
+<script>
+  // function checkDuplicateEmail() {
+    const error = "<%= error %>";
+    if (error) {
+      // Hiển thị thông báo lỗi, ví dụ: sử dụng alert
+      alert(error);
+    }
+  // }
+</script>
+
+
 
     <script>
 
