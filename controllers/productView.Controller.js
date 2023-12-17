@@ -20,15 +20,19 @@ exports.index = async (req, res) => {
 
     let _page = req.query.page ? req.query.page : 1;
     let listProduct = [];
-
     let _limit = Number(req.query.limit ? req.query.limit : 10);
-    let totalRow = await Product.count();
-    let totalPage = Math.ceil(totalRow / _limit);
-    _page = _page > 0 ? Math.floor(_page) : 1;
-    _page = _page <= totalPage ? Math.floor(_page) : totalPage;
-    let _start = (_page - 1) * _limit;
-
+    let totalRow = 0;
+    let totalPage = 0;
     if (_name) {
+      totalRow = await Product.count({
+        where: {
+          name: { [Op.like]: `%${_name}%` },
+        },
+      });
+      totalPage = Math.ceil(totalRow / _limit);
+      _page = _page > 0 ? Math.floor(_page) : 1;
+      _page = _page <= totalPage ? Math.floor(_page) : totalPage;
+      let _start = (_page - 1) * _limit;
       listProduct = await Product.findAll({
         include: [
           {
@@ -42,6 +46,11 @@ exports.index = async (req, res) => {
         limit: _limit,
       });
     } else {
+      totalRow = await Product.count();
+      totalPage = Math.ceil(totalRow / _limit);
+      _page = _page > 0 ? Math.floor(_page) : 1;
+      _page = _page <= totalPage ? Math.floor(_page) : totalPage;
+      let _start = (_page - 1) * _limit;
       listProduct = await Product.findAll({
         include: [
           {

@@ -1,38 +1,39 @@
 <%- include('head') %>
     <aside class="app-sidebar">
         <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
-            alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
-        <div>
-            <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
-            <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+                alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+            <div>
+                <p class="app-sidebar__user-name"><b>
+                        <%= user.name %>
+                    </b></p>
+                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            </div>
         </div>
-    </div>
         <hr>
         <ul class="app-menu">
-            <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
-                    <span class="app-menu__label">MD VN</span></a></li>
-            <li><a class="app-menu__item " href="/home"><i
-                        class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+
+            <li><a class="app-menu__item " href="/home"><i class='app-menu__icon bx bx-tachometer'></i><span
+                        class="app-menu__label">Bảng điều
                         khiển</span></a></li>
-            <li><a class="app-menu__item " href="/staff"><i
-                        class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+            <li><a class="app-menu__item " href="/staff"><i class='app-menu__icon bx bx-id-card'></i> <span
+                        class="app-menu__label">Quản lý nhân
                         viên</span></a></li>
             <li><a class="app-menu__item" href="/account/listAccount"><i
                         class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
                         hàng</span></a></li>
-            <li><a class="app-menu__item " href="/products"><i
-                        class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+            <li><a class="app-menu__item " href="/products"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+                        class="app-menu__label">Quản lý
                         sản phẩm</span></a>
             </li>
             <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
                         class="app-menu__label">Quản lý đơn hàng</span></a></li>
-            <li><a class="app-menu__item" href="/internal"><i
-                        class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
+            <li><a class="app-menu__item" href="/internal"><i class='app-menu__icon bx bx-run'></i><span
+                        class="app-menu__label">Quản lý nội bộ
                     </span></a></li>
-            <li><a class="app-menu__item" href="/salary"><i
-                        class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
+            <li><a class="app-menu__item" href="/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+                        class="app-menu__label">Bảng kê
                         lương</span></a></li>
-            <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+            <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon fa fa-ticket'></i><span
                         class="app-menu__label">Quản lí Voucher</span></a></li>
             <li><a class="app-menu__item active" href="/statistical/all"><i
                         class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
@@ -52,7 +53,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-lg-3">
+            <!-- <div class="col-md-6 col-lg-3">
                 <div class="widget-small primary coloured-icon"><i class='icon  bx bxs-user fa-3x'></i>
                     <div class="info">
                         <h4>Tổng Nhân viên</h4>
@@ -61,7 +62,7 @@
                             </b></p>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small info coloured-icon"><i class='icon bx bxs-purchase-tag-alt fa-3x'></i>
                     <div class="info">
@@ -83,8 +84,8 @@
                 </div>
             </div>
 
-        </div>
-        <div class="row">
+            <!-- </div>
+        <div class="row"> -->
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small primary coloured-icon"><i class='icon fa-3x bx bxs-chart'></i>
                     <div class="info">
@@ -95,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <!-- <div class="col-md-6 col-lg-3">
                 <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-info-circle'></i>
                     <div class="info">
                         <h4>Bị cấm</h4>
@@ -104,7 +105,7 @@
                             </b></p>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-6 col-lg-3">
                 <div class="widget-small danger coloured-icon"><i class='icon fa-3x bx bxs-receipt'></i>
                     <div class="info">
@@ -156,7 +157,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="tile">
                     <div>
@@ -188,7 +189,7 @@
                                                                 <%= order.Account.name %>
                                                             </td>
                                                             <td>
-                                                                <!-- Hiển thị tên sản phẩm -->
+                                                               
                                                                 <% order.OrdersProducts.forEach(product=> { %>
                                                                     <%= product.Product.name %>
                                                                         <% }); %>
@@ -219,7 +220,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-md-12">
                 <div class="tile">
@@ -233,7 +234,7 @@
                                     <th>Mã sản phẩm</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Ảnh</th>
-                                    <th>Số lượng</th>
+                                    <!-- <th>Số lượng</th> -->
                                     <th>Tình trạng</th>
                                     <th>Giá tiền</th>
                                     <th>Danh mục</th>
@@ -249,9 +250,9 @@
                                             <%= product.name %>
                                         </td>
                                         <td><img src=<%=product.images %> alt="" width="100px;"></td>
-                                        <td>
+                                        <!-- <td>
                                             <%= product.quantity %>
-                                        </td>
+                                        </td> -->
                                         <td><span class="badge bg-danger">Hết hàng</span></td>
                                         <td>
                                             <%= new Intl.NumberFormat('en-US').format(product.price) %> VNĐ
@@ -269,7 +270,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="tile">
                     <div>
@@ -323,7 +324,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-md-6">
                 <div class="tile">
@@ -365,12 +366,12 @@
                 const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
 
                 data.data.forEach(item => {
-                    labels.push("Tháng "+item.month);
+                    labels.push("Tháng " + item.month);
                     revenueData.push(item.revenue);
                     anotherDataSet.push(item.expense);
                 });
 
-                updateChart(labels, revenueData, anotherDataSet); 
+                updateChart(labels, revenueData, anotherDataSet);
             } catch (error) {
                 console.error('Error fetching data from API:', error);
             }

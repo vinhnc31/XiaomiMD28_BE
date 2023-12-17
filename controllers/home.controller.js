@@ -45,7 +45,7 @@ exports.getAllData = async (req, res) => {
         totalStaff: totalStaff,
         listAccount: listAccount,
         listOrder: listOrder,
-        user: loggedInUser
+        user: loggedInUser,
       });
     }
   } catch (error) {
@@ -172,14 +172,17 @@ exports.getRevenueInMonth = async (req, res) => {
           },
         },
       });
+      console.log(orderCountByStatus, "aa");
 
-      const revenue = orderCountByStatus - importProductCountByStatus;
+      const revenue =
+        Number(orderCountByStatus) - Number(importProductCountByStatus);
 
       // Tạo đối tượng chứa thông tin tháng và số lượng đơn hàng
       const monthOrderData = {
         month: startOfMonth.getMonth() + 1,
         expense: importProductCountByStatus || 0,
-        revenue: revenue || 0,
+        profit: revenue || 0,
+        revenue: orderCountByStatus || 0,
       };
 
       // Lưu đối tượng vào mảng orderData

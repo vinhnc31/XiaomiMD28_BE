@@ -14759,7 +14759,7 @@ be a descendant of the grid when it is being dragged.
       align-self: center;
 }
 
-.widget-small .info h4 {
+.widget-small .info h5 {
   text-transform: uppercase;
   margin: 0;
   margin-bottom: 5px;

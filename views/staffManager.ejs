@@ -1,27 +1,28 @@
 <%- include('head') %>
   <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
-      alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
-  <div>
-      <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
-      <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-  </div>
-</div>
+        alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+      <div>
+        <p class="app-sidebar__user-name"><b>
+            <%= user.name %>
+          </b></p>
+        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+      </div>
+    </div>
     <hr>
     <ul class="app-menu">
-      <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
-          <span class="app-menu__label">MD VN</span></a></li>
-      <li><a class="app-menu__item " href="/home"><i
-            class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+
+      <li><a class="app-menu__item " href="/home"><i class='app-menu__icon bx bx-tachometer'></i><span
+            class="app-menu__label">Bảng điều
             khiển</span></a></li>
-      <li><a class="app-menu__item active" href="/staff"><i
-            class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+      <li><a class="app-menu__item active" href="/staff"><i class='app-menu__icon bx bx-id-card'></i> <span
+            class="app-menu__label">Quản lý nhân
             viên</span></a></li>
-      <li><a class="app-menu__item" href="/account/listAccount"><i
-            class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
+      <li><a class="app-menu__item" href="/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
+            class="app-menu__label">Quản lý khách
             hàng</span></a></li>
-      <li><a class="app-menu__item " href="/products"><i
-            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+      <li><a class="app-menu__item " href="/products"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+            class="app-menu__label">Quản lý
             sản phẩm</span></a>
       </li>
       <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
@@ -32,10 +33,10 @@
       <li><a class="app-menu__item" href="/salary"><i class='app-menu__icon bx bx-dollar'></i><span
             class="app-menu__label">Bảng kê
             lương</span></a></li>
-      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon fa fa-ticket'></i><span
             class="app-menu__label">Quản lí Voucher</span></a></li>
-      <li><a class="app-menu__item" href="/statistical/all"><i
-            class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
+      <li><a class="app-menu__item" href="/statistical/all"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
+            class="app-menu__label">Báo cáo
             doanh thu</span></a>
       </li>
     </ul>
@@ -59,8 +60,7 @@
               <div class="row element-button">
                 <div class="col-sm-2">
 
-                  <a class="btn btn-add btn-sm" href="/form-addStaff" title="Thêm"><i
-                      class="fas fa-plus"></i>
+                  <a class="btn btn-add btn-sm" href="/form-addStaff" title="Thêm"><i class="fas fa-plus"></i>
                     Thêm nhân viên</a>
                 </div>
                 <div class="col-sm-2">

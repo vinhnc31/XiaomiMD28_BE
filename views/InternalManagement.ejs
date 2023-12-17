@@ -1,141 +1,150 @@
 <%- include('head') %>
-<aside class="app-sidebar">
-  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
-    alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
-<div>
-    <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
-    <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-</div>
-</div>
-  <hr>
-  <ul class="app-menu">
-      <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
-              <span class="app-menu__label">MD VN</span></a></li>
-      <li><a class="app-menu__item " href="/home"><i
-                  class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
-                  khiển</span></a></li>
-      <li><a class="app-menu__item" href="/staff"><i
-                  class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
-                  viên</span></a></li>
-      <li><a class="app-menu__item" href="/account/listAccount"><i
-                  class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
-                  hàng</span></a></li>
-      <li><a class="app-menu__item " href="/products"><i
-                  class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
-                  sản phẩm</span></a>
+  <aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
+        alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+      <div>
+        <p class="app-sidebar__user-name"><b>
+            <%= user.name %>
+          </b></p>
+        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+      </div>
+    </div>
+    <hr>
+    <ul class="app-menu">
+
+      <li><a class="app-menu__item " href="/home"><i class='app-menu__icon bx bx-tachometer'></i><span
+            class="app-menu__label">Bảng điều
+            khiển</span></a></li>
+      <li><a class="app-menu__item" href="/staff"><i class='app-menu__icon bx bx-id-card'></i> <span
+            class="app-menu__label">Quản lý nhân
+            viên</span></a></li>
+      <li><a class="app-menu__item" href="/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
+            class="app-menu__label">Quản lý khách
+            hàng</span></a></li>
+      <li><a class="app-menu__item " href="/products"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+            class="app-menu__label">Quản lý
+            sản phẩm</span></a>
       </li>
       <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
-                  class="app-menu__label">Quản lý đơn hàng</span></a></li>
-      <li><a class="app-menu__item active" href="/internal"><i
-                  class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
-              </span></a></li>
-      <li><a class="app-menu__item" href="/salary"><i
-                  class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
-                  lương</span></a></li>
-      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
-                  class="app-menu__label">Quản lí Voucher</span></a></li>
-      <li><a class="app-menu__item" href="/statistical/all"><i
-                  class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
-                  doanh thu</span></a>
+            class="app-menu__label">Quản lý đơn hàng</span></a></li>
+      <li><a class="app-menu__item active" href="/internal"><i class='app-menu__icon bx bx-run'></i><span
+            class="app-menu__label">Quản lý nội bộ
+          </span></a></li>
+      <li><a class="app-menu__item" href="/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+            class="app-menu__label">Bảng kê
+            lương</span></a></li>
+      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon fa fa-ticket'></i><span
+            class="app-menu__label">Quản lí Voucher</span></a></li>
+      <li><a class="app-menu__item" href="/statistical/all"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
+            class="app-menu__label">Báo cáo
+            doanh thu</span></a>
       </li>
-  </ul>
-</aside>
-<main class="app-content">
-      <div class="app-title">
-        <ul class="app-breadcrumb breadcrumb side">
-          <li class="breadcrumb-item active"><a href="#"><b>Quản lý nội bộ</b></a></li>
-        </ul>
-        <div id="clock"></div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="tile">
-            <div class="tile-body">
-              <div class="row element-button">
-                <div class="col-sm-2">
-  
-                  <a class="btn btn-add btn-sm" href="/addInternal" title="Thêm"><i class="fas fa-plus"></i>
-                    Tạo mới</a>
-                </div>
-                
-                <div class="col-sm-2">
-                  <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                      class="fas fa-trash-alt"></i> Xóa tất cả </a>
-                </div>
+    </ul>
+  </aside>
+  <main class="app-content">
+    <div class="app-title">
+      <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Quản lý nội bộ</b></a></li>
+      </ul>
+      <div id="clock"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <div class="tile-body">
+            <div class="row element-button">
+              <div class="col-sm-2">
+
+                <a class="btn btn-add btn-sm" href="/addInternal" title="Thêm"><i class="fas fa-plus"></i>
+                  Tạo mới</a>
               </div>
-              <table class="table table-hover table-bordered" id="sampleTable">
-                <thead>
+
+              <div class="col-sm-2">
+                <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
+                    class="fas fa-trash-alt"></i> Xóa tất cả </a>
+              </div>
+            </div>
+            <table class="table table-hover table-bordered" id="sampleTable">
+              <thead>
+                <tr>
+                  <th width="10"><input type="checkbox" id="all"></th>
+                  <th>Họ và Tên</th>
+                  <th>Ngày sinh</th>
+                  <th>Chức vụ</th>
+                  <th>Lý do cấm</th>
+                  <th>Tình trạng</th>
+                  <th>Chức năng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% listInternal.forEach(internal=> { %>
                   <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
-                    <th>Họ và Tên</th>
-                    <th>Ngày sinh</th>
-                    <th>Chức vụ</th>
-                    <th>Lý do cấm</th>
-                    <th>Tình trạng</th>
-                    <th>Chức năng</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% listInternal.forEach(internal => { %>
-                    <tr>
-                      <td><%= internal.id %></td>
-                      <td><%= internal.staffInternals.name %></td>
-                      <td>
-                        <% if (internal.staffInternals.dateOfBirth) { %>
-                          <% const date=new Date(internal.staffInternals.dateOfBirth); %>
-                            <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
-                                  <% } else { %>
-                                    Ngày sinh không khả dụng
-                                    <% } %>
-                      </td>
-                      <td><%= internal.staffInternals.position %></td>
-                      <td><%= internal.reason %></td>
-                      <td><span class="badge <%= internal.status === '0' ? 'bg-danger' : 'bg-success' %>">
-                        <%= internal.status === '0' ? 'Sa thải' : 'Khoá tài khoản' %>
+                    <td>
+                      <%= internal.id %>
+                    </td>
+                    <td>
+                      <%= internal.staffInternals.name %>
+                    </td>
+                    <td>
+                      <% if (internal.staffInternals.dateOfBirth) { %>
+                        <% const date=new Date(internal.staffInternals.dateOfBirth); %>
+                          <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %>
+                                <% } else { %>
+                                  Ngày sinh không khả dụng
+                                  <% } %>
+                    </td>
+                    <td>
+                      <%= internal.staffInternals.position %>
+                    </td>
+                    <td>
+                      <%= internal.reason %>
+                    </td>
+                    <td><span class="badge <%= internal.status === '0' ? 'bg-danger' : 'bg-success' %>">
+                        <%= internal.status==='0' ? 'Sa thải' : 'Khoá tài khoản' %>
                       </span></td>
-                      <td>
-                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa" data-toggle="modal"
-                          data-target="#<%=internal.id%>"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i>  Xoá
-                        </button>
-                        <!-- model xóa -->
-                        <div class="modal fade" id="<%=internal.id%>" tabindex="-1" role="dialog"
-                          aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false">
-                          <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content text-center">
-                              <div class="modal-header text-center  ">
-                                <h2 class="modal-title w-100">
-                                  fa</h2>
-                              </div>
-                              <div class="modal-body text-center text-dark ">
-                                <h2 class="modal-title w-100">Cảnh báo</h2>
-                                <h5>Bạn có chắc muốn xóa không?
-                                </h5>
-                                <BR>
-                                <form class="text-right" action="/internal/<%=internal.id%>" method="post">
-                                  <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
-                                    bỏ</a>
-                                  <input type="hidden" value="<%=internal.id%>" name="<%=internal.id%>">
-                                  <button class="btn btn-save" type="submit">Đồng ý</button>
-                                </form>
-                                <BR>
-                              </div>
-                              <div class="modal-footer">
-                              </div>
+                    <td>
+                      <button class="btn btn-primary btn-sm trash" type="button" title="Xóa" data-toggle="modal"
+                        data-target="#<%=internal.id%>"><i class="fas fa-trash-alt" style="margin-right: 10px;"></i> Xoá
+                      </button>
+                      <!-- model xóa -->
+                      <div class="modal fade" id="<%=internal.id%>" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content text-center">
+                            <div class="modal-header text-center  ">
+                              <h2 class="modal-title w-100">
+                                fa</h2>
+                            </div>
+                            <div class="modal-body text-center text-dark ">
+                              <h2 class="modal-title w-100">Cảnh báo</h2>
+                              <h5>Bạn có chắc muốn xóa không?
+                              </h5>
+                              <BR>
+                              <form class="text-right" action="/internal/<%=internal.id%>" method="post">
+                                <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy
+                                  bỏ</a>
+                                <input type="hidden" value="<%=internal.id%>" name="<%=internal.id%>">
+                                <button class="btn btn-save" type="submit">Đồng ý</button>
+                              </form>
+                              <BR>
+                            </div>
+                            <div class="modal-footer">
                             </div>
                           </div>
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </td>
+                  </tr>
                   <% }); %>
-                  
-                </tbody>
-              </table>
-            </div>
+
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </main>
-   <!-- Essential javascripts for application to work-->
+    </div>
+  </main>
+  <!-- Essential javascripts for application to work-->
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -151,7 +160,7 @@
   <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript">$('#sampleTable').DataTable();</script>
   <script>
-    
+
     //EXCEL
     // $(document).ready(function () {
     //   $('#').DataTable({
@@ -238,4 +247,5 @@
     });
   </script>
   </body>
-</html>
+
+  </html>

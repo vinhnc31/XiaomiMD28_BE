@@ -134,47 +134,48 @@
     }
   </style>
   <%- include('head') %>
-  <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
-      alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
-  <div>
-      <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
-      <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
-  </div>
-</div>
-    <hr>
-    <ul class="app-menu">
-        <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
-                <span class="app-menu__label">MD VN</span></a></li>
-        <li><a class="app-menu__item " href="/home"><i
-                    class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
-                    khiển</span></a></li>
-        <li><a class="app-menu__item active" href="/staff"><i
-                    class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
-                    viên</span></a></li>
-        <li><a class="app-menu__item" href="/account/listAccount"><i
-                    class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
-                    hàng</span></a></li>
-        <li><a class="app-menu__item " href="/products"><i
-                    class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
-                    sản phẩm</span></a>
+    <aside class="app-sidebar">
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
+          alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+        <div>
+          <p class="app-sidebar__user-name"><b>
+              <%= user.name %>
+            </b></p>
+          <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+        </div>
+      </div>
+      <hr>
+      <ul class="app-menu">
+
+        <li><a class="app-menu__item " href="/home"><i class='app-menu__icon bx bx-tachometer'></i><span
+              class="app-menu__label">Bảng điều
+              khiển</span></a></li>
+        <li><a class="app-menu__item active" href="/staff"><i class='app-menu__icon bx bx-id-card'></i> <span
+              class="app-menu__label">Quản lý nhân
+              viên</span></a></li>
+        <li><a class="app-menu__item" href="/account/listAccount"><i class='app-menu__icon bx bx-user-voice'></i><span
+              class="app-menu__label">Quản lý khách
+              hàng</span></a></li>
+        <li><a class="app-menu__item " href="/products"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+              class="app-menu__label">Quản lý
+              sản phẩm</span></a>
         </li>
         <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
-                    class="app-menu__label">Quản lý đơn hàng</span></a></li>
-        <li><a class="app-menu__item" href="/internal"><i
-                    class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
-                </span></a></li>
-        <li><a class="app-menu__item" href="/salary"><i
-                    class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
-                    lương</span></a></li>
+              class="app-menu__label">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="/internal"><i class='app-menu__icon bx bx-run'></i><span
+              class="app-menu__label">Quản lý nội bộ
+            </span></a></li>
+        <li><a class="app-menu__item" href="/salary"><i class='app-menu__icon bx bx-dollar'></i><span
+              class="app-menu__label">Bảng kê
+              lương</span></a></li>
         <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
-                    class="app-menu__label">Quản lí Voucher</span></a></li>
-        <li><a class="app-menu__item" href="/statistical/all"><i
-                    class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
-                    doanh thu</span></a>
+              class="app-menu__label">Quản lí Voucher</span></a></li>
+        <li><a class="app-menu__item" href="/statistical/all"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
+              class="app-menu__label">Báo cáo
+              doanh thu</span></a>
         </li>
-    </ul>
-  </aside>
+      </ul>
+    </aside>
     <main class="app-content">
       <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
@@ -210,8 +211,9 @@
                 </div>
                 <div class="form-group col-md-4">
                   <label class="control-label">Ngày sinh</label>
-                  <input class="form-control" type="date" value="<%=staff.dateOfBirth%>" name="dateOfBirth" id="dateOfBirthInput" required>
-              </div>
+                  <input class="form-control" type="date" value="<%=staff.dateOfBirth%>" name="dateOfBirth"
+                    id="dateOfBirthInput" required>
+                </div>
 
 
                 <div class="form-group col-md-3">
@@ -235,28 +237,32 @@
                     <option value="Kiểm hàng" <%=staff.position==='Kiểm hàng' ? 'selected' : '' %>>Kiểm hàng</option>
                     <option value="Bảo vệ" <%=staff.position==='Bảo vệ' ? 'selected' : '' %>>Bảo vệ</option>
                     <option value="Tạp vụ" <%=staff.position==='Tạp vụ' ? 'selected' : '' %>>Tạp vụ</option>
-                </select>
+                  </select>
                 </div>
                 <div class="form-group col-md-3">
                   <label class="control-label">Bằng cấp</label>
                   <select class="form-control" selected="<%=staff.degree%>" id="degree" name="degree" required>
                     <option value="">-- Chọn bằng cấp --</option>
-                    <option value="Tốt nghiệp đại học" <%=staff.degree==='Tốt nghiệp đại học' ? 'selected' : '' %>>Tốt nghiệp Đại Học</option>
-                    <option value="Tốt nghiệp cao đẳng" <%=staff.degree==='Tốt nghiệp cao đẳng' ? 'selected' : '' %>>Tốt nghiệp Cao Đẳng</option>
-                    <option value="Tốt nghiệp phổ thông" <%=staff.degree==='Tốt nghiệp phổ thông' ? 'selected' : '' %>>Tốt nghiệp Phổ Thông</option>
-                    <option value="Chưa tốt nghiệp" <%=staff.degree==='Chưa tốt nghiệp' ? 'selected' : '' %>>Chưa tốt nghiệp</option>
-                    <option value="Không bằng cấp" <%=staff.degree==='Không bằng cấp' ? 'selected' : '' %>>Không bằng cấp</option>
-                </select>
+                    <option value="Tốt nghiệp đại học" <%=staff.degree==='Tốt nghiệp đại học' ? 'selected' : '' %>>Tốt
+                      nghiệp Đại Học</option>
+                    <option value="Tốt nghiệp cao đẳng" <%=staff.degree==='Tốt nghiệp cao đẳng' ? 'selected' : '' %>>Tốt
+                      nghiệp Cao Đẳng</option>
+                    <option value="Tốt nghiệp phổ thông" <%=staff.degree==='Tốt nghiệp phổ thông' ? 'selected' : '' %>
+                      >Tốt nghiệp Phổ Thông</option>
+                    <option value="Chưa tốt nghiệp" <%=staff.degree==='Chưa tốt nghiệp' ? 'selected' : '' %>>Chưa tốt
+                      nghiệp</option>
+                    <option value="Không bằng cấp" <%=staff.degree==='Không bằng cấp' ? 'selected' : '' %>>Không bằng
+                      cấp</option>
+                  </select>
                 </div>
                 <div class="form-group col-md-12">
                   <label class="control-label">Ảnh 3x4 nhân viên</label>
                   <div id="myfileupload">
                     <input type="file" id="uploadfile" name="avatar" value="<%=staff.avatar%>"
-                      onchange="readURL(this);"/>
+                      onchange="readURL(this);" />
                   </div>
                   <div id="thumbbox">
-                    <img height="300" width="300" alt="Thumb image" id="thumbimage" src="<%=staff.avatar%>"
-                       />
+                    <img height="300" width="300" alt="Thumb image" id="thumbimage" src="<%=staff.avatar%>" />
                     <a class="removeimg" href="javascript:"></a>
                   </div>
                   <div id="boxchoice">
@@ -268,10 +274,10 @@
 
                 <button class="btn btn-save" type="submit">Lưu lại</button>
                 <a class="btn btn-cancel" href="/staff">Hủy bỏ</a>
-                
+
               </form>
             </div>
-            
+
           </div>
 
     </main>
@@ -311,12 +317,12 @@
   MODAL
 -->
 
-<script>
-  // Chuyển đổi định dạng ngày tháng năm
-  var dateOfBirth = '<%=staff.dateOfBirth%>';
-  var formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];
-  document.getElementById('dateOfBirthInput').value = formattedDate;
-</script>
+    <script>
+      // Chuyển đổi định dạng ngày tháng năm
+      var dateOfBirth = '<%=staff.dateOfBirth%>';
+      var formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];
+      document.getElementById('dateOfBirthInput').value = formattedDate;
+    </script>
     <!-- Essential javascripts for application to work-->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>

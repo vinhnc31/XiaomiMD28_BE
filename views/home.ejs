@@ -19,9 +19,9 @@
             <!-- col-6 -->
             <div class="col-md-6">
               <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'
-                  style="height: 100px;"></i>
+                  style="height: 120px;"></i>
                 <div class="info">
-                  <h4>Tổng khách hàng</h4>
+                  <h5>Tổng khách hàng</h5>
                   <p><b>
                       <%= totalAccount %> khách hàng
                     </b></p>
@@ -31,9 +31,9 @@
             </div>
             <!-- col-6 -->
             <div class="col-md-6">
-              <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x' style="height: 100px;"></i>
+              <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x' style="height: 120px;"></i>
                 <div class="info">
-                  <h4>Tổng sản phẩm</h4>
+                  <h5>Tổng sản phẩm</h5>
                   <p><b>
                       <%= totalProduct %> sản phẩm
                     </b></p>
@@ -44,9 +44,9 @@
             <!-- col-6 -->
             <div class="col-md-6">
               <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'
-                  style="height: 100px;"></i>
+                  style="height: 120px;"></i>
                 <div class="info">
-                  <h4>Tổng đơn hàng</h4>
+                  <h5>Tổng đơn hàng</h5>
                   <p><b>
                       <%= totalOrder %> đơn hàng
                     </b></p>
@@ -57,9 +57,9 @@
             <!-- col-6 -->
             <div class="col-md-6">
               <div class="widget-small danger coloured-icon"><i class='icon bx bxs-group fa-3x'
-                  style="height: 100px;"></i>
+                  style="height: 120px;"></i>
                 <div class="info">
-                  <h4>Số lượng nhân viên</h4>
+                  <h5>Số lượng nhân viên</h5>
                   <p><b>
                       <%= totalStaff %> nhân viên
                     </b></p>
@@ -108,7 +108,7 @@
                     </tbody>
                   </table>
                 </div>
-                <!-- / div trống-->
+                <!-- div trống -->
               </div>
             </div>
             <!-- / col-12 -->
@@ -221,41 +221,50 @@
           const response = await fetch('/home/RevenueInMonth');
           const data = await response.json();
           const labels = [];
-          const revenueData = [];
-          const anotherDataSet = []; // Dữ liệu cho đường kẻ đỏ mới
+          const profitData = [];
+          const anotherDataSet = [];
+          const revenueData = []; // Dữ liệu cho đường kẻ đỏ mới
 
           data.data.forEach(item => {
-            labels.push("Tháng "+item.month);
-            revenueData.push(item.revenue);
+            labels.push("Tháng " + item.month);
+            profitData.push(item.profit);
             // Đây là nơi bạn lấy dữ liệu cho đường kẻ đỏ từ item hoặc một nguồn dữ liệu khác
             anotherDataSet.push(item.expense);
+            revenueData.push(item.revenue > 0 ? item.revenue : 0);
           });
 
           // const intLabels = labels.map(month => parseInt(month));
-          updateChart(labels, revenueData, anotherDataSet);
+          updateChart(labels, profitData, anotherDataSet, revenueData);
         } catch (error) {
           console.error('Error fetching data from API:', error);
         }
       }
 
       // Hàm để cập nhật biểu đồ với dữ liệu mới
-      function updateChart(labels, data, anotherDataSet) {
+      function updateChart(labels, data, anotherDataSet, revenue) {
         const myChart = new Chart("myChart", {
           type: "line",
           data: {
             labels: labels,
-            datasets: [{
-              label: "Doanh thu thực tế",
-              data: data,
-              borderColor: "green",
-              fill: false
-            },
-            {
-              label: "Chi phí",
-              data: anotherDataSet,
-              borderColor: "red",
-              fill: false
-            }]
+            datasets: [
+              // {
+              //   label: "Lợi nhuận",
+              //   data: data,
+              //   borderColor: "green",
+              //   fill: false
+              // },
+              {
+                label: "Chi phí",
+                data: anotherDataSet,
+                borderColor: "red",
+                fill: false
+              },
+              {
+                label: "Doanh thu",
+                data: revenue,
+                borderColor: "yellow",
+                fill: false
+              }]
           },
           options: {
             legend: { display: true }
@@ -287,7 +296,7 @@
           const cancelValues = [];
 
           data.data.forEach(item => {
-            xValues.push("Tháng "+item.month);
+            xValues.push("Tháng " + item.month);
             yValues.push(item.totalOrder.orderCountByStatus);
             zValues.push(item.totalOrder.orderCountByStatus1);
             aValues.push(item.totalOrder.orderCountByStatus2);

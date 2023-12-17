@@ -198,7 +198,7 @@ exports.getRevenueInMonth = async (req, res) => {
       const monthOrderData = {
         month: startOfMonth.getMonth() + 1,
         expense: importProductCountByStatus || 0,
-        revenue: revenue || 0,
+        revenue: orderCountByStatus || 0,
       };
       revenueByMonth.push(monthOrderData);
     }

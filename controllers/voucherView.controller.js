@@ -20,7 +20,8 @@ exports.getData = async (req, res) => {
 
     let _limit = Number(req.query.limit ? req.query.limit : 10);
     let totalRow = await Promotion.count();
-    let totalPage = Math.ceil(totalRow / _limit);
+    let totalPage =
+      Math.ceil(totalRow / _limit) > 0 ? Math.ceil(totalRow / _limit) : 1;
     _page = _page > 0 ? Math.floor(_page) : 1;
     _page = _page <= totalPage ? Math.floor(_page) : totalPage;
     let _start = (_page - 1) * _limit;
@@ -87,7 +88,7 @@ exports.indexaddPromotion = async (req, res, next) => {
   }
 };
 exports.createPromotion = async (req, res) => {
-  const { name, image, discount, startDate, endDate } = req.body;
+  const { name, image, discount, startDate, endDate, quantity } = req.body;
   const imageFlie = req.file;
   try {
     if (
@@ -118,6 +119,7 @@ exports.createPromotion = async (req, res) => {
       discount,
       startDate,
       endDate,
+      quantity,
     };
     console.log(newpromotion);
     const createPromotion = await Promotion.create(newpromotion);
