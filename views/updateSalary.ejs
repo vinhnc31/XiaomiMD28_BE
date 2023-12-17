@@ -1,4 +1,5 @@
 <%- include('head') %>
+<<<<<<< HEAD
   <aside class="app-sidebar">
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
         alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
@@ -32,11 +33,48 @@
             class="app-menu__label">Quản lí Voucher</span></a></li>
       <li><a class="app-menu__item" href="/statistical/all"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span
             class="app-menu__label">Báo cáo doanh thu</span></a>
+=======
+<aside class="app-sidebar">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="<%= user.avatar %>" width="50px"
+    alt="User Image" style="border-radius: 50%; width: 50px; height: 50px;">
+<div>
+    <p class="app-sidebar__user-name"><b> <%= user.name %> </b></p>
+    <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+</div>
+  <hr>
+  <ul class="app-menu">
+      <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
+              <span class="app-menu__label">MD VN</span></a></li>
+      <li><a class="app-menu__item " href="/home"><i
+                  class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Bảng điều
+                  khiển</span></a></li>
+      <li><a class="app-menu__item" href="/staff"><i
+                  class='app-menu__icon bx bx-id-card'></i> <span class="app-menu__label">Quản lý nhân
+                  viên</span></a></li>
+      <li><a class="app-menu__item" href="/account/listAccount"><i
+                  class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách
+                  hàng</span></a></li>
+      <li><a class="app-menu__item " href="/products"><i
+                  class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý
+                  sản phẩm</span></a>
       </li>
-    </ul>
-
-
-  </aside>
+      <li><a class="app-menu__item" href="/order"><i class='app-menu__icon bx bx-task'></i><span
+                  class="app-menu__label">Quản lý đơn hàng</span></a></li>
+      <li><a class="app-menu__item" href="/internal"><i
+                  class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Quản lý nội bộ
+              </span></a></li>
+      <li><a class="app-menu__item active" href="/salary"><i
+                  class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê
+                  lương</span></a></li>
+      <li><a class="app-menu__item " href="/voucher"><i class='app-menu__icon bx bx-dollar'></i><span
+                  class="app-menu__label">Quản lí Voucher</span></a></li>
+      <li><a class="app-menu__item" href="/statistical/all"><i
+                  class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo
+                  doanh thu</span></a>
+>>>>>>> origin/test
+      </li>
+  </ul>
+</aside>
   <main class="app-content">
     <div class="app-title">
       <ul class="app-breadcrumb breadcrumb">
@@ -51,8 +89,7 @@
           <div class="tile-body">
             <div class="row element-button">
               <div class="col-sm-2">
-                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><b><i
-                      class="fas fa-folder-plus"></i> Tạo trạng thái mới</b></a>
+                
               </div>
 
             </div>
@@ -121,7 +158,7 @@
 
           </div>
           <button class="btn btn-save" type="submit">Lưu lại</button>
-          <a class="btn btn-cancel" href="/doc/table-data-oder.html">Hủy bỏ</a>
+          <a class="btn btn-cancel" href="/salary">Hủy bỏ</a>
           </form>
         </div>
   </main>

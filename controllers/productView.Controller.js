@@ -29,7 +29,8 @@ exports.index = async (req, res) => {
           name: { [Op.like]: `%${_name}%` },
         },
       });
-      totalPage = Math.ceil(totalRow / _limit);
+      totalPage =
+        Math.ceil(totalRow / _limit) > 0 ? Math.ceil(totalRow / _limit) : 1;
       _page = _page > 0 ? Math.floor(_page) : 1;
       _page = _page <= totalPage ? Math.floor(_page) : totalPage;
       let _start = (_page - 1) * _limit;
@@ -47,7 +48,8 @@ exports.index = async (req, res) => {
       });
     } else {
       totalRow = await Product.count();
-      totalPage = Math.ceil(totalRow / _limit);
+      totalPage =
+        Math.ceil(totalRow / _limit) > 0 ? Math.ceil(totalRow / _limit) : 1;
       _page = _page > 0 ? Math.floor(_page) : 1;
       _page = _page <= totalPage ? Math.floor(_page) : totalPage;
       let _start = (_page - 1) * _limit;
