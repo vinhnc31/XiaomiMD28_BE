@@ -272,33 +272,40 @@
     <!--
   MODAL
 -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-
-          <div class="modal-body">
-            <div class="row">
-              <div class="form-group  col-md-12">
-                <span class="thong-tin-thanh-toan">
-                  <h5>Tạo chức vụ mới</h5>
-                </span>
-              </div>
-              <div class="form-group col-md-12">
-                <label class="control-label">Nhập tên chức vụ mới</label>
-                <input class="form-control" type="text" required>
-              </div>
-            </div>
-            <BR>
-            <button class="btn btn-save" type="button">Lưu lại</button>
-            <a class="btn btn-cancel" data-dismiss="modal" href="/staff">Hủy bỏ</a>
-            <BR>
-          </div>
-          <div class="modal-footer">
-          </div>
-        </div>
+    <!-- Modal -->
+    <style>
+      .modal-title {
+        font-size: 24px; /* Thay đổi kích thước chữ theo mong muốn */
+        text-align: center; /* Căn giữa chữ */
+      }
+    
+      .modal-error-message {
+        font-size: 18px; /* Thay đổi kích thước chữ nếu cần */
+        text-align: center;
+      }
+    </style>
+    
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Cảnh báo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3 class="modal-title" id="errorModalLabel">Cảnh báo</h3>
+        <p class="modal-error-message" id="errorText"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-dismiss="modal">Đóng</button>
       </div>
     </div>
+  </div>
+</div>
+    
     <!--
   MODAL
 -->
@@ -313,17 +320,23 @@
     <script src="js/plugins/pace.min.js"></script>
 
 
-
+    <script>
+      function showErrorModal(errorMessage) {
+        // Đặt nội dung lỗi vào modal
+        document.getElementById('errorText').innerText = errorMessage;
+        // Hiển thị modal
+        $('#errorModal').modal('show');
+      }
+    </script>
     <!-- Trong phần head của trang HTML -->
-<script>
-  // function checkDuplicateEmail() {
-    const error = "<%= error %>";
-    if (error) {
-      // Hiển thị thông báo lỗi, ví dụ: sử dụng alert
-      alert(error);
-    }
-  // }
-</script>
+    <script>
+      // function checkDuplicateEmail() {
+      const error = "<%= error %>";
+      if (error) {
+        showErrorModal(error);
+      }
+      // }
+    </script>
 
 
 
