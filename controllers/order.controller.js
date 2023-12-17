@@ -17,7 +17,9 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config;
 
 const FCM = require("fcm-node");
-const fcm = new FCM(process.env.FCM);
+const fcm = new FCM(
+  "AAAAjF46CC4:APA91bGm5n9UYevBNVrCWA_MWgGw8SJRN3_L28XU1pJ8pwsTHWdoSZMqPibQoB3az5akJtcNMVWtIPDA9jQb9dy2zTOrh5w3Eui5wAh9WeaUux6wpX9bPgaxFVIJNDClWac2HzlZ6Kq9"
+);
 
 exports.getListOrder = async (req, res) => {
   try {
@@ -157,6 +159,12 @@ exports.createOrder = async (req, res) => {
       }
 
       if (ProductColorId && ProductColorConfigId) {
+        if (productColorConfig.quantity === 0) {
+          return res.status(400).json({
+            status: 400,
+            message: "The product is out of stock",
+          });
+        }
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
@@ -167,6 +175,13 @@ exports.createOrder = async (req, res) => {
             });
           }
           if (promotion.endDate > date) {
+            await transaction.rollback();
+            return res.status(400).json({
+              status: 404,
+              message: "Promotion expired",
+            });
+          }
+          if (promotion.quantity === 0) {
             await transaction.rollback();
             return res.status(400).json({
               status: 404,
@@ -177,6 +192,11 @@ exports.createOrder = async (req, res) => {
             productColorConfig.price *
             quantity *
             (1 - promotion.discount / 100);
+          const update = await promotion.update(
+            { quantity: sequelize.literal(`quantity - ${quantity}`) },
+            { where: { id: productId }, transaction }
+          );
+          console.log(update);
         } else {
           totalPrice += productColorConfig.price * quantity;
         }
@@ -186,6 +206,12 @@ exports.createOrder = async (req, res) => {
         );
         console.log(update);
       } else {
+        if (product.quantity === 0) {
+          return res.status(400).json({
+            status: 400,
+            message: "The product is out of stock",
+          });
+        }
         if (PromotionId) {
           const promotion = await Promotion.findByPk(PromotionId);
           if (!promotion) {
@@ -202,8 +228,20 @@ exports.createOrder = async (req, res) => {
               message: "Promotion expired",
             });
           }
+          if (promotion.quantity === 0) {
+            await transaction.rollback();
+            return res.status(400).json({
+              status: 404,
+              message: "Promotion expired",
+            });
+          }
           totalPrice +=
             product.price * quantity * (1 - promotion.discount / 100);
+          const update = await promotion.update(
+            { quantity: sequelize.literal(`quantity - ${quantity}`) },
+            { where: { id: productId }, transaction }
+          );
+          console.log(update);
         } else {
           totalPrice += product.price * quantity;
         }
@@ -316,12 +354,6 @@ exports.updateOrder = async (req, res) => {
         title: title,
         body: content,
       },
-      android: {
-        notification: {
-          imageUrl:
-            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
-        },
-      },
       to: registrationToken,
     };
     console.log(message);
@@ -340,6 +372,7 @@ exports.updateOrder = async (req, res) => {
         title: title,
         content: content,
         AccountId: AccountId,
+        OrderId: id,
       });
 
       console.log("Successfully sent message:", response);

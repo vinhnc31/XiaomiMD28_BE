@@ -196,6 +196,7 @@ exports.getProductId = async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Product not found" });
     }
+
     const product = await Product.findOne({
       where: { id: id },
       include: [
@@ -212,13 +213,16 @@ exports.getProductId = async (req, res) => {
               as: "colorConfigs",
               include: [
                 {
-                  model: Config, // Adjust this based on your actual association
+                  model: Config,
                 },
               ],
             },
           ],
         },
-        { model: Comment, as: "comments" },
+        {
+          model: Comment,
+          as: "comments",
+        },
       ],
       attributes: [
         "id",
@@ -226,8 +230,7 @@ exports.getProductId = async (req, res) => {
         "price",
         "images",
         "description",
-        "createdAt",
-        "updatedAt",
+        "quantity",
         "CategoryId",
         [fn("COUNT", col("comments.id")), "commentCount"],
         [
@@ -237,8 +240,9 @@ exports.getProductId = async (req, res) => {
           "averageRating",
         ],
       ],
-      group: ["Product.id", "comments.id"],
+      group: ["Product.id"],
     });
+
     if (!product) {
       return res
         .status(404)

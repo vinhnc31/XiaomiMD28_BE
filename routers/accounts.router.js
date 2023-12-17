@@ -90,6 +90,8 @@ const account = require("../controllers/accounts.controller");
 const accountGoogle = require("../controllers/accounts_google.controller");
 const authMidleWare = require("../middleWare/auth.middlewere");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
+const middleWare = require("../middleWare/auth.middlewere");
+
 router.post("/register", account.register);
 router.get("/profile", authMidleWare.apiAuth, account.getUserId);
 router.post("/login", account.login);
@@ -105,9 +107,9 @@ router.post("/forgotPassword", account.forgotPassword);
 router.put(
   "/updateProfile/:id",
   authMidleWare.apiAuth,
-  cloudinary.single("image"),
+  cloudinary.single("avatar"),
   account.updateProfile
 );
-router.get("/account/listAccount", account.getAccounts);
-
+router.get("/account/listAccount", middleWare.loggedin, account.getAccounts);
+router.post("/account/search", middleWare.loggedin, account.searchAccount);
 module.exports = router;
