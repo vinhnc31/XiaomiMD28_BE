@@ -5,6 +5,7 @@ const productController = require("../controllers/productView.Controller");
 const cloudinary = require("../middleWare/cloudinary.middlewere");
 const middleWare = require("../middleWare/auth.middlewere");
 
+router.get("/category/:id", productController.indexProductCategory);
 router.get("/", middleWare.loggedin, productController.index);
 router.get("/add", middleWare.loggedin, productController.indexAddProduct);
 router.post("/delete/:id", productController.deleteProduct);
@@ -20,7 +21,7 @@ router.post(
   productController.updateProduct
 );
 router.post("/addCategory", productController.addCategory);
-router.post("/delete/category", productController.deleteCategory);
+router.post("/deleteCategory", productController.deleteCategory);
 router.post("/delete/color/:id", productController.deleteColor);
 router.post("/delete/config/:id", productController.deleteConfig);
 

@@ -81,36 +81,30 @@
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <!-- <div class="dataTables_length"><label>Hiện <select name="sampleTable_length"
+                                    <div class="dataTables_length"><label>Thể loại: <select name="sampleTable_length"
                                                 onchange="onclickoption()" aria-controls="sampleTable"
                                                 id="sampleTable_length" class="form-control form-control-sm">
-                                                <% if(limit===10){%>
-                                                    <option value="?limit=10" selected="true">10</option>
+                                                <%if(cate===0){%>
+                                                    <option value="/products" selected>Tất cả</option>
                                                     <%}else{%>
-                                                        <option value="?limit=10">10</option>
+                                                        <option value="/products">Tất cả</option>
                                                         <%}%>
+                                                            <%category.map(function(category) {%>
+                                                                <%if(cate===category.id){%>
+                                                                    <option value="/products/category/<%=category.id%>"
+                                                                        selected>
+                                                                        <%=category.name%>
+                                                                    </option>
+                                                                    <%}else{%>
+                                                                        <option
+                                                                            value="/products/category/<%=category.id%>">
+                                                                            <%=category.name%>
+                                                                        </option>
+                                                                        <%}%>
 
-                                                            <% if(limit===25){%>
-                                                                <option value="?limit=25" selected="true">25
-                                                                </option>
-                                                                <%}else{%>
-                                                                    <option value="?limit=25">25</option>
-                                                                    <%}%>
-                                                                        <% if(limit===50){%>
-                                                                            <option value="?limit=50" selected="true">50
-                                                                            </option>
-                                                                            <%}else{%>
-                                                                                <option value="?limit=50">50
-                                                                                </option>
-                                                                                <%}%>
-                                                                                    <% if(limit===100){%>
-                                                                                        <option value="?limit=100"
-                                                                                            selected="true">100</option>
-                                                                                        <%}else{%>
-                                                                                            <option value="?limit=100">
-                                                                                                100</option>
-                                                                                            <%}%>
-                                            </select> sản phẩm</label></div> -->
+
+                                                                            <%})%>
+                                            </select> </label></div>
                                 </div>
                                 <div class="col-sm-12 col-md-6">
                                     <form action="" method="get" role="form">
@@ -242,19 +236,18 @@
                                         <ul class="pagination">
                                             <li class="paginate_button page-item previous " id="sampleTable_previous">
                                                 <%if(name){%>
-                                                    <a href="/products/?page=<%=page>1?page-1:1%>&name=<%=search%>"
+                                                    <a href="?page=<%=page>1?page-1:1%>&name=<%=search%>"
                                                         aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
                                                         class="page-link">Lùi</a>
                                                     <%}else{%>
-                                                        <a href="/products/?page=<%=page>1?page-1:1%>"
-                                                            aria-controls="sampleTable" data-dt-idx="0" tabindex="0"
-                                                            class="page-link">Lùi</a>
+                                                        <a href="?page=<%=page>1?page-1:1%>" aria-controls="sampleTable"
+                                                            data-dt-idx="0" tabindex="0" class="page-link">Lùi</a>
                                             </li>
                                             <%}%>
                                                 <%if(totalPage>5){%>
                                                     <%if(page>3&&page<=(totalPage-2)){ %>
                                                             <li class="paginate_button page-item ">
-                                                                <a href="/products/?page=1" aria-controls="sampleTable"
+                                                                <a href="?page=1" aria-controls="sampleTable"
                                                                     data-dt-idx="1" tabindex="0" class="page-link">
                                                                     <i class="fas fa-angle-double-left"></i>
                                                                 </a>
@@ -271,7 +264,7 @@
                                                                         <%}else{%>
                                                                     <li class="paginate_button page-item">
                                                                         <%}%>
-                                                                            <a href="/products/?page=<%=i%>"
+                                                                            <a href="?page=<%=i%>"
                                                                                 aria-controls="sampleTable"
                                                                                 data-dt-idx="1" tabindex="0"
                                                                                 class="page-link">
@@ -319,7 +312,7 @@
                                                                             <% for(i=1;i<=5;i++){ if(name){ %>
                                                                                 <li
                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                    <a href="?page=<%=i%>&name=<%=search%>"
                                                                                         aria-controls="sampleTable"
                                                                                         data-dt-idx="1" tabindex="0"
                                                                                         class="page-link">
@@ -329,7 +322,7 @@
                                                                                 <%}else{ %>
                                                                                     <li
                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                        <a href="/products/?page=<%=i%>"
+                                                                                        <a href="?page=<%=i%>"
                                                                                             aria-controls="sampleTable"
                                                                                             data-dt-idx="1" tabindex="0"
                                                                                             class="page-link">
@@ -339,7 +332,7 @@
                                                                                     <%} }}else if(page>(totalPage-2)){%>
                                                                                         <li
                                                                                             class="paginate_button page-item ">
-                                                                                            <a href="/products/?page=1"
+                                                                                            <a href="?page=1"
                                                                                                 aria-controls="sampleTable"
                                                                                                 data-dt-idx="1"
                                                                                                 tabindex="0"
@@ -363,7 +356,7 @@
                                                                                             if(name){%>
                                                                                             <li
                                                                                                 class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                                <a href="?page=<%=i%>&name=<%=search%>"
                                                                                                     aria-controls="sampleTable"
                                                                                                     data-dt-idx="1"
                                                                                                     tabindex="0"
@@ -374,7 +367,7 @@
                                                                                             <%}else{ %>
                                                                                                 <li
                                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                    <a href="/products/?page=<%=i%>"
+                                                                                                    <a href="?page=<%=i%>"
                                                                                                         aria-controls="sampleTable"
                                                                                                         data-dt-idx="1"
                                                                                                         tabindex="0"
@@ -399,7 +392,7 @@
                                                                                                         </li>
                                                                                                         <li
                                                                                                             class="paginate_button page-item ">
-                                                                                                            <a href="/products/?page=<%=totalPage%>"
+                                                                                                            <a href="?page=<%=totalPage%>"
                                                                                                                 aria-controls="sampleTable"
                                                                                                                 data-dt-idx="1"
                                                                                                                 tabindex="0"
@@ -414,7 +407,7 @@
                                                                                                                 %>
                                                                                                                 <li
                                                                                                                     class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                                    <a href="/products/?page=<%=i%>&name=<%=search%>"
+                                                                                                                    <a href="?page=<%=i%>&name=<%=search%>"
                                                                                                                         aria-controls="sampleTable"
                                                                                                                         data-dt-idx="1"
                                                                                                                         tabindex="0"
@@ -426,7 +419,7 @@
                                                                                                                     %>
                                                                                                                     <li
                                                                                                                         class="paginate_button page-item  <%=page ==i?'active':''%> ">
-                                                                                                                        <a href="/products/?page=<%=i%>"
+                                                                                                                        <a href="?page=<%=i%>"
                                                                                                                             aria-controls="sampleTable"
                                                                                                                             data-dt-idx="1"
                                                                                                                             tabindex="0"
@@ -440,14 +433,14 @@
                                                                                                                             <li class="paginate_button page-item next"
                                                                                                                                 id="sampleTable_next">
                                                                                                                                 <%if(name){%>
-                                                                                                                                    <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
+                                                                                                                                    <a href="?page=<%=page<totalPage?page+1:totalPage%>&name=<%=search%>"
                                                                                                                                         aria-controls="sampleTable"
                                                                                                                                         data-dt-idx="3"
                                                                                                                                         tabindex="0"
                                                                                                                                         class="page-link">Tiếp</a>
                                                                                                                                     <%
                                                                                                                                         }else{%>
-                                                                                                                                        <a href="/products/?page=<%=page<totalPage?page+1:totalPage%>"
+                                                                                                                                        <a href="?page=<%=page<totalPage?page+1:totalPage%>"
                                                                                                                                             aria-controls="sampleTable"
                                                                                                                                             data-dt-idx="3"
                                                                                                                                             tabindex="0"

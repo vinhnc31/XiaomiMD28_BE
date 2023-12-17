@@ -88,16 +88,16 @@
 
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Giá bán</label>
-                                    <input class="form-control" type="text" name="price" value="<%=product.price%>"
+                                    <input class="form-control" type="number" name="price" value="<%=product.price%>"
                                         required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Giá nhập</label>
-                                    <input class="form-control" type="text" name="importPrice" required>
+                                    <input class="form-control" type="number" name="importPrice" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label class="control-label">Số lượng</label>
-                                    <input class="form-control" type="text" name="quantity" value="0" required>
+                                    <input class="form-control" type="number" name="quantity" value="0" required>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Ảnh sản phẩm</label>
@@ -186,13 +186,13 @@
                                                             </h5>
                                                             <BR>
                                                             <form class="text-right" id="form2"
-                                                                action="/products/delete/category" method="post">
+                                                                action="/products/deleteCategory" method="post">
                                                                 <button class="btn btn-cancel" type="button"
                                                                     data-dismiss="modal">Hủy
                                                                     bỏ</button>
                                                                 <input type="hidden" value="<%=category.id%>" name="id">
                                                                 <button class="btn btn-save" type="submit" id="submit2"
-                                                                    onclick="click2()">Đồng
+                                                                    onclick="submit2()">Đồng
                                                                     ý</button>
                                                             </form>
                                                             <BR>

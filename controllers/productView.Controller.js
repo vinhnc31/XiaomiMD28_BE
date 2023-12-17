@@ -63,11 +63,14 @@ exports.index = async (req, res) => {
         limit: _limit,
       });
     }
+    const category = await Category.findAll();
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
 
       return res.render("product", {
+        cate: 0,
+        category: category,
         data: listProduct,
         search: _name,
         totalPage: totalPage,
@@ -89,10 +92,11 @@ exports.index = async (req, res) => {
 };
 
 exports.indexAddProduct = async (req, res) => {
+  console.log("fffffffffffffffffffffffffff");
   const listCategory = await Category.findAll();
-  if (listCategory) {
-  } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+
+  if (!listCategory) {
+    res.status(400).json({ status: 400, message: "afalse connexting db" });
   }
   if (req.session.loggedin && req.session.user) {
     // Lấy thông tin người dùng từ đối tượng session
@@ -193,7 +197,7 @@ exports.deleteProduct = async (req, res) => {
   if (deleteCategory) {
     res.redirect("/products");
   } else {
-    res.status(400).json({ status: 400, message: "false connexting db" });
+    res.status(400).json({ status: 400, message: "afalse connexting db" });
   }
 };
 
@@ -209,7 +213,7 @@ exports.indexUpdateProduct = async (req, res, next) => {
   } else {
     return res
       .status(400)
-      .json({ status: 400, message: "false connexting db" });
+      .json({ status: 400, message: "afalse connexting db" });
   }
   if (req.session.loggedin && req.session.user) {
     // Lấy thông tin người dùng từ đối tượng session
@@ -311,6 +315,7 @@ exports.addCategory = async (req, res) => {
   }
 };
 exports.deleteCategory = async (req, res, next) => {
+  console.log("a");
   try {
     const categoryId = req.body.id;
     await Category.destroy({ where: { id: categoryId } });
@@ -569,6 +574,97 @@ exports.deleteProductColor_config = async (req, res) => {
     res.status(400).json({
       status: 400,
       message: error,
+    });
+  }
+};
+exports.indexProductCategory = async (req, res) => {
+  const categoryID = req.params.id;
+  try {
+    let _name = req.query.name;
+    console.log(_name);
+
+    if (!_name) {
+      _name = "";
+    }
+
+    let _page = req.query.page ? req.query.page : 1;
+    let listProduct = [];
+    let _limit = Number(req.query.limit ? req.query.limit : 10);
+    let totalRow = 0;
+    let totalPage = 0;
+    if (_name) {
+      totalRow = await Product.count({
+        where: {
+          name: { [Op.like]: `%${_name}%` },
+          CategoryId: categoryID,
+        },
+      });
+      totalPage =
+        Math.ceil(totalRow / _limit) > 0 ? Math.ceil(totalRow / _limit) : 1;
+      _page = _page > 0 ? Math.floor(_page) : 1;
+      _page = _page <= totalPage ? Math.floor(_page) : totalPage;
+      let _start = (_page - 1) * _limit;
+      listProduct = await Product.findAll({
+        include: [
+          {
+            model: Category,
+          },
+        ],
+        where: {
+          name: { [Op.like]: `%${_name}%` },
+          CategoryId: categoryID,
+        },
+        offset: _start,
+        limit: _limit,
+      });
+    } else {
+      totalRow = await Product.count({
+        where: {
+          CategoryId: categoryID,
+        },
+      });
+      totalPage =
+        Math.ceil(totalRow / _limit) > 0 ? Math.ceil(totalRow / _limit) : 1;
+      _page = _page > 0 ? Math.floor(_page) : 1;
+      _page = _page <= totalPage ? Math.floor(_page) : totalPage;
+      let _start = (_page - 1) * _limit;
+      listProduct = await Product.findAll({
+        where: {
+          CategoryId: categoryID,
+        },
+        include: [
+          {
+            model: Category,
+          },
+        ],
+        offset: _start,
+        limit: _limit,
+      });
+    }
+    const category = await Category.findAll();
+    if (req.session.loggedin && req.session.user) {
+      // Lấy thông tin người dùng từ đối tượng session
+      const loggedInUser = req.session.user;
+
+      return res.render("product", {
+        cate: Number(categoryID),
+        category: category,
+        data: listProduct,
+        search: _name,
+        totalPage: totalPage,
+        name: _name,
+        page: _page,
+        limit: _limit,
+        user: loggedInUser,
+
+        //return res.status(200).json({ status: 200, data: listProduct });
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.render("product", {
+      data: [],
+      message: "Internal server error",
     });
   }
 };
