@@ -146,12 +146,6 @@
       </div>
       <hr>
       <ul class="app-menu">
-<<<<<<< HEAD
-
-=======
-        <li><a class="app-menu__item haha"><i class='app-menu__icon bx bx-cart-alt'></i>
-            <span class="app-menu__label">MD VN</span></a></li>
->>>>>>> origin/test
         <li><a class="app-menu__item " href="/home"><i class='app-menu__icon bx bx-tachometer'></i><span
               class="app-menu__label">Bảng điều
               khiển</span></a></li>
@@ -218,11 +212,7 @@
                 <div class="form-group col-md-4">
                   <label class="control-label">Ngày sinh</label>
                   <input class="form-control" type="date" value="<%=staff.dateOfBirth%>" name="dateOfBirth"
-<<<<<<< HEAD
-                    id="dateOfBirthInput" required>
-=======
                     id="dateOfBirthInput" max="<?php echo date('Y-m-d'); ?>" required>
->>>>>>> origin/test
                 </div>
 
 
@@ -328,12 +318,6 @@
 -->
 
     <script>
-<<<<<<< HEAD
-      // Chuyển đổi định dạng ngày tháng năm
-      var dateOfBirth = '<%=staff.dateOfBirth%>';
-      var formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];
-      document.getElementById('dateOfBirthInput').value = formattedDate;
-=======
       // Corrected script for date format
       var dateOfBirth = '<%=staff.dateOfBirth%>';
       var formattedDate = new Date(dateOfBirth);
@@ -345,7 +329,6 @@
       // Set the max attribute to the current date
       document.getElementById('dateOfBirthInput').max = new Date().toISOString().split("T")[0];
 
->>>>>>> origin/test
     </script>
     <!-- Essential javascripts for application to work-->
     <script src="js/jquery-3.2.1.min.js"></script>
