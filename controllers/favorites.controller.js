@@ -16,23 +16,6 @@ exports.getAccount = async (req, res) => {
         {
           model: Product,
           include: [{ model: Comment, as: "comments" }],
-          attributes: [
-            "id",
-            "name",
-            "price",
-            "images",
-            "description",
-            "quantity",
-            "CategoryId",
-            [fn("COUNT", col("Product.comments.id")), "commentCount"],
-            [
-              literal(
-                "ROUND(IFNULL(SUM(`Product.comments`.`star`), 0) / NULLIF(COUNT(`Product.comments`.`id`), 0), 2)"
-              ),
-              "averageRating",
-            ],
-          ],
-          group: ["Product.id"],
         },
       ],
     });

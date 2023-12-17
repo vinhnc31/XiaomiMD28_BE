@@ -352,12 +352,6 @@ exports.updateOrder = async (req, res) => {
         title: title,
         body: content,
       },
-      android: {
-        notification: {
-          imageUrl:
-            "https://res.cloudinary.com/dj9kuswbx/image/upload/v1701677696/ehpkgf7liptimndzhitp.jpg",
-        },
-      },
       to: registrationToken,
     };
     console.log(message);
@@ -376,6 +370,7 @@ exports.updateOrder = async (req, res) => {
         title: title,
         content: content,
         AccountId: AccountId,
+        OrderId: id,
       });
 
       console.log("Successfully sent message:", response);
