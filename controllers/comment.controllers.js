@@ -37,12 +37,6 @@ exports.createComment = async (req, res) => {
         .status(404)
         .json({ status: 404, message: "Account not found" });
     }
-    if (!checkOrder) {
-      return res.status(400).json({
-        status: 400,
-        message: "User has not purchased the product yet",
-      });
-    }
     if (!commentBody) {
       return res
         .status(400)

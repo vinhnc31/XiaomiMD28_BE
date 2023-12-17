@@ -614,17 +614,20 @@ exports.getMostFavorites = async (req, res) => {
   try {
     const listProduct = await Product.findAll({
       include: [
-        { model: Favorites, as: "favorites" },
-        { model: Comment, as: "comments" },
+        {
+          model: Favorites,
+          as: "favorites",
+        },
+        {
+          model: Comment,
+          as: "comments",
+        },
       ],
       attributes: [
         "id",
         "name",
         "price",
         "images",
-        "description",
-        "createdAt",
-        "updatedAt",
         "CategoryId",
         [fn("COUNT", col("favorites.id")), "FavoritesCount"],
         [fn("COUNT", col("comments.id")), "commentCount"],
@@ -637,6 +640,7 @@ exports.getMostFavorites = async (req, res) => {
       ],
       group: ["Product.id"],
       order: [[literal("FavoritesCount"), "DESC"]],
+      distinct: true, // Add this line to ensure distinct products
       subQuery: false,
       limit: 5,
     });
