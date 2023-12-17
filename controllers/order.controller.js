@@ -90,7 +90,6 @@ exports.getListOrderInAccountAndStatus = async (req, res) => {
 exports.createOrder = async (req, res) => {
   const {
     message,
-    status,
     AccountId,
     AddressId,
     PayId,
@@ -98,20 +97,22 @@ exports.createOrder = async (req, res) => {
     products,
     statusOrder,
   } = req.body;
-  const date = new Date();
 
-  const transaction = await sequelize.transaction(); // Assuming you're using Sequelize
+  const date = new Date();
+  const transaction = await sequelize.transaction();
 
   try {
+    if (!AddressId || !AccountId || !PayId || !products) {
+      return res.status(400).json({
+        status: 400,
+        message: "Required fields cannot be left blank",
+      });
+    }
+
     const account = await Account.findByPk(AccountId);
     const address = await Address.findByPk(AddressId);
     const pay = await Pay.findByPk(PayId);
 
-    if (!AddressId || !AccountId || !PayId) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "Fields cannot be left blank" });
-    }
     if (!account || !address || !pay) {
       await transaction.rollback();
       return res.status(404).json({
@@ -141,16 +142,11 @@ exports.createOrder = async (req, res) => {
         productData;
 
       const product = await Product.findByPk(productId);
-      const productColor = await productcolor.findByPk(ProductColorId);
       const productColorConfig = await ProductColorConfig.findByPk(
         ProductColorConfigId
       );
 
-      if (
-        !product ||
-        (!productColor && ProductColorId) ||
-        (!productColorConfig && ProductColorConfigId)
-      ) {
+      if (!product || (ProductColorId && !productColorConfig)) {
         await transaction.rollback();
         return res.status(404).json({
           status: 404,
@@ -158,123 +154,76 @@ exports.createOrder = async (req, res) => {
         });
       }
 
+      let productPrice = 0;
+
       if (ProductColorId && ProductColorConfigId) {
-        if (productColorConfig.quantity === 0) {
-          return res.status(400).json({
-            status: 400,
-            message: "The product is out of stock",
-          });
-        }
-        if (PromotionId) {
-          const promotion = await Promotion.findByPk(PromotionId);
-          if (!promotion) {
-            await transaction.rollback();
-            return res.status(404).json({
-              status: 404,
-              message: "Promotion not found",
-            });
-          }
-          if (promotion.endDate > date) {
-            await transaction.rollback();
-            return res.status(400).json({
-              status: 404,
-              message: "Promotion expired",
-            });
-          }
-          if (promotion.quantity === 0) {
-            await transaction.rollback();
-            return res.status(400).json({
-              status: 404,
-              message: "Promotion expired",
-            });
-          }
-          totalPrice +=
-            productColorConfig.price *
-            quantity *
-            (1 - promotion.discount / 100);
-          const update = await promotion.update(
-            { quantity: sequelize.literal(`quantity - ${quantity}`) },
-            { where: { id: productId }, transaction }
-          );
-          console.log(update);
-        } else {
-          totalPrice += productColorConfig.price * quantity;
-        }
-        const update = await ProductColorConfig.update(
-          { quantity: sequelize.literal(`quantity - ${quantity}`) },
-          { where: { id: ProductColorConfigId }, transaction }
-        );
-        console.log(update);
+        productPrice = productColorConfig.price;
       } else {
-        if (product.quantity === 0) {
-          return res.status(400).json({
-            status: 400,
-            message: "The product is out of stock",
-          });
-        }
-        if (PromotionId) {
-          const promotion = await Promotion.findByPk(PromotionId);
-          if (!promotion) {
-            await transaction.rollback();
-            return res.status(404).json({
-              status: 404,
-              message: "Promotion not found",
-            });
-          }
-          if (promotion.endDate > date) {
-            await transaction.rollback();
-            return res.status(400).json({
-              status: 404,
-              message: "Promotion expired",
-            });
-          }
-          if (promotion.quantity === 0) {
-            await transaction.rollback();
-            return res.status(400).json({
-              status: 404,
-              message: "Promotion expired",
-            });
-          }
-          totalPrice +=
-            product.price * quantity * (1 - promotion.discount / 100);
-          const update = await promotion.update(
-            { quantity: sequelize.literal(`quantity - ${quantity}`) },
-            { where: { id: productId }, transaction }
-          );
-          console.log(update);
-        } else {
-          totalPrice += product.price * quantity;
-        }
-        const update = await Product.update(
-          { quantity: sequelize.literal(`quantity - ${quantity}`) },
-          { where: { id: productId }, transaction }
-        );
-        console.log(update);
+        productPrice = product.price;
       }
 
-      // Create record in the ordersProduct table for each product
+      if (PromotionId) {
+        const promotion = await Promotion.findByPk(PromotionId);
+
+        if (
+          !promotion ||
+          promotion.endDate < date ||
+          promotion.quantity === 0
+        ) {
+          await transaction.rollback();
+          return res.status(400).json({
+            status: 400,
+            message: "Promotion not valid",
+          });
+        }
+
+        productPrice *= (100 - promotion.discount) / 100;
+
+        await promotion.update(
+          {
+            quantity: sequelize.literal(`quantity - ${quantity}`),
+          },
+          { transaction }
+        );
+      }
+
+      totalPrice += productPrice * quantity;
+
+      if (ProductColorId && ProductColorConfigId) {
+        await ProductColorConfig.update(
+          {
+            quantity: sequelize.literal(`quantity - ${quantity}`),
+          },
+          { where: { id: ProductColorConfigId }, transaction }
+        );
+      } else {
+        await Product.update(
+          {
+            quantity: sequelize.literal(`quantity - ${quantity}`),
+          },
+          { where: { id: productId }, transaction }
+        );
+      }
+
       await OrdersProduct.create(
         {
           quantity,
           productId,
           ProductColorId,
           ProductColorConfigId,
-          OrderId: createdOrder.id, // Assuming there is a foreign key relationship
+          OrderId: createdOrder.id,
         },
         { transaction }
       );
     }
 
-    // Update the total price in the created order
     await createdOrder.update({ total: totalPrice }, { transaction });
 
     await transaction.commit();
-    // Update the quantity in the product table
 
-    // Return success response
     return res.status(201).json({
       status: 201,
-      message: "Order successfully",
+      message: "Order successfully created",
     });
   } catch (error) {
     console.error(error);
