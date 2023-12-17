@@ -126,6 +126,7 @@ exports.getNotify = async (req, res) => {
     }
     const listNotify = await notifyAccount.findAll({
       where: { AccountId: AccountId },
+      order: [["createdAt", "DESC"]],
     });
     if (!listNotify) {
       return res
