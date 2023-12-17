@@ -84,10 +84,20 @@ exports.createStaff = async (req, res) => {
       password: hashedPassword,
     };
     const checkEmail = await Staff.findOne({ where: { email: email } });
+    // if (checkEmail) {
+    //   return res
+    //     .status(400)
+    //     .json({ status: 400, message: "email already exist" });
+    // }
     if (checkEmail) {
-      return res
-        .status(400)
-        .json({ status: 400, message: "email already exist" });
+
+      if (req.session.loggedin && req.session.user) {
+        // Lấy thông tin người dùng từ đối tượng session
+        const loggedInUser = req.session.user;
+        const error = "Email đã tồn tại";
+        res.render('addStaff', { user: loggedInUser, error: error });
+        return;
+      } 
     }
     const createStaff = await Staff.create(staff);
     if (!createStaff) {
@@ -160,7 +170,7 @@ exports.updateStaff = async (req, res) => {
 };
 exports.deleteStaff = async (req, res) => {
   const id = req.params.id;
-  try {
+  try { 
     const checkId = await Staff.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Staff not found" });
@@ -269,6 +279,7 @@ exports.addStaffView = async (req, res) => {
   if (req.session.loggedin && req.session.user) {
     // Lấy thông tin người dùng từ đối tượng session
     const loggedInUser = req.session.user;
-    res.render('addStaff', { user: loggedInUser });
+    const error = ""
+    res.render('addStaff', { user: loggedInUser, error: error });
   } 
 }
