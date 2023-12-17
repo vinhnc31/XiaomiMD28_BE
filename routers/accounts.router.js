@@ -107,9 +107,9 @@ router.post("/forgotPassword", account.forgotPassword);
 router.put(
   "/updateProfile/:id",
   authMidleWare.apiAuth,
-  cloudinary.single("image"),
+  cloudinary.single("avatar"),
   account.updateProfile
 );
-router.get("/account/listAccount", middleWare.loggedin,account.getAccounts);
-router.post("/account/search", middleWare.loggedin,account.searchAccount);
+router.get("/account/listAccount", middleWare.loggedin, account.getAccounts);
+router.post("/account/search", middleWare.loggedin, account.searchAccount);
 module.exports = router;

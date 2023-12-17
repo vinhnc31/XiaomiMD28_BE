@@ -128,7 +128,7 @@ router.get("/comment/:ProductId", commentController.getProductId);
 router.post(
   "/comment",
   authMidleWare.apiAuth,
-  cloudinary.single("image"),
+  cloudinary.single("images"),
   commentController.createComment
 );
 router.put(

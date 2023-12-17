@@ -17,7 +17,9 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config;
 
 const FCM = require("fcm-node");
-const fcm = new FCM(process.env.FCM);
+const fcm = new FCM(
+  "AAAAjF46CC4:APA91bGm5n9UYevBNVrCWA_MWgGw8SJRN3_L28XU1pJ8pwsTHWdoSZMqPibQoB3az5akJtcNMVWtIPDA9jQb9dy2zTOrh5w3Eui5wAh9WeaUux6wpX9bPgaxFVIJNDClWac2HzlZ6Kq9"
+);
 
 exports.getListOrder = async (req, res) => {
   try {
