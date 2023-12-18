@@ -157,69 +157,8 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-12">
-                <div class="tile">
-                    <div>
-                        <h3 class="tile-title">TỔNG ĐƠN HÀNG</h3>
-                    </div>
-                    <div class="tile-body">
-                        <table class="table table-hover table-bordered" id="sampleTable">
-                            <thead>
-                                <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Khách hàng</th>
-                                    <th>Đơn hàng</th>
-                                    <th>Số lượng</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% let total=0 %>
-                                    <% dataOrder.forEach(order=> { %>
-                                        <% let totalQuantity=0 %>
-                                            <% order.OrdersProducts.forEach(product=> { %>
-                                                <% totalQuantity +=product.quantity %>
-                                                    <% }); %>
-                                                        <tr>
-                                                            <td>
-                                                                <%= order.id %>
-                                                            </td>
-                                                            <td>
-                                                                <%= order.Account.name %>
-                                                            </td>
-                                                            <td>
-                                                               
-                                                                <% order.OrdersProducts.forEach(product=> { %>
-                                                                    <%= product.Product.name %>
-                                                                        <% }); %>
-                                                            </td>
-                                                            <td>
-                                                                <%= totalQuantity %>
-                                                            </td>
-                                                            <td>
-                                                                <%= new Intl.NumberFormat('en-US').format(order.total)
-                                                                    %> VNĐ
-                                                            </td>
-                                                        </tr>
-                                                        <% total +=order.total %>
-                                                            <% totalQuantity=0 %>
-                                                                <% }); %>
-
-                                                                    <tr>
-                                                                        <th colspan="4">Tổng cộng:</th>
-                                                                        <td>
-                                                                            <%= new
-                                                                                Intl.NumberFormat('en-US').format(total)
-                                                                                %> VNĐ
-                                                                        </td>
-                                                                    </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+            
+        </div> 
         <div class="row">
             <div class="col-md-12">
                 <div class="tile">
@@ -269,60 +208,8 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-12">
-                <div class="tile">
-                    <div>
-                        <h3 class="tile-title">NHÂN VIÊN MỚI</h3>
-                    </div>
-                    <div class="tile-body">
-                        <table class="table table-hover table-bordered" id="sampleTable">
-                            <thead>
-                                <tr>
-                                    <th>Họ và tên</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Giới tính</th>
-                                    <th>SĐT</th>
-                                    <th>Chức vụ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% dataStaff.forEach(staff=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= staff.name %>
-                                        </td>
-                                        <td>
-                                            <%= staff.address %>
-                                        </td>
-                                        <td>
-                                            <% if (staff.dateOfBirth) { %>
-                                                <% const date=new Date(staff.dateOfBirth); %>
-                                                    <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%=
-                                                                date.getFullYear() %>
-                                                                <% } else { %>
-                                                                    Ngày sinh không khả dụng
-                                                                    <% } %>
-                                        </td>
-                                        <td>
-                                            <%= staff.gender %>
-                                        </td>
-                                        <td>
-                                            <%= staff.phone %>
-                                        </td>
-                                        <td>
-                                            <%= staff.position %>
-                                        </td>
-
-                                    </tr>
-                                    <% }); %>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+          
+        </div> 
         <div class="row">
             <div class="col-md-6">
                 <div class="tile">
