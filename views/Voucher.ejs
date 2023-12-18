@@ -60,10 +60,10 @@
                                         class="fas fa-plus"></i>
                                     Thêm Voucher</a>
                             </div>
-                            <div class="col-sm-2">
+                            <!-- <div class="col-sm-2">
                                 <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
                                         class="fas fa-trash-alt"></i> Xóa tất cả </a>
-                            </div>
+                            </div> -->
                         </div>
                         <div id="sampleTable_wrapper"
                             class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
@@ -89,13 +89,13 @@
                                         role="grid" aria-describedby="sampleTable_info">
                                         <thead>
                                             <tr role="row">
-                                                <th width="10" class="sorting_asc" tabindex="0"
+                                                <!-- <th width="10" class="sorting_asc" tabindex="0"
                                                     aria-controls="sampleTable" rowspan="1" colspan="1"
                                                     aria-sort="ascending"
                                                     aria-label=": activate to sort column descending"
                                                     style="width: 13px;">
                                                     <input type="checkbox" id="all">
-                                                </th>
+                                                </th> -->
                                                 <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1"
                                                     colspan="1"
                                                     aria-label="Mã sản phẩm: activate to sort column ascending"
@@ -128,8 +128,8 @@
                                         <tbody>
                                             <% if(data){ data.map(function(product){%>
                                                 <tr role="row" class="odd">
-                                                    <td width="10" class="sorting_1"><input type="checkbox"
-                                                            name="check1" value="1"></td>
+                                                    <!-- <td width="10" class="sorting_1"><input type="checkbox"
+                                                            name="check1" value="1"></td> -->
                                                     <td>
                                                         #<%=product.promotion.id%>
                                                     </td>
