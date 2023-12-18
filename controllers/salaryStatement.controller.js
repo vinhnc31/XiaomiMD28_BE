@@ -92,19 +92,22 @@ exports.updateSalary = async (req, res) => {
 exports.deleteSalary = async (req, res) => {
   const id = req.params.id;
   try {
-    console.log(id)
-    const salary = await Salaries.findAll();
-    console.log(salary)
-    const checkId = await Salaries.findByPk(id);
+    // const salary = await Salaries.findAll();
+    const checkId = await Salaries.findByPk(id); 
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Salary not found" });
     }
-    const deleteSalary = await checkId.destroy();
+    const deleteSalary = await Salaries.destroy({
+      where:{
+        id: checkId.id
+      }
+    });
     if (!deleteSalary) {
       return res
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
+    console.log(deleteSalary)
     return res.redirect("/salary");
   } catch (error) {
     console.log(error);
