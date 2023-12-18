@@ -224,21 +224,8 @@
                     <option value="Nữ" <%=staff.gender==='Nữ' ? 'selected' : '' %>>Nữ</option>
                   </select>
                 </div>
-                <div class="form-group  col-md-3">
-                  <label for="exampleSelect1" class="control-label">Chức vụ</label>
-                  <select class=" form-control" id="position" name="position" required>
-                    <option value="">-- Chọn chức vụ --</option>
-                    <option value="Bán hàng" <%=staff.position==='Bán hàng' ? 'selected' : '' %>>Bán hàng</option>
-                    <option value="Tư vấn" <%=staff.position==='Tư vấn' ? 'selected' : '' %>>Tư vấn</option>
-                    <option value="Dịch vụ" <%=staff.position==='Dịch vụ' ? 'selected' : '' %>>Dịch vụ</option>
-                    <option value="Thu Ngân" <%=staff.position==='Thu Ngân' ? 'selected' : '' %>>Thu Ngân</option>
-                    <option value="Quản kho" <%=staff.position==='Quản kho' ? 'selected' : '' %>>Quản kho</option>
-                    <option value="Bảo trì" <%=staff.position==='Bảo trì' ? 'selected' : '' %>>Bảo trì</option>
-                    <option value="Kiểm hàng" <%=staff.position==='Kiểm hàng' ? 'selected' : '' %>>Kiểm hàng</option>
-                    <option value="Bảo vệ" <%=staff.position==='Bảo vệ' ? 'selected' : '' %>>Bảo vệ</option>
-                    <option value="Tạp vụ" <%=staff.position==='Tạp vụ' ? 'selected' : '' %>>Tạp vụ</option>
-                  </select>
-                </div>
+                <input style="display: none" class="form-control" type="text" id="position" name="position"
+                  value="Staff">
                 <div class="form-group col-md-3">
                   <label class="control-label">Bằng cấp</label>
                   <select class="form-control" selected="<%=staff.degree%>" id="degree" name="degree" required>
