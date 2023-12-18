@@ -9,13 +9,15 @@ exports.getSalary = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "connect fail database" });
     }
-    
+
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
-      res.render('salaryStatement', {salaryList: listSalary, user: loggedInUser });
+      res.render("salaryStatement", {
+        salaryList: listSalary,
+        user: loggedInUser,
+      });
     }
-
   } catch (error) {
     console.log(error);
     return res
@@ -92,14 +94,18 @@ exports.updateSalary = async (req, res) => {
 exports.deleteSalary = async (req, res) => {
   const id = req.params.id;
   try {
-    console.log(id)
+    console.log(id);
     const salary = await Salaries.findAll();
-    console.log(salary)
+    console.log(salary);
     const checkId = await Salaries.findByPk(id);
     if (!checkId) {
       return res.status(404).json({ status: 404, message: "Salary not found" });
     }
-    const deleteSalary = await checkId.destroy();
+    const deleteSalary = await Salaries.destroy({
+      where: {
+        id: checkId.id,
+      },
+    });
     if (!deleteSalary) {
       return res
         .status(400)
@@ -115,11 +121,11 @@ exports.deleteSalary = async (req, res) => {
 };
 exports.viewAdd = async (req, res) => {
   const listStaff = await Staff.findAll();
-  
-    if (!listStaff) {
-      return res.status(404).json({ status: 404, message: "No staff found" });
-    }
-  return res.render('AddSalary', {"staffs": listStaff });
+
+  if (!listStaff) {
+    return res.status(404).json({ status: 404, message: "No staff found" });
+  }
+  return res.render("AddSalary", { staffs: listStaff });
 };
 
 exports.viewUpdateSalary = async (req, res, next) => {
@@ -129,24 +135,23 @@ exports.viewUpdateSalary = async (req, res, next) => {
       id: id,
     },
   });
- console.log(salaries)
- const staff = await Staff.findOne({
-  where: {
-    id: salaries.StaffId,
-  },
-});
-if (req.session.loggedin && req.session.user) {
-  // Lấy thông tin người dùng từ đối tượng session
-  const loggedInUser = req.session.user;
-  res.render("updateSalary", {
-    staff: staff,
-    Salaries: salaries,
-    title: "Sửa lương",
-    user: loggedInUser
+  console.log(salaries);
+  const staff = await Staff.findOne({
+    where: {
+      id: salaries.StaffId,
+    },
   });
-}
-  
-}; 
+  if (req.session.loggedin && req.session.user) {
+    // Lấy thông tin người dùng từ đối tượng session
+    const loggedInUser = req.session.user;
+    res.render("updateSalary", {
+      staff: staff,
+      Salaries: salaries,
+      title: "Sửa lương",
+      user: loggedInUser,
+    });
+  }
+};
 
 const { Op } = require("sequelize");
 
@@ -156,7 +161,9 @@ exports.searchSalary = async (req, res) => {
 
     // Kiểm tra xem 'name' có tồn tại hay không
     if (!name) {
-      return res.status(400).json({ status: 400, message: "'name' parameter is required" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "'name' parameter is required" });
     }
 
     const listSalary = await Salaries.findAll({
@@ -176,10 +183,15 @@ exports.searchSalary = async (req, res) => {
     if (req.session.loggedin && req.session.user) {
       // Lấy thông tin người dùng từ đối tượng session
       const loggedInUser = req.session.user;
-      res.render('salaryStatement', { salaryList: listSalary, user: loggedInUser });
+      res.render("salaryStatement", {
+        salaryList: listSalary,
+        user: loggedInUser,
+      });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ status: 500, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
